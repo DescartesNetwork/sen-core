@@ -1,0 +1,44 @@
+.scrollbar {
+  overflow: auto; // To let lazyload realize the container
+  &:hover {
+    overflow: overlay !important; // Avoid scrollbar occupying space
+  }
+}
+
+// Hide all inessential
+.scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar::-webkit-scrollbar-track-piece {
+  display: none;
+}
+.scrollbar::-webkit-scrollbar-corner {
+  display: none;
+}
+
+// Customize the bar
+.scrollbar:hover::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+
+#light {
+  .scrollbar:hover::-webkit-scrollbar-thumb {
+    background: #4e4f5caa;
+    border-radius: 8px;
+    &:hover {
+      background: #4e4f5c;
+    }
+  }
+}
+
+#dark {
+  .scrollbar:hover::-webkit-scrollbar-thumb {
+    background: #d3d3d6aa;
+    border-radius: 8px;
+    &:hover {
+      background: #d3d3d6;
+    }
+  }
+}

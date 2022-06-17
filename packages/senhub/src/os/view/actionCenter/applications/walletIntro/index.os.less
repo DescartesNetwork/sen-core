@@ -1,0 +1,45 @@
+.card-wallet {
+  position: relative !important;
+  background-image: url('../../../../static/images/actionCenter/card-bg.png') !important;
+  background-position: center !important;
+  background-size: cover !important;
+  margin-bottom: 8px !important;
+  .sentre-card-body {
+    padding: 16px;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    width: calc(100% - 24px);
+    height: 100%;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(93, 108, 207, 0.4);
+    border-radius: 16px;
+    z-index: -1;
+  }
+  .balance,
+  .btn-disconnect {
+    color: #e9e9eb !important;
+  }
+  .label {
+    color: #bec4ec !important;
+    font-size: 12px;
+  }
+  .icon-sol {
+    color: #03e1ff;
+  }
+  .text-right {
+    text-align: right;
+  }
+  .price-arrow {
+    padding: 0 3px;
+    border-radius: 50%;
+  }
+  .btn-disconnect {
+    background: transparent;
+    padding: 0;
+    height: auto;
+  }
+}

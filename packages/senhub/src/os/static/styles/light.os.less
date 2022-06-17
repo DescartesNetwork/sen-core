@@ -1,0 +1,84 @@
+/**
+ * Available vars: https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+ */
+
+@import '~antd/dist/antd.less';
+@import './common/vars.os.less';
+@import './common/polyfill.os.less';
+@import './common/typography.os.less';
+@import './common/scrollbar.os.less';
+@import './shared.os.less';
+
+// Colors
+@primary-color: @PRIMARY;
+@info-color: @INFO;
+@success-color: @SUCCESS;
+@warning-color: @WARNING;
+@error-color: @ERROR;
+@popover-background: @NEUTRAL100;
+@body-background: @NEUTRAL05;
+@component-background: @NEUTRAL05;
+@disabled-bg: @NEUTRAL10;
+@item-hover-bg: @NEUTRAL10;
+
+// Typography
+@font-family: 'Nunito', sans-serif;
+@text-color: @NEUTRAL100;
+@text-color-secondary: @NEUTRAL60;
+@heading-color: @NEUTRAL100;
+@disabled-color: @NEUTRAL40;
+@typography-title-margin-top: 0px;
+@typography-title-margin-bottom: 0px;
+
+// Border
+@border-radius-base: 8px;
+@border-color-base: @NEUTRAL20;
+@border-width-base: 1px;
+@popover-customize-border-color: @border-color-base;
+@border-color-split: @border-color-base;
+
+// Card
+@card-radius: @border-radius-base * 2;
+@card-actions-background: @NEUTRAL05;
+@card-background: @NEUTRAL05;
+@card-shadow: @LIGHT_SHADOW2;
+
+// Modal
+@modal-header-bg: @NEUTRAL05;
+@modal-content-bg: @NEUTRAL05;
+@modal-footer-bg: @NEUTRAL05;
+@modal-footer-padding-horizontal: 24px;
+
+// Drawer
+@drawer-bg: @NEUTRAL05;
+
+// Button
+@btn-font-weight: 700;
+@btn-shadow: unset;
+@btn-primary-shadow: unset;
+@btn-text-shadow: unset;
+@btn-default-border: @NEUTRAL20;
+@btn-default-ghost-color: @NEUTRAL100;
+@btn-default-ghost-border: @NEUTRAL100;
+
+// Input
+@input-placeholder-color: @NEUTRAL60;
+
+// Divider
+@divider-color: @NEUTRAL10;
+@divider-orientation-margin: 0;
+
+// Checkbox
+@checkbox-border-radius: @border-radius-base - 4;
+
+// Patch
+.@{ant-prefix}-layout {
+  background: unset;
+}
+.@{ant-prefix}-card {
+  box-shadow: @LIGHT_SHADOW1;
+  &.glass {
+    background-color: color(~`('@{card-background}aa') `);
+    backdrop-filter: blur(16px);
+  }
+}

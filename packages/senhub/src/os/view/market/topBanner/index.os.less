@@ -1,0 +1,21 @@
+.hero-banner {
+  & .swiper-pagination {
+    @media (max-width: 768px) {
+      bottom: 2px !important;
+    }
+  }
+  & .indicator {
+    width: 25px;
+    height: 4px;
+    border-radius: 4px !important;
+    background: #dadada;
+    margin: 0 5px;
+    border-radius: unset;
+    cursor: pointer;
+    @media (max-width: 768px) {
+      width: 18px;
+      height: 2px;
+      border-radius: 2px !important;
+    }
+  }
+}

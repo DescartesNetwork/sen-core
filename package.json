@@ -1,0 +1,16 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "prestart": "npm run build && lerna bootstrap",
+    "start": "lerna run --scope client --stream start",
+    "prebuild": "lerna bootstrap --no-private",
+    "build": "lerna run build --no-private",
+    "predeploy": "npm run build",
+    "deploy": "lerna exec --no-private --parallel --stream -- npm publish --access=public",
+    "patch": "lerna version patch --force-publish"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}

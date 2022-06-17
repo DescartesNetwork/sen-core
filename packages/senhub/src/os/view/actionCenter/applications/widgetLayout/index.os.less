@@ -1,0 +1,26 @@
+@import '../../../../static/styles/common/vars.os.less';
+
+.build-droppable-page(@background) {
+  .droppable-page {
+    transition: all 0.25s ease-in-out;
+    &.active {
+      background: @background;
+      padding: 12px;
+      margin: 0px -10px;
+      border-radius: 20px;
+      min-height: 100px;
+    }
+    &.passive {
+      background: transparent;
+      border-radius: 0px;
+    }
+  }
+}
+
+#light {
+  .build-droppable-page(@NEUTRAL10);
+}
+
+#dark {
+  .build-droppable-page(@NEUTRAL90);
+}

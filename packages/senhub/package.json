@@ -1,0 +1,71 @@
+{
+  "name": "@sentre/senhub",
+  "version": "3.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "dependencies": {
+    "@dnd-kit/core": "^4.0.1",
+    "@dnd-kit/sortable": "^5.0.0",
+    "@project-serum/sol-wallet-adapter": "^0.2.6",
+    "@reduxjs/toolkit": "^1.8.0",
+    "@senswap/sen-js": "^1.4.0",
+    "@sentre/antd-ionicon": "^1.0.27",
+    "@sentre/connector": "^0.0.30",
+    "@sentre/react-dynamic-remote-component": "^0.0.6",
+    "@sentre/react-lazyload": "^3.2.2",
+    "@solana/spl-token-registry": "^0.2.3771",
+    "antd": "^4.21.1",
+    "bn.js": "^5.2.0",
+    "bs58": "^4.0.1",
+    "ipfs-core": "^0.14.2",
+    "js-file-download": "^0.4.12",
+    "localforage": "^1.10.0",
+    "lunr": "^2.3.9",
+    "numbro": "^2.3.5",
+    "qrcode.react": "^3.0.0",
+    "react-copy-to-clipboard": "^5.0.4",
+    "react-joyride": "^2.3.2",
+    "react-json-view": "^1.21.3",
+    "react-query": "^3.39.1",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^5.3.0",
+    "remarkable": "^2.0.1",
+    "swiper": "^7.2.0",
+    "tweetnacl": "^1.0.3"
+  },
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "postbuild": "copyfiles -s -e \"**/*.ts\" -e \"**/*.tsx\" -u 1 \"src/**/*\" \"dist/\" && tsc-alias",
+    "clean": "rm -rf ./dist"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ],
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.0",
+    "@types/bs58": "^4.0.1",
+    "@types/jest": "^27.0.2",
+    "@types/lunr": "^2.3.4",
+    "@types/node": "^16.10.3",
+    "@types/react": "^17.0.38",
+    "@types/react-copy-to-clipboard": "^5.0.2",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-router-dom": "^5.3.1",
+    "@types/remarkable": "^2.0.3",
+    "copyfiles": "^2.4.1",
+    "tsc-alias": "^1.6.10",
+    "typescript": "^4.5.2"
+  }
+}

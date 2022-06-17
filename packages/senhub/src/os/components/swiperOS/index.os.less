@@ -1,0 +1,20 @@
+.swiper-button-next,
+.swiper-button-prev {
+  color: 'inherit';
+  background: #f4f4f5e6;
+  border-radius: 20px;
+  width: 32px;
+  height: 32px;
+  transition: all 0.2s linear;
+  &::after {
+    font-size: 16px;
+    color: #212433;
+  }
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.swiper-button-disabled {
+  pointer-events: unset !important;
+}
