@@ -1,3 +1,8 @@
+/**
+ * This file is compulsory to let webpack to build the source into Module Federation standard.
+ * References: https://webpack.js.org/concepts/module-federation/#troubleshooting
+ */
+
 import { render } from 'react-dom'
 
 import Senhub from '@sentre/senhub'
