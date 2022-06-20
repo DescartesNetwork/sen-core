@@ -1,10 +1,10 @@
 import { Provider } from 'react-redux'
 import { WalletProvider, UIProvider } from '@sentre/senhub'
 
-import View from 'app/view'
+import View from 'view'
 
-import model from 'app/model'
-import configs from 'app/configs'
+import model from 'model'
+import configs from 'configs'
 
 const {
   manifest: { appId },
@@ -22,4 +22,4 @@ export const Page = () => {
   )
 }
 
-export * from 'app/static.app'
+export * from 'static.app'

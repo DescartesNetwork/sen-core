@@ -14,6 +14,6 @@ module.exports = {
     '@sentre/senhub': { singleton: true, requiredVersion: senhubVersion },
   },
   exposes: {
-    './bootstrap': 'app/bootstrap.app',
+    './bootstrap': 'bootstrap.app',
   },
 }

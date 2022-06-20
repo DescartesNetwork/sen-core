@@ -5,9 +5,9 @@ import { useWallet, createPDB } from '@sentre/senhub'
 import { Row, Col, Typography, Button, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { AppDispatch, AppState } from 'app/model'
-import { increaseCounter } from 'app/model/main.controller'
-import configs from 'app/configs'
+import { AppDispatch, AppState } from 'model'
+import { increaseCounter } from 'model/main.controller'
+import configs from 'configs'
 
 const {
   manifest: { appId },

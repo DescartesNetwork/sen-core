@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { devTools, bigintSerializationMiddleware } from 'app/model/devTools'
+import { devTools, bigintSerializationMiddleware } from 'model/devTools'
 
-import main from 'app/model/main.controller'
+import main from 'model/main.controller'
 
 /**
  * Isolated store
