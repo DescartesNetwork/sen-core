@@ -2,13 +2,13 @@
 
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { RootContext } from 'os/store/context'
+import { RootContext } from 'store/context'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { ConfigProvider } from 'antd'
-import View from 'os/view'
+import View from 'view'
 
-import store from 'os/store'
+import store from 'store'
 
 /**
  * Mainboard
@@ -33,7 +33,7 @@ export default Senhub
  */
 
 // Senhub providers
-export * from 'os/providers'
+export * from 'providers'
 // PDB
 export { default as PDB } from 'shared/pdb'
 export * from 'shared/pdb'
