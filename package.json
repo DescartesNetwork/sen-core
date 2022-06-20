@@ -7,7 +7,7 @@
     "prebuild": "lerna bootstrap --no-private",
     "build": "lerna run build --no-private",
     "predeploy": "yarn build",
-    "deploy": "ls -la ./packages/senhub/dist && lerna exec --no-private --parallel --stream -- yarn publish",
+    "deploy": "lerna exec --no-private --parallel --stream -- npm publish",
     "patch": "lerna version patch --force-publish"
   },
   "devDependencies": {
