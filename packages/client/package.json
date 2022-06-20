@@ -1,12 +1,12 @@
 {
   "name": "client",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.0",
     "@senswap/sen-js": "^1.4.0",
     "@sentre/antd-ionicon": "^1.0.27",
-    "@sentre/senhub": "^3.0.1",
+    "@sentre/senhub": "^3.0.2",
     "antd": "^4.21.1",
     "bn.js": "^5.2.0",
     "react": "^17.0.2",
