@@ -6,6 +6,7 @@
     "@reduxjs/toolkit": "^1.8.0",
     "@senswap/sen-js": "^1.4.0",
     "@sentre/antd-ionicon": "^1.0.27",
+    "@sentre/react-lazyload": "^3.2.2",
     "@sentre/senhub": "^3.0.3",
     "antd": "^4.21.1",
     "bn.js": "^5.2.0",
@@ -18,13 +19,13 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "npm run build:production",
+    "build": "yarn build:production",
     "build:production": "craco build",
     "build:staging": "env-cmd -f .env.staging craco build",
     "test": "craco test",
-    "predeploy": "npm run build:production",
+    "predeploy": "yarn build:production",
     "deploy": "gh-pages -d build",
-    "preserve": "npm run build:staging",
+    "preserve": "yarn build:staging",
     "serve": "serve -s build -l 3000",
     "manifest": "NODE_ENV=production node ./manifest-builder.js"
   },
@@ -39,6 +40,13 @@
     "last 1 firefox version",
     "last 1 safari version"
   ],
+  "engines": {
+    "node": ">=16 <=18"
+  },
+  "resolutions": {
+    "@types/react": "17.0.39",
+    "@types/react-dom": "17.0.11"
+  },
   "devDependencies": {
     "@craco/craco": "^6.4.3",
     "@sentre/craco-plugins": "^1.0.27",
@@ -48,8 +56,8 @@
     "@types/bn.js": "^5.1.0",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.3",
-    "@types/react": "^17.0.38",
-    "@types/react-dom": "^17.0.9",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
     "@types/react-router-dom": "^5.3.1",
     "dotenv-cra": "^3.0.2",
     "env-cmd": "^10.1.0",

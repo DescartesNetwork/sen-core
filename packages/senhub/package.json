@@ -34,7 +34,7 @@
     "tweetnacl": "^1.0.3"
   },
   "scripts": {
-    "prebuild": "npm run clean",
+    "prebuild": "yarn clean",
     "build": "tsc",
     "postbuild": "copyfiles -s -e \"**/*.ts\" -e \"**/*.tsx\" -u 1 \"src/**/*\" \"dist/\" && tsc-alias",
     "clean": "rm -rf ./dist"
@@ -49,9 +49,16 @@
     "last 1 firefox version",
     "last 1 safari version"
   ],
+  "engines": {
+    "node": ">=16 <=18"
+  },
+  "resolutions": {
+    "@types/react": "17.0.39",
+    "@types/react-dom": "17.0.11"
+  },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^17.0.39",
+    "react-dom": "^17.0.11"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
