@@ -1,9 +1,13 @@
 {
-  "packages": ["packages/*"],
+  "packages": [
+    "packages/*"
+  ],
   "command": {
     "bootstrap": {
-      "npmClientArgs": ["--legacy-peer-deps"]
+      "npmClientArgs": [
+        "--legacy-peer-deps"
+      ]
     }
   },
-  "version": "3.0.0"
+  "version": "3.0.1"
 }
