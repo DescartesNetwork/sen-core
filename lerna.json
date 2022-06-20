@@ -1,7 +1,8 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "version": "3.0.5",
-  "npmClient": "yarn"
+  "npmClient": "yarn",
+  "command": {
+    "publish": { "registry": "npmjs.org" }
+  }
 }

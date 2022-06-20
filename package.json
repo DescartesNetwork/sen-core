@@ -7,7 +7,7 @@
     "prebuild": "lerna bootstrap --no-private",
     "build": "lerna run build --no-private",
     "predeploy": "yarn build",
-    "deploy": "lerna exec --no-private --parallel --stream -- yarn npm publish --access=public",
+    "deploy": "lerna exec --no-private --parallel --stream -- npm publish --access=public",
     "patch": "lerna version patch --force-publish"
   },
   "devDependencies": {
