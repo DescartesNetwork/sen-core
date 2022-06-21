@@ -10,6 +10,10 @@
   "license": "MIT",
   "main": "dist/index.js",
   "repository": "tuphan-dn/sen-core",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "files": [
     "/bin",
     "/dist",
@@ -65,7 +69,7 @@
     "version": "oclif readme && git add README.md"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=16 <=18"
   },
   "bugs": "https://github.com/tuphan-dn/sen-core/issues",
   "keywords": [
