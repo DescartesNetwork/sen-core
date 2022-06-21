@@ -20,7 +20,7 @@ $ npm install -g create-senhub-app
 $ create-senhub-app COMMAND
 running command...
 $ create-senhub-app (--version)
-create-senhub-app/3.0.13 darwin-x64 node-v18.3.0
+create-senhub-app/3.0.14 darwin-x64 node-v18.3.0
 $ create-senhub-app --help [COMMAND]
 USAGE
   $ create-senhub-app COMMAND
@@ -78,7 +78,7 @@ EXAMPLES
   $ create-senhub-app init my-app
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.13/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.14/dist/commands/init.ts)_
 
 ## `create-senhub-app publish [FILE]`
 
@@ -99,5 +99,5 @@ EXAMPLES
   $ create-senhub-app publish
 ```
 
-_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.13/dist/commands/publish.ts)_
+_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.14/dist/commands/publish.ts)_
 <!-- commandsstop -->
