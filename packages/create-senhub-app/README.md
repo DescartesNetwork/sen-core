@@ -20,7 +20,7 @@ $ npm install -g create-senhub-app
 $ create-senhub-app COMMAND
 running command...
 $ create-senhub-app (--version)
-create-senhub-app/0.0.0 darwin-x64 node-v18.3.0
+create-senhub-app/3.0.11 darwin-x64 node-v18.3.0
 $ create-senhub-app --help [COMMAND]
 USAGE
   $ create-senhub-app COMMAND
@@ -29,9 +29,8 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`create-senhub-app hello PERSON`](#create-senhub-app-hello-person)
-* [`create-senhub-app hello world`](#create-senhub-app-hello-world)
 * [`create-senhub-app help [COMMAND]`](#create-senhub-app-help-command)
+* [`create-senhub-app init [PROJECT-NAME]`](#create-senhub-app-init-project-name)
 * [`create-senhub-app plugins`](#create-senhub-app-plugins)
 * [`create-senhub-app plugins:install PLUGIN...`](#create-senhub-app-pluginsinstall-plugin)
 * [`create-senhub-app plugins:inspect PLUGIN...`](#create-senhub-app-pluginsinspect-plugin)
@@ -41,46 +40,7 @@ USAGE
 * [`create-senhub-app plugins:uninstall PLUGIN...`](#create-senhub-app-pluginsuninstall-plugin-1)
 * [`create-senhub-app plugins:uninstall PLUGIN...`](#create-senhub-app-pluginsuninstall-plugin-2)
 * [`create-senhub-app plugins update`](#create-senhub-app-plugins-update)
-
-## `create-senhub-app hello PERSON`
-
-Say hello
-
-```
-USAGE
-  $ create-senhub-app hello [PERSON] -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
-
-FLAGS
-  -f, --from=<value>  (required) Whom is saying hello
-
-DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ oex hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
-```
-
-_See code: [dist/commands/hello/index.ts](https://github.com/tuphan-dn/sen-core/blob/v0.0.0/dist/commands/hello/index.ts)_
-
-## `create-senhub-app hello world`
-
-Say hello world
-
-```
-USAGE
-  $ create-senhub-app hello world
-
-DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ oex hello world
-  hello world! (./src/commands/hello/world.ts)
-```
+* [`create-senhub-app publish [FILE]`](#create-senhub-app-publish-file)
 
 ## `create-senhub-app help [COMMAND]`
 
@@ -100,7 +60,32 @@ DESCRIPTION
   Display help for create-senhub-app.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.10/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
+
+## `create-senhub-app init [PROJECT-NAME]`
+
+Init a template of DApp on Senhub.
+
+```
+USAGE
+  $ create-senhub-app init [PROJECT-NAME] [-t module|embeded] [-f]
+
+ARGUMENTS
+  PROJECT-NAME  Your project name
+
+FLAGS
+  -f, --force              Overwrite existing directory. All files in the curent directory will be deleted.
+  -t, --template=<option>  [default: module] Template for the new DApp
+                           <options: module|embeded>
+
+DESCRIPTION
+  Init a template of DApp on Senhub.
+
+EXAMPLES
+  $ create-senhub-app init my-app
+```
+
+_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.11/dist/commands/init.ts)_
 
 ## `create-senhub-app plugins`
 
@@ -331,4 +316,25 @@ FLAGS
 DESCRIPTION
   Update installed plugins.
 ```
+
+## `create-senhub-app publish [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ create-senhub-app publish [FILE] [-n <value>] [-f]
+
+FLAGS
+  -f, --force
+  -n, --name=<value>  name to print
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ create-senhub-app publish
+```
+
+_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.11/dist/commands/publish.ts)_
 <!-- commandsstop -->
