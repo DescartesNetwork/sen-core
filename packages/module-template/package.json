@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "module-template",
   "version": "3.0.10",
   "private": true,
   "dependencies": {
