@@ -22,4 +22,5 @@ export const clone = async ({ url, dir }: { url: string; dir: string }) =>
     http,
     dir,
     url,
+    ref: 'develop',
   })

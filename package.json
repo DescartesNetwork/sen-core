@@ -2,8 +2,9 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "prestart": "yarn build && lerna bootstrap",
+    "prestart:module": "yarn build && lerna bootstrap",
     "start:module": "lerna run --scope module-template --stream start",
+    "prestart:embeded": "yarn build && lerna bootstrap",
     "start:embeded": "lerna run --scope embeded-template --stream start",
     "prebuild": "lerna bootstrap --no-private",
     "build": "lerna run build --no-private",

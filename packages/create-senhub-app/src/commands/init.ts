@@ -1,6 +1,8 @@
 import { Command, Flags, CliUx } from '@oclif/core'
-import fs from 'fs'
+import tmp from 'tmp'
+import fs from 'fs-extra'
 import path from 'path'
+import { execSync } from 'child_process'
 import { clone, rmrf } from '../util'
 
 export default class Init extends Command {
@@ -38,21 +40,33 @@ export default class Init extends Command {
     const { template, force } = flags
 
     this.log('\n👏👏👏 Welcome Sentizen!\n')
+    // Start
     CliUx.ux.action.start('Building the project', 'initializing', {
       stdout: true,
     })
-    console.log(name, force)
+    // Set up
+    const tmpobj = tmp.dirSync()
+    const tmpDir = tmpobj.name
+    // Clone the Sen Core
+    await clone({
+      dir: tmpDir,
+      url: 'https://github.com/DescartesNetwork/sen-core',
+    })
+    const templateDir = path.join(tmpDir, `./packages/${template}-template`)
+    const dir = path.join(process.cwd(), name)
+    // Init the project directory
     if (fs.existsSync(name) && !force)
       return this.error(
         `The project ${name} that already existed. Please retry with another name!`,
       )
     else await rmrf(name)
-    const dir = path.join(process.cwd(), name)
-    await clone({
-      dir,
-      url: 'https://github.com/DescartesNetwork/senreg',
+    fs.copySync(templateDir, dir)
+    // Install deps
+    execSync('yarn install', {
+      cwd: dir,
+      stdio: 'inherit',
     })
-
+    // End
     CliUx.ux.action.stop()
   }
 }
