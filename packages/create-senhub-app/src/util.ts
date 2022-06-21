@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'fs-extra'
 import rimraf from 'rimraf'
 import git from 'isomorphic-git'
 import http from 'isomorphic-git/http/node'

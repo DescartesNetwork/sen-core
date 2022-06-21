@@ -8,7 +8,7 @@ import { clone, rmrf } from '../util'
 export default class Init extends Command {
   static description = 'Init a template of DApp on Senhub.'
 
-  static examples = ['<%= config.bin %> <%= command.id %> my-app']
+  static examples = ['<%= config.bin %> <%= command.id %> my-dapp']
 
   static flags = {
     template: Flags.string({
