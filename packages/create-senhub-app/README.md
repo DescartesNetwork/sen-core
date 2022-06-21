@@ -20,7 +20,7 @@ $ npm install -g create-senhub-app
 $ create-senhub-app COMMAND
 running command...
 $ create-senhub-app (--version)
-create-senhub-app/3.0.14 darwin-x64 node-v18.3.0
+create-senhub-app/3.0.15 darwin-x64 node-v18.3.0
 $ create-senhub-app --help [COMMAND]
 USAGE
   $ create-senhub-app COMMAND
@@ -33,7 +33,7 @@ USAGE
 <!-- commands -->
 * [`create-senhub-app help [COMMAND]`](#create-senhub-app-help-command)
 * [`create-senhub-app init [PROJECT-NAME]`](#create-senhub-app-init-project-name)
-* [`create-senhub-app publish [FILE]`](#create-senhub-app-publish-file)
+* [`create-senhub-app publish`](#create-senhub-app-publish)
 
 ## `create-senhub-app help [COMMAND]`
 
@@ -75,22 +75,24 @@ DESCRIPTION
   Init a template of DApp on Senhub.
 
 EXAMPLES
-  $ create-senhub-app init my-app
+  $ create-senhub-app init my-dapp
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.14/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.15/dist/commands/init.ts)_
 
-## `create-senhub-app publish [FILE]`
+## `create-senhub-app publish`
 
 describe the command here
 
 ```
 USAGE
-  $ create-senhub-app publish [FILE] [-n <value>] [-f]
+  $ create-senhub-app publish [-d <value>]
 
 FLAGS
-  -f, --force
-  -n, --name=<value>  name to print
+  -d, --directory=<value>  [default:
+                           /Users/tuphan/Desktop/core/packages/create-senhub-app/create-senhub-app.manifest.json] The
+                           directory to the manifest file. Default option will automatically search the manifest file in
+                           the current directory.
 
 DESCRIPTION
   describe the command here
@@ -99,5 +101,5 @@ EXAMPLES
   $ create-senhub-app publish
 ```
 
-_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.14/dist/commands/publish.ts)_
+_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.15/dist/commands/publish.ts)_
 <!-- commandsstop -->
