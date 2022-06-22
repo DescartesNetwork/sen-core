@@ -5,14 +5,13 @@ import { format } from 'prettier'
 import { config } from 'dotenv-cra'
 
 export const buildManifest = async ({
-  env = process.env.NODE_ENV || 'production',
   inDir = process.cwd(),
   outDir = process.cwd(),
 }: {
-  env?: string
   inDir?: string
   outDir?: string
 }) => {
+  const env = process.env.NODE_ENV
   const { parsed } = config({ env, path: path.resolve(inDir, `.env`) })
   if (!fs.existsSync(path.resolve(inDir, `.env.${env}`)) || !parsed)
     throw new Error(`Cannot find the file env.${env}`)
@@ -94,13 +93,6 @@ export default class Manifest extends Command {
   static examples = ['<%= config.bin %> <%= command.id %>']
 
   static flags = {
-    env: Flags.string({
-      char: 'e',
-      description:
-        'The NODE_ENV to generate a corresponding manifest. Default: production.',
-      options: ['development', 'staging', 'production'],
-      default: 'production',
-    }),
     inDir: Flags.string({
       char: 'i',
       description: 'The directory to your project.',
@@ -111,21 +103,34 @@ export default class Manifest extends Command {
     }),
   }
 
-  static args = []
+  static args = [
+    {
+      name: 'env',
+      description:
+        'The NODE_ENV to generate a corresponding manifest. Default: production.',
+      options: ['development', 'staging', 'production'],
+      default: 'production',
+    },
+  ]
 
   public async run(): Promise<void> {
-    const { flags } = await this.parse(Manifest)
+    const { args, flags } = await this.parse(Manifest)
 
-    const { inDir, outDir, env } = flags
+    const { env } = args
+    const { inDir, outDir } = flags
 
+    const origEnv = process.env.NODE_ENV
     try {
-      const outPath = await buildManifest({ inDir, outDir, env })
+      process.env.NODE_ENV = env
+      const outPath = await buildManifest({ inDir, outDir })
       return this.log(
         '\n🎉 Completely build the manifest. Check here out:',
         outPath,
       )
     } catch (er: any) {
       return this.error(er.message)
+    } finally {
+      process.env.NODE_ENV = origEnv
     }
   }
 }
