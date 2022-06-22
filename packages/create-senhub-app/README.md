@@ -20,7 +20,7 @@ $ npm install -g create-senhub-app
 $ create-senhub-app COMMAND
 running command...
 $ create-senhub-app (--version)
-create-senhub-app/3.0.20 darwin-x64 node-v18.3.0
+create-senhub-app/3.0.21 darwin-x64 node-v18.3.0
 $ create-senhub-app --help [COMMAND]
 USAGE
   $ create-senhub-app COMMAND
@@ -79,11 +79,11 @@ EXAMPLES
   $ create-senhub-app init my-dapp
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.20/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.21/dist/commands/init.ts)_
 
 ## `create-senhub-app manifest [ENV]`
 
-describe the command here
+Generate the manifest file of the application, which is to submit your application to Sentre Hub.
 
 ```
 USAGE
@@ -98,17 +98,17 @@ FLAGS
   -o, --outDir=<value>  The directory to output the manifest file.
 
 DESCRIPTION
-  describe the command here
+  Generate the manifest file of the application, which is to submit your application to Sentre Hub.
 
 EXAMPLES
   $ create-senhub-app manifest
 ```
 
-_See code: [dist/commands/manifest.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.20/dist/commands/manifest.ts)_
+_See code: [dist/commands/manifest.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.21/dist/commands/manifest.ts)_
 
 ## `create-senhub-app publish`
 
-describe the command here
+Publish your applications to Sentre Hub. The manifest file will be automatically generated with production mode.
 
 ```
 USAGE
@@ -121,11 +121,11 @@ FLAGS
                            the current directory.
 
 DESCRIPTION
-  describe the command here
+  Publish your applications to Sentre Hub. The manifest file will be automatically generated with production mode.
 
 EXAMPLES
   $ create-senhub-app publish
 ```
 
-_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.20/dist/commands/publish.ts)_
+_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.21/dist/commands/publish.ts)_
 <!-- commandsstop -->
