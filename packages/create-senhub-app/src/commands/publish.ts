@@ -2,7 +2,8 @@ import { Command, Flags } from '@oclif/core'
 import path from 'path'
 
 export default class Publish extends Command {
-  static description = 'describe the command here'
+  static description =
+    'Publish your applications to Sentre Hub. The manifest file will be automatically generated with production mode.'
 
   static examples = ['<%= config.bin %> <%= command.id %>']
 

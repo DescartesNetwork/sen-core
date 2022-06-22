@@ -88,7 +88,8 @@ export const buildManifest = async ({
 }
 
 export default class Manifest extends Command {
-  static description = 'describe the command here'
+  static description =
+    'Generate the manifest file of the application, which is to submit your application to Sentre Hub.'
 
   static examples = ['<%= config.bin %> <%= command.id %>']
 
