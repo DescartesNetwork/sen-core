@@ -20,7 +20,7 @@ $ npm install -g create-senhub-app
 $ create-senhub-app COMMAND
 running command...
 $ create-senhub-app (--version)
-create-senhub-app/3.0.16 darwin-x64 node-v18.3.0
+create-senhub-app/3.0.17 darwin-x64 node-v18.3.0
 $ create-senhub-app --help [COMMAND]
 USAGE
   $ create-senhub-app COMMAND
@@ -33,6 +33,7 @@ USAGE
 <!-- commands -->
 * [`create-senhub-app help [COMMAND]`](#create-senhub-app-help-command)
 * [`create-senhub-app init [PROJECT-NAME]`](#create-senhub-app-init-project-name)
+* [`create-senhub-app manifest`](#create-senhub-app-manifest)
 * [`create-senhub-app publish`](#create-senhub-app-publish)
 
 ## `create-senhub-app help [COMMAND]`
@@ -68,7 +69,7 @@ ARGUMENTS
 
 FLAGS
   -f, --force              Overwrite existing directory. All files in the curent directory will be deleted.
-  -t, --template=<option>  [default: module] Template for the new DApp
+  -t, --template=<option>  [default: module] Template for the new DApp.
                            <options: module|embeded>
 
 DESCRIPTION
@@ -78,7 +79,30 @@ EXAMPLES
   $ create-senhub-app init my-dapp
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.16/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.17/dist/commands/init.ts)_
+
+## `create-senhub-app manifest`
+
+describe the command here
+
+```
+USAGE
+  $ create-senhub-app manifest [-e development|staging|production] [-i <value>] [-o <value>]
+
+FLAGS
+  -e, --env=<option>    [default: production] The NODE_ENV to generate a corresponding manifest. Default: production.
+                        <options: development|staging|production>
+  -i, --inDir=<value>   The directory to your project.
+  -o, --outDir=<value>  The directory to output the manifest file.
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ create-senhub-app manifest
+```
+
+_See code: [dist/commands/manifest.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.17/dist/commands/manifest.ts)_
 
 ## `create-senhub-app publish`
 
@@ -101,5 +125,5 @@ EXAMPLES
   $ create-senhub-app publish
 ```
 
-_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.16/dist/commands/publish.ts)_
+_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.17/dist/commands/publish.ts)_
 <!-- commandsstop -->
