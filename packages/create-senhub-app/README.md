@@ -20,7 +20,7 @@ $ npm install -g create-senhub-app
 $ create-senhub-app COMMAND
 running command...
 $ create-senhub-app (--version)
-create-senhub-app/3.0.17 darwin-x64 node-v18.3.0
+create-senhub-app/3.0.18 darwin-x64 node-v18.3.0
 $ create-senhub-app --help [COMMAND]
 USAGE
   $ create-senhub-app COMMAND
@@ -79,7 +79,7 @@ EXAMPLES
   $ create-senhub-app init my-dapp
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.17/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.18/dist/commands/init.ts)_
 
 ## `create-senhub-app manifest`
 
@@ -102,7 +102,7 @@ EXAMPLES
   $ create-senhub-app manifest
 ```
 
-_See code: [dist/commands/manifest.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.17/dist/commands/manifest.ts)_
+_See code: [dist/commands/manifest.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.18/dist/commands/manifest.ts)_
 
 ## `create-senhub-app publish`
 
@@ -125,5 +125,5 @@ EXAMPLES
   $ create-senhub-app publish
 ```
 
-_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.17/dist/commands/publish.ts)_
+_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.18/dist/commands/publish.ts)_
 <!-- commandsstop -->
