@@ -13,7 +13,7 @@ export default class Init extends Command {
   static flags = {
     template: Flags.string({
       char: 't',
-      description: 'Template for the new DApp',
+      description: 'Template for the new DApp.',
       options: ['module', 'embeded'],
       default: 'module',
     }),
@@ -52,8 +52,8 @@ export default class Init extends Command {
       dir: tmpDir,
       url: 'https://github.com/DescartesNetwork/sen-core',
     })
-    const templateDir = path.join(tmpDir, `./packages/${template}-template`)
-    const dir = path.join(process.cwd(), name)
+    const templateDir = path.resolve(tmpDir, `./packages/${template}-template`)
+    const dir = path.resolve(process.cwd(), name)
     // Init the project directory
     if (fs.existsSync(name) && !force)
       return this.error(
