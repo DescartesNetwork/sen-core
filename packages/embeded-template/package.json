@@ -26,8 +26,7 @@
     "predeploy": "yarn build:production",
     "deploy": "gh-pages -d build",
     "preserve": "yarn build:staging",
-    "serve": "serve -s build -l 3000",
-    "manifest": "NODE_ENV=production node ./manifest-builder.js"
+    "serve": "serve -s build -l 3000"
   },
   "eslintConfig": {
     "extends": [
@@ -62,7 +61,6 @@
     "dotenv-cra": "^3.0.2",
     "env-cmd": "^10.1.0",
     "gh-pages": "^3.2.3",
-    "prettier": "2.5.0",
     "serve": "^12.0.1",
     "typescript": "^4.5.2"
   }
