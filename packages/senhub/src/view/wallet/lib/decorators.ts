@@ -6,6 +6,22 @@ const {
   sol: { taxmanAddress, platformFee },
 } = configs
 
+export const addFeeInstruction = (
+  tx: Transaction,
+  payer: PublicKey,
+): Transaction => {
+  for (const { signature } of tx.signatures) {
+    if (signature) return tx
+  }
+  const ix = SystemProgram.transfer({
+    fromPubkey: payer,
+    toPubkey: new PublicKey(taxmanAddress),
+    lamports: platformFee,
+  })
+  tx.add(ix)
+  return tx
+}
+
 export const collectFee = (
   target: any,
   memberName: string,
@@ -13,13 +29,9 @@ export const collectFee = (
 ) => {
   const original = descriptor.value
   descriptor.value = async function (tx: Transaction) {
-    const ix = SystemProgram.transfer({
-      fromPubkey: tx.feePayer || (await target.getAddress()),
-      toPubkey: new PublicKey(taxmanAddress),
-      lamports: platformFee,
-    })
-    tx.add(ix)
-    return original.call(target, tx)
+    const payer = tx.feePayer || (await target.getAddress())
+    const chagredTx = addFeeInstruction(tx, payer)
+    return original.call(target, chagredTx)
   }
 }
 
@@ -30,14 +42,12 @@ export const collectFees = (
 ) => {
   const original = descriptor.value
   descriptor.value = async (txs: Transaction[]) => {
+    let chargedTxs = []
     for (const tx of txs) {
-      const ix = SystemProgram.transfer({
-        fromPubkey: tx.feePayer || (await target.getAddress()),
-        toPubkey: new PublicKey(taxmanAddress),
-        lamports: platformFee,
-      })
-      tx.add(ix)
+      const payer = tx.feePayer || (await target.getAddress())
+      const chagredTx = addFeeInstruction(tx, payer)
+      chargedTxs.push(chagredTx)
     }
-    return original.call(target, txs)
+    return original.call(target, chargedTxs)
   }
 }
