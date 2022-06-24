@@ -3,7 +3,6 @@
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { RootContext } from 'store/context'
-import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { ConfigProvider } from 'antd'
 import View from 'view'
@@ -17,11 +16,9 @@ import store from 'store'
 const Senhub = () => (
   <Provider context={RootContext} store={store}>
     <BrowserRouter>
-      <QueryClientProvider client={new QueryClient()}>
-        <ConfigProvider prefixCls={'sentre'}>
-          <View />
-        </ConfigProvider>
-      </QueryClientProvider>
+      <ConfigProvider prefixCls={'sentre'}>
+        <View />
+      </ConfigProvider>
     </BrowserRouter>
   </Provider>
 )
