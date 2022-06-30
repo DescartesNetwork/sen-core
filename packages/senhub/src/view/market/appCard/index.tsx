@@ -45,7 +45,9 @@ const AppCard = ({ appId, style = {} }: AppCardProps) => {
               onClick={onOpen}
             >
               <Row align="bottom" style={{ height: cardHeight }}>
-                <AppCardInfo appId={appId} />
+                <Col span={24}>
+                  <AppCardInfo appId={appId} />
+                </Col>
               </Row>
             </Card>
           )}

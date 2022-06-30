@@ -64,57 +64,50 @@ const AppCardInfo = ({ appId }: AppCardInfoProps) => {
   )
 
   return (
-    <Col span={24}>
-      <Card
-        bordered={false}
-        className="glass"
-        style={{
-          // Don't remove the border-radius bottom because -webkit- properties not working with overflow hidden.
-          borderTopRightRadius: 'unset',
-          borderTopLeftRadius: 'unset',
-          boxShadow: 'unset',
-        }}
-        bodyStyle={{
-          padding: '12px 16px',
-        }}
-      >
-        <Row align="middle" gutter={[8, 8]} wrap={false}>
-          <Col>
-            <AppIcon size={32} appId={appId} name={false} />
-          </Col>
-          <Col flex="auto">
-            <Space direction="vertical" size={0}>
-              <Space align="center" style={{ lineHeight: 1 }}>
-                <Typography.Title level={5}>{name}</Typography.Title>
-                <Verification verified={verified} />
-              </Space>
-              <Typography.Text type="secondary">{author?.name}</Typography.Text>
+    <Card
+      bordered={false}
+      className="glass"
+      style={{
+        // Don't remove the border-radius bottom because -webkit- properties not working with overflow hidden.
+        borderTopRightRadius: 'unset',
+        borderTopLeftRadius: 'unset',
+        boxShadow: 'unset',
+      }}
+      bodyStyle={{
+        padding: '12px 16px',
+      }}
+    >
+      <Row align="middle" gutter={[8, 8]} wrap={false}>
+        <Col>
+          <AppIcon size={32} appId={appId} name={false} />
+        </Col>
+        <Col flex="auto">
+          <Space direction="vertical" size={0}>
+            <Space align="center" style={{ lineHeight: 1 }}>
+              <Typography.Title level={5}>{name}</Typography.Title>
+              <Verification verified={verified} />
             </Space>
-          </Col>
-          <Col>
-            {installed ? (
-              <Button
-                ghost
-                size="small"
-                onClick={onOpen}
-                id="open-action-button"
-              >
-                Open
-              </Button>
-            ) : (
-              <Button
-                type="primary"
-                onClick={onInstall}
-                size="small"
-                id="install-action-button"
-              >
-                Install
-              </Button>
-            )}
-          </Col>
-        </Row>
-      </Card>
-    </Col>
+            <Typography.Text type="secondary">{author?.name}</Typography.Text>
+          </Space>
+        </Col>
+        <Col>
+          {installed ? (
+            <Button ghost size="small" onClick={onOpen} id="open-action-button">
+              Open
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              onClick={onInstall}
+              size="small"
+              id="install-action-button"
+            >
+              Install
+            </Button>
+          )}
+        </Col>
+      </Row>
+    </Card>
   )
 }
 
