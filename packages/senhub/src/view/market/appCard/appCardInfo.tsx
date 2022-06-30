@@ -67,7 +67,7 @@ const AppCardInfo = ({ appId }: AppCardInfoProps) => {
     <Col span={24}>
       <Card
         bordered={false}
-        className="glass webkit-border"
+        className="glass"
         style={{
           // Don't remove the border-radius bottom because -webkit- properties not working with overflow hidden.
           borderTopRightRadius: 'unset',
