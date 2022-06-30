@@ -69,7 +69,10 @@ const AppCardInfo = ({ appId }: AppCardInfoProps) => {
         bordered={false}
         className="glass"
         style={{
-          borderRadius: 'unset',
+          // Don't remove the border-radius bottom because -webkit- properties not working with overflow hidden.
+          borderTopRightRadius: 'unset',
+          borderTopLeftRadius: 'unset',
+          boxShadow: 'unset',
         }}
         bodyStyle={{
           padding: '12px 16px',
