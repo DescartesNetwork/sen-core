@@ -58,7 +58,6 @@
     "node": ">=16 <=18"
   },
   "resolutions": {
-    "@solana/web3.js": "1.45.0",
     "@types/react": "17.0.39",
     "@types/react-dom": "17.0.11"
   },
