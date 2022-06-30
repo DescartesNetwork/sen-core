@@ -15,6 +15,15 @@ export const ContextMenu = ({ appId }: ContextMenuProps) => {
     () => window.open(`/app/${appId}`, '_blank'),
     [appId],
   )
+  const onShareInstantLink = useCallback(() => {
+    navigator.clipboard.writeText(
+      `${window.location.origin}/app/${appId}?autoInstall=true`,
+    )
+    return window.message({
+      type: 'info',
+      description: 'The link has been copied.',
+    })
+  }, [appId])
   const onViewInStore = useGoToStore({ appId, blank: true })
   const onUninstall = useUninstallApp(appId)
 
@@ -33,6 +42,12 @@ export const ContextMenu = ({ appId }: ContextMenuProps) => {
           icon: <IonIcon name="images-outline" />,
           onClick: onOpenInPictureMode,
           disabled: true,
+        },
+        {
+          key: 'share-instant-link',
+          label: 'Share Instant Link',
+          icon: <IonIcon name="arrow-redo-outline" />,
+          onClick: onShareInstantLink,
         },
         {
           key: 'view-in-store',

@@ -83,6 +83,11 @@ type SentreNotification = {
   description: string
   onClick?: () => void
 }
+type SentreMessage = {
+  type: 'error' | 'warning' | 'success' | 'info' | 'loading'
+  description: string
+  onClick?: () => void
+}
 interface Window {
   // Sentre
   sentre: {
@@ -95,6 +100,7 @@ interface Window {
   ipfs?: any
   // Utility
   notify: ({ type, description, onClick }: SentreNotification) => void
+  message: ({ type, description, onClick }: SentreMessage) => void
   // Partner wallets
   coin98: any
   solana: any

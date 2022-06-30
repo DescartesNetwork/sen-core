@@ -2,12 +2,12 @@
 
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { RootContext } from 'store/context'
 
 import { ConfigProvider } from 'antd'
 import View from 'view'
 
 import store from 'store'
+import { RootContext } from 'store/context'
 
 /**
  * Mainboard
