@@ -11,13 +11,12 @@ const {
   register: { devAppId },
 } = configs
 
-const AppAvatar = ({
-  appId,
-  avatarProps,
-}: {
+export type AppAvatarProps = {
   appId: string
   avatarProps: AvatarProps
-}) => {
+}
+
+export const AppAvatar = ({ appId, avatarProps }: AppAvatarProps) => {
   return appId === devAppId ? (
     <Badge.Ribbon className="sentre-ribbon-dev" text="dev" placement="start">
       <Avatar {...avatarProps}>
@@ -41,7 +40,7 @@ export type RawAppIconProps = {
   src: ReactNode
 }
 
-const RawVerticalAppIcon = ({
+export const RawVerticalAppIcon = ({
   src,
   appId,
   onClick = () => {},
@@ -82,7 +81,7 @@ const RawVerticalAppIcon = ({
   )
 }
 
-const RawHorizontalAppIcon = ({
+export const RawHorizontalAppIcon = ({
   src,
   appId,
   onClick = () => {},

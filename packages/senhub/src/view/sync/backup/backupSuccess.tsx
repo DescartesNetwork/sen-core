@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
+import copy from 'copy-to-clipboard'
 
 import {
   Button,
@@ -14,6 +14,7 @@ import {
 import IonIcon from '@sentre/antd-ionicon'
 
 import SuccessImg from 'static/images/backup/success.png'
+import { asyncWait } from 'shared/util'
 
 const BackupSuccess = ({
   link,
@@ -26,12 +27,19 @@ const BackupSuccess = ({
 }) => {
   const [copied, setCopied] = useState(false)
 
-  const onCopy = useCallback(async () => {
+  const visibleCopied = useCallback(async () => {
     setCopied(true)
-    setTimeout(() => {
-      setCopied(false)
-    }, 1500)
+    await asyncWait(1500)
+    setCopied(false)
   }, [])
+
+  const onCopy = useCallback(
+    async (text: string, cb: () => void = () => {}) => {
+      copy(text)
+      return cb()
+    },
+    [],
+  )
 
   return (
     <Modal
@@ -67,24 +75,21 @@ const BackupSuccess = ({
             }
             suffix={
               <Tooltip title="Copied" visible={copied}>
-                <CopyToClipboard text={link} onCopy={onCopy}>
-                  <Button
-                    type="text"
-                    size="small"
-                    icon={<IonIcon name="copy-outline" />}
-                  />
-                </CopyToClipboard>
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<IonIcon name="copy-outline" />}
+                  onClick={() => onCopy(link, visibleCopied)}
+                />
               </Tooltip>
             }
             value={link}
           />
         </Col>
         <Col span={24}>
-          <CopyToClipboard text={link} onCopy={onCopy}>
-            <Button type="primary" onClick={onClose}>
-              {'Copy & Close'}
-            </Button>
-          </CopyToClipboard>
+          <Button type="primary" onClick={() => onCopy(link, onClose)}>
+            {'Copy & Close'}
+          </Button>
         </Col>
       </Row>
     </Modal>

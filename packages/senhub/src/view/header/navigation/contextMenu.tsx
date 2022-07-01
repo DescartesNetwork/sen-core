@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import copy from 'copy-to-clipboard'
 
 import { Menu } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -15,10 +16,8 @@ export const ContextMenu = ({ appId }: ContextMenuProps) => {
     () => window.open(`/app/${appId}`, '_blank'),
     [appId],
   )
-  const onShareInstantLink = useCallback(() => {
-    navigator.clipboard.writeText(
-      `${window.location.origin}/app/${appId}?autoInstall=true`,
-    )
+  const onCopyInstantLink = useCallback(() => {
+    copy(`${window.location.origin}/app/${appId}?autoInstall=true`)
     return window.message({
       type: 'info',
       description: 'The link has been copied.',
@@ -44,10 +43,10 @@ export const ContextMenu = ({ appId }: ContextMenuProps) => {
           disabled: true,
         },
         {
-          key: 'share-instant-link',
-          label: 'Share Instant Link',
+          key: 'copy-instant-link',
+          label: 'Copy Instant Link',
           icon: <IonIcon name="arrow-redo-outline" />,
-          onClick: onShareInstantLink,
+          onClick: onCopyInstantLink,
         },
         {
           key: 'view-in-store',

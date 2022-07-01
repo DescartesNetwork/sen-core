@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
+import copy from 'copy-to-clipboard'
 
 import {
   Button,
@@ -65,11 +65,12 @@ const ShareModal = ({
     },
     [onShare],
   )
-  const onCopy = async () => {
+  const onCopy = useCallback(async (text: string) => {
+    copy(text)
     setCopied(true)
     await asyncWait(1500)
-    setCopied(false)
-  }
+    return setCopied(false)
+  }, [])
 
   const shareLogo = useMemo(() => {
     if (shareWith === 'twitter') return Twitter
@@ -98,14 +99,12 @@ const ShareModal = ({
           <Input
             suffix={
               <Tooltip title="Copied" visible={copied}>
-                <CopyToClipboard text={window.location.href}>
-                  <Button
-                    type="text"
-                    size="small"
-                    icon={<IonIcon name="copy-outline" />}
-                    onClick={onCopy}
-                  />
-                </CopyToClipboard>
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<IonIcon name="copy-outline" />}
+                  onClick={() => onCopy(window.location.href)}
+                />
               </Tooltip>
             }
             value={window.location.href}

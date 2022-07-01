@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import copy from 'copy-to-clipboard'
 
 import { Tooltip, Space, Typography, Popover } from 'antd'
 import QRCodeCanvas from 'qrcode.react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { useRootSelector, RootState } from 'store'
-import { explorer, shortenAddress } from 'shared/util'
+import { asyncWait, explorer, shortenAddress } from 'shared/util'
 import IconButton from './iconButton'
 
 const QR = ({ address }: { address: string }) => {
@@ -36,12 +36,12 @@ const Address = () => {
   )
   const [copied, setCopied] = useState(false)
 
-  const onCopy = async () => {
+  const onCopy = useCallback(async (text: string) => {
+    copy(text)
     setCopied(true)
-    setTimeout(() => {
-      setCopied(false)
-    }, 1500)
-  }
+    await asyncWait(1500)
+    return setCopied(false)
+  }, [])
 
   return (
     <Space size={10}>
@@ -52,9 +52,7 @@ const Address = () => {
         {shortenAddress(walletAddress, 3, '...')}
       </Typography.Text>
       <Tooltip title="Copied" visible={copied}>
-        <CopyToClipboard text={walletAddress} onCopy={onCopy}>
-          <IconButton name="copy-outline" onClick={onCopy} />
-        </CopyToClipboard>
+        <IconButton name="copy-outline" onClick={() => onCopy(walletAddress)} />
       </Tooltip>
       <QR address={walletAddress} />
     </Space>

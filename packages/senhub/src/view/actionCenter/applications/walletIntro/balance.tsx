@@ -25,28 +25,19 @@ const Balance = ({
     const cgkData = await fetchCGK('solana')
     return setCGKData(cgkData)
   }, [])
+
   useEffect(() => {
     getCGKData()
   }, [getCGKData])
 
-  if (inUSD)
-    return hidden ? (
-      <Skeleton.Input
-        style={{ width: 128, borderRadius: 4 }}
-        size="small"
-        active
-      />
-    ) : (
-      <span>{`$${usd}`}</span>
-    )
   return hidden ? (
     <Skeleton.Input
-      style={{ width: 56, borderRadius: 4 }}
+      style={{ width: inUSD ? 128 : 56, borderRadius: 4 }}
       size="small"
       active
     />
   ) : (
-    <span>{balance}</span>
+    <span>{inUSD ? `$${usd}` : balance}</span>
   )
 }
 
