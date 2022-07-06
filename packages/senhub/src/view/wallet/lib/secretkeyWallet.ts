@@ -62,7 +62,7 @@ class SecretKeyWallet extends BaseWallet {
     if (!keypair) throw new Error('Cannot get the keystore-based provider')
     const provider = {
       keypair,
-      disconnect: () => session.clear('SecretKey'),
+      disconnect: () => storage.clear('SecretKey'),
     }
     return provider
   }
