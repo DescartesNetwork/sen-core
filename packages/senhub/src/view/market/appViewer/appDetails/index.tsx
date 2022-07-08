@@ -8,7 +8,6 @@ import ReadmeLoader from 'components/readmeLoader'
 import InstalledApp from './installedApp'
 import AppTags from './appTags'
 import AppAuthor from './appAuthor'
-import AppReadMe from './appReadMe'
 import AppShare from './appShare'
 
 import { useRootSelector, RootState } from 'store'
@@ -21,7 +20,7 @@ const AppDetails = ({ appId }: { appId: string }) => {
     (state: RootState) => state.wallet.address,
   )
 
-  const { description, author, name, tags, verified } = useMemo(
+  const { author, name, tags, verified } = useMemo(
     () => register[appId] || ({} as ComponentManifest),
     [register, appId],
   )
