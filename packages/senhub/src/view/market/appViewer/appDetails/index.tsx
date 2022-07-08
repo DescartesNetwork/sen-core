@@ -4,10 +4,10 @@ import { account } from '@senswap/sen-js'
 import { Row, Col, Typography, Space } from 'antd'
 import AppIcon from 'components/appIcon'
 import Verification from 'components/verification'
+import ReadmeLoader from 'components/readmeLoader'
 import InstalledApp from './installedApp'
 import AppTags from './appTags'
 import AppAuthor from './appAuthor'
-import AppReadMe from './appReadMe'
 import AppShare from './appShare'
 
 import { useRootSelector, RootState } from 'store'
@@ -20,7 +20,7 @@ const AppDetails = ({ appId }: { appId: string }) => {
     (state: RootState) => state.wallet.address,
   )
 
-  const { description, author, name, tags, verified } = useMemo(
+  const { author, name, tags, verified } = useMemo(
     () => register[appId] || ({} as ComponentManifest),
     [register, appId],
   )
@@ -62,7 +62,6 @@ const AppDetails = ({ appId }: { appId: string }) => {
               <Col>
                 <Space>
                   <AppShare appId={appId} />
-                  <AppReadMe appId={appId} />
                 </Space>
               </Col>
             </Row>
@@ -73,11 +72,7 @@ const AppDetails = ({ appId }: { appId: string }) => {
         <AppAuthor author={author} />
       </Col>
       <Col span={24}>
-        <Typography.Paragraph
-          ellipsis={{ rows: 2, expandable: true, symbol: 'More' }}
-        >
-          {description}
-        </Typography.Paragraph>
+        <ReadmeLoader appId={appId} />
       </Col>
     </Row>
   )
