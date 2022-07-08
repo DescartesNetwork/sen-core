@@ -4,6 +4,7 @@ import { account } from '@senswap/sen-js'
 import { Row, Col, Typography, Space } from 'antd'
 import AppIcon from 'components/appIcon'
 import Verification from 'components/verification'
+import ReadmeLoader from 'components/readmeLoader'
 import InstalledApp from './installedApp'
 import AppTags from './appTags'
 import AppAuthor from './appAuthor'
@@ -72,13 +73,17 @@ const AppDetails = ({ appId }: { appId: string }) => {
       <Col span={24}>
         <AppAuthor author={author} />
       </Col>
-      <Col span={24}>
+      {!!description ? (
         <Typography.Paragraph
           ellipsis={{ rows: 2, expandable: true, symbol: 'More' }}
         >
           {description}
         </Typography.Paragraph>
-      </Col>
+      ) : (
+        <Col span={24}>
+          <ReadmeLoader appId={appId} />
+        </Col>
+      )}
     </Row>
   )
 }
