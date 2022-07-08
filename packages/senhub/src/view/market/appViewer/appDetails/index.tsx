@@ -63,7 +63,6 @@ const AppDetails = ({ appId }: { appId: string }) => {
               <Col>
                 <Space>
                   <AppShare appId={appId} />
-                  <AppReadMe appId={appId} />
                 </Space>
               </Col>
             </Row>
@@ -73,17 +72,9 @@ const AppDetails = ({ appId }: { appId: string }) => {
       <Col span={24}>
         <AppAuthor author={author} />
       </Col>
-      {!!description ? (
-        <Typography.Paragraph
-          ellipsis={{ rows: 2, expandable: true, symbol: 'More' }}
-        >
-          {description}
-        </Typography.Paragraph>
-      ) : (
-        <Col span={24}>
-          <ReadmeLoader appId={appId} />
-        </Col>
-      )}
+      <Col span={24}>
+        <ReadmeLoader appId={appId} />
+      </Col>
     </Row>
   )
 }
