@@ -1894,10 +1894,10 @@
   dependencies:
     react-helmet "^6.1.0"
 
-"@sentre/antd-ionicon@^1.0.34":
-  version "1.0.34"
-  resolved "https://registry.yarnpkg.com/@sentre/antd-ionicon/-/antd-ionicon-1.0.34.tgz#d83ac793c6886cc201edb2ac574e9c40ba877dae"
-  integrity sha512-56O2k5bbQH0cC7xS1EnnRn3hObMOFuXWoAOeEB/3gfCSESavB0HW8IO8pFqQ/H3pxUI6b9CTqwDgyD+jmFh4Uw==
+"@sentre/antd-ionicon@^1.0.35":
+  version "1.0.35"
+  resolved "https://registry.yarnpkg.com/@sentre/antd-ionicon/-/antd-ionicon-1.0.35.tgz#d5f1cfdba3da53eb201cc04f20e2db7dbc0af437"
+  integrity sha512-/pQ8wFvdo3ska8k8m/V3DexjBmmQ4774VzQuOASS3FWUV85nQkjyFvSw4kKc0OYQ4ooB/YC+mhxrEkXK6Sozpg==
   dependencies:
     react-helmet "^6.1.0"
 
@@ -1908,10 +1908,10 @@
   dependencies:
     "@solana/web3.js" "^1.43.1"
 
-"@sentre/craco-plugins@^1.0.34":
-  version "1.0.34"
-  resolved "https://registry.yarnpkg.com/@sentre/craco-plugins/-/craco-plugins-1.0.34.tgz#15627789841068052ef07409e5aeba03cc6cc5f4"
-  integrity sha512-DvDirsrcItlFlgENlqc6moKyC6uuEGSWR2Ms8kl+ByaPMkKvUZw/A1QrPXkKwUJoa8FlJqOIHN8rWy7GVZ2P3Q==
+"@sentre/craco-plugins@^1.0.35":
+  version "1.0.35"
+  resolved "https://registry.yarnpkg.com/@sentre/craco-plugins/-/craco-plugins-1.0.35.tgz#9816fa7adf0f28d38970ea9a85db29036484e09f"
+  integrity sha512-uer73ov7XfyuZ6CODxwC/052q0utqK9uuLYo2C4H+59nrzvjoh22zyYaOaCxM3J+lQR/3fzGcCw/gZWMD4UUSw==
   dependencies:
     "@babel/cli" "^7.17.10"
     "@babel/core" "^7.18.2"
@@ -1954,10 +1954,10 @@
   resolved "https://registry.yarnpkg.com/@sentre/react-lazyload/-/react-lazyload-3.2.2.tgz#f3d921327a2b14b9b3a9e906d01034f11387097a"
   integrity sha512-NKJhz9G8pModoZJaLMziRJtd582pFHbIydNXwRI72ECkjqbc7XIgBX+8kssrUtRxK2rW9VVQnGKDpmyZ8iSIyw==
 
-"@sentre/senhub@^3.0.41":
-  version "3.0.41"
-  resolved "https://registry.yarnpkg.com/@sentre/senhub/-/senhub-3.0.41.tgz#ca12302d9f6dac0cf3b5e48e5ab7fa966471c401"
-  integrity sha512-rn0PAUGJQRg4nekgwpe6RICY31y9wt62V3j3IzV4luce5TBU+3dRxBJ92pBtp2gnUElOwIMIhOI/QAk4fNTmvA==
+"@sentre/senhub@^3.0.42":
+  version "3.0.42"
+  resolved "https://registry.yarnpkg.com/@sentre/senhub/-/senhub-3.0.42.tgz#ad30203c16d0345aaa227e6d956c91cd145bc189"
+  integrity sha512-DF0SSbSB6IVBj41vpsusKzDETsTMuCnGS+1IzA4xDoUDqHwOWsaSvS8ckaleeLzFeXWXj85J3lwWDkuFZ/qmJw==
   dependencies:
     "@dnd-kit/core" "^4.0.1"
     "@dnd-kit/sortable" "^5.0.0"
