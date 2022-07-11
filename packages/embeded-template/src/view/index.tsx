@@ -10,7 +10,7 @@ const View = () => {
   return (
     <EmbededView
       appId={'sypool'}
-      src={'https://app.sypool.io/'}
+      src={'https://sentre.io/'}
       title="Please replace the src and title to your original DApp."
       wallet={window.sentre.wallet}
     />
