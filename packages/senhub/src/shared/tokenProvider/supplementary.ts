@@ -1,9 +1,10 @@
+export const SOL_ADDRESS = '11111111111111111111111111111111'
 // Pseudo native sol info
 // It's for all networks
 export const sol = (chainId: 101 | 102 | 103) => ({
   symbol: 'SOL',
   name: 'Solana',
-  address: '11111111111111111111111111111111',
+  address: SOL_ADDRESS,
   decimals: 9,
   chainId,
   extensions: {
