@@ -2,7 +2,7 @@ import lunr, { Index } from 'lunr'
 import { TokenListProvider, TokenInfo } from '@solana/spl-token-registry'
 
 import { net, chainId, ChainId, Net } from 'shared/runtime'
-import supplementary, { sntr, sol } from './supplementary'
+import supplementary, { sntr, sol, SOL_ADDRESS } from './supplementary'
 
 class TokenProvider {
   private tokenMap: Map<string, TokenInfo>
@@ -59,7 +59,12 @@ class TokenProvider {
 
   all = async (): Promise<TokenInfo[]> => {
     const [tokenMap] = await this._init()
-    return Array.from(tokenMap.values())
+    const filteredToken: TokenInfo[] = []
+    tokenMap.forEach((token) => {
+      // Ignore SOL Native
+      if (token.address !== SOL_ADDRESS) filteredToken.push(token)
+    })
+    return filteredToken
   }
 
   findByAddress = async (addr: string): Promise<TokenInfo | undefined> => {
@@ -75,7 +80,8 @@ class TokenProvider {
     engine.search(fuzzy).forEach(({ ref }) => {
       if (tokens.findIndex(({ address }) => address === ref) < 0) {
         const token = tokenMap.get(ref)
-        if (token) tokens.push(token)
+        // Ignore SOL Native
+        if (token && token.address !== SOL_ADDRESS) tokens.push(token)
       }
     })
     if (limit === 0) return tokens
