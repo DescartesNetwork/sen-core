@@ -11,7 +11,7 @@ import AllApps from './allApps'
 import { useRootSelector, RootState } from 'store'
 import { compareAliasString } from './appCategory/hooks/custom'
 
-const CATEGORIES = ['utility', 'DAO', 'liquidity', 'sentre', 'game']
+const CATEGORIES = ['utility', 'DAO', 'liquidity', 'stable', 'sentre', 'game']
 
 const Market = () => {
   const { search } = useLocation()
