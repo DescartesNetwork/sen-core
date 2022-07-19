@@ -45,3 +45,10 @@ export { default as TokenProvider } from 'shared/tokenProvider'
 export * as util from 'shared/util'
 // Dataloader
 export * from 'shared/dataloader'
+// Hooks
+export * from 'hooks/useRegister'
+export * from 'hooks/useAppIds'
+export * from 'hooks/useGotoApp'
+export * from 'hooks/useGotoStore'
+export * from 'hooks/useInstallApp'
+export * from 'hooks/useUninstallApp'
