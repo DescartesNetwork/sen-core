@@ -50,7 +50,7 @@ const AppList = () => {
 
   return (
     <Row gutter={[12, 12]} wrap={false} align="middle">
-      <Col id="store-nav-button">
+      <Col>
         <AppStore />
       </Col>
       {account.isAddress(walletAddress) && (
