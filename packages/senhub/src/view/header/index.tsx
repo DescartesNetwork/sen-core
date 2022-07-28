@@ -15,11 +15,8 @@ import {
   RootDispatch,
   RootState,
 } from 'store'
-import { setWalkthrough, WalkThroughType } from 'store/walkthrough.reducer'
 import { net } from 'shared/runtime'
 import { setVisible } from 'store/search.reducer'
-import { useGoToStore } from 'hooks/useGotoStore'
-import { useCallback } from 'react'
 
 export type NavButtonProps = {
   id: string
@@ -48,21 +45,11 @@ const Header = () => {
   )
   const width = useRootSelector((state: RootState) => state.ui.width)
   const theme = useRootSelector((state: RootState) => state.ui.theme)
-  const run = useRootSelector((state: RootState) => state.walkthrough.run)
-  const step = useRootSelector((state: RootState) => state.walkthrough.step)
   const dispatch = useRootDispatch<RootDispatch>()
   const history = useHistory()
   const { pathname } = useLocation()
 
   const onSearch = () => dispatch(setVisible(true))
-  const onGoToStore = useGoToStore()
-  const onStore = useCallback(async () => {
-    if (run && step === 0)
-      await dispatch(
-        setWalkthrough({ type: WalkThroughType.NewComer, step: 1 }),
-      )
-    return onGoToStore()
-  }, [dispatch, run, step, onGoToStore])
 
   return (
     <Row gutter={[12, 12]} align="middle" wrap={false}>
@@ -88,12 +75,6 @@ const Header = () => {
               title="Search"
             />
           ) : null}
-          <NavButton
-            id="store-nav-button"
-            iconName="bag-handle-outline"
-            onClick={onStore}
-            title="Store"
-          />
           {!account.isAddress(walletAddress) ? <Wallet /> : <ActionCenter />}
         </Space>
       </Col>
