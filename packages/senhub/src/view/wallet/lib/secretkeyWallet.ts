@@ -5,7 +5,7 @@ import { account, Provider } from '@senswap/sen-js'
 import BaseWallet from './baseWallet'
 import session from 'shared/session'
 import storage from 'shared/storage'
-import { collectFee, collectFees } from './decorators'
+import { collectFee, collectFees } from 'decorators/fee.decorator'
 
 type ExpanedProvider = Provider & { keypair: Keypair }
 

@@ -1,3 +1,4 @@
+import { declareDeprecated } from 'decorators/deprecated.decorator'
 import {
   createContext,
   useContext,
@@ -45,6 +46,7 @@ const PoolContextComsumer = ({ children }: { children: JSX.Element }) => {
  * Pool HOC
  */
 export const withPool = (WrappedComponent: typeof Component) => {
+  declareDeprecated({ memberName: 'withPool', deadline: 'Senhub v4' })
   class HOC extends Component<any, any> {
     render() {
       const { forwardedRef, ...rest } = this.props
@@ -64,5 +66,6 @@ export const withPool = (WrappedComponent: typeof Component) => {
  * Pool Hook
  */
 export const usePool = () => {
+  declareDeprecated({ memberName: 'usePool', deadline: 'Senhub v4' })
   return useContext<PoolProvider>(Context)
 }

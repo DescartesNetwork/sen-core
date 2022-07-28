@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useWallet, createPDB } from '@sentre/senhub'
+import { createPDB, useWalletAddress } from '@sentre/senhub'
 
 import { Row, Col, Typography, Button, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -14,13 +14,11 @@ const {
 } = configs
 
 const View = () => {
-  const {
-    wallet: { address },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const dispatch = useDispatch<AppDispatch>()
   const { counter } = useSelector((state: AppState) => state.main)
 
-  const pdb = useMemo(() => createPDB(address, appId), [address])
+  const pdb = useMemo(() => createPDB(walletAddress, appId), [walletAddress])
   const increase = useCallback(() => dispatch(increaseCounter()), [dispatch])
   useEffect(() => {
     if (pdb) pdb.setItem('counter', counter)
@@ -35,7 +33,7 @@ const View = () => {
         </Space>
       </Col>
       <Col span={24}>
-        <Typography.Text>Address: {address}</Typography.Text>
+        <Typography.Text>Address: {walletAddress}</Typography.Text>
       </Col>
       <Col>
         <Typography.Text>Counter: {counter}</Typography.Text>

@@ -3,7 +3,7 @@ import { account, SignedMessage } from '@senswap/sen-js'
 import { decode } from 'bs58'
 
 import BaseWallet from './baseWallet'
-import { collectFee, collectFees } from './decorators'
+import { collectFee, collectFees } from 'decorators/fee.decorator'
 
 class Coin98Wallet extends BaseWallet {
   constructor() {

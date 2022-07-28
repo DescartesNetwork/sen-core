@@ -1,3 +1,4 @@
+import { declareDeprecated } from 'decorators/deprecated.decorator'
 import {
   createContext,
   useContext,
@@ -45,6 +46,7 @@ const WalletContextComsumer = ({ children }: { children: JSX.Element }) => {
  * Wallet HOC
  */
 export const withWallet = (WrappedComponent: typeof Component) => {
+  declareDeprecated({ memberName: 'withWallet', deadline: 'Senhub v4' })
   class HOC extends Component<any, any> {
     render() {
       const { forwardedRef, ...rest } = this.props
@@ -64,5 +66,6 @@ export const withWallet = (WrappedComponent: typeof Component) => {
  * Wallet Hook
  */
 export const useWallet = () => {
+  declareDeprecated({ memberName: 'useWallet', deadline: 'Senhub v4' })
   return useContext<WalletProvider>(Context)
 }
