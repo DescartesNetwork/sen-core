@@ -1,4 +1,5 @@
-import { useHistory, useLocation } from 'react-router-dom'
+import { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 
 import { Row, Col, Button, Space } from 'antd'
@@ -7,7 +8,6 @@ import Wallet from 'view/wallet'
 import Brand from 'components/brand'
 import ActionCenter from 'view/actionCenter'
 import Navigation from './navigation'
-import Search from './search'
 
 import {
   useRootDispatch,
@@ -17,9 +17,7 @@ import {
 } from 'store'
 import { setWalkthrough, WalkThroughType } from 'store/walkthrough.reducer'
 import { net } from 'shared/runtime'
-import { setVisible } from 'store/search.reducer'
 import { useGoToStore } from 'hooks/useGotoStore'
-import { useCallback } from 'react'
 
 export type NavButtonProps = {
   id: string
@@ -52,9 +50,7 @@ const Header = () => {
   const step = useRootSelector((state: RootState) => state.walkthrough.step)
   const dispatch = useRootDispatch<RootDispatch>()
   const history = useHistory()
-  const { pathname } = useLocation()
 
-  const onSearch = () => dispatch(setVisible(true))
   const onGoToStore = useGoToStore()
   const onStore = useCallback(async () => {
     if (run && step === 0)
@@ -80,14 +76,6 @@ const Header = () => {
       </Col>
       <Col>
         <Space align="center">
-          {pathname.startsWith('/store') ? (
-            <NavButton
-              id="search-nav-button"
-              iconName="search-outline"
-              onClick={onSearch}
-              title="Search"
-            />
-          ) : null}
           <NavButton
             id="store-nav-button"
             iconName="bag-handle-outline"
@@ -97,7 +85,6 @@ const Header = () => {
           {!account.isAddress(walletAddress) ? <Wallet /> : <ActionCenter />}
         </Space>
       </Col>
-      <Search />
     </Row>
   )
 }

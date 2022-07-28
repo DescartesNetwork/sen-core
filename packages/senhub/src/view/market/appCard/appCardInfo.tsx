@@ -13,7 +13,6 @@ import {
 } from 'store'
 import { setWalkthrough, WalkThroughType } from 'store/walkthrough.reducer'
 import { openWallet } from 'store/wallet.reducer'
-import { setVisible } from 'store/search.reducer'
 import { useGoToApp } from 'hooks/useGotoApp'
 import { useInstallApp } from 'hooks/useInstallApp'
 
@@ -27,7 +26,6 @@ const AppCardInfo = ({ appId }: AppCardInfoProps) => {
   const walletAddress = useRootSelector(
     (state: RootState) => state.wallet.address,
   )
-  const visible = useRootSelector((state: RootState) => state.search.visible)
   const onInstallApp = useInstallApp(appId)
   const onGoToApp = useGoToApp({ appId })
 
@@ -53,14 +51,13 @@ const AppCardInfo = ({ appId }: AppCardInfoProps) => {
   const onOpen = useCallback(
     async (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation()
-      if (visible) await dispatch(setVisible(false))
       if (run)
         await dispatch(
           setWalkthrough({ type: WalkThroughType.NewComer, step: 3 }),
         )
       return onGoToApp()
     },
-    [onGoToApp, dispatch, run, visible],
+    [onGoToApp, dispatch, run],
   )
 
   return (
