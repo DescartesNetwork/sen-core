@@ -15,6 +15,7 @@ import {
   RootDispatch,
   RootState,
 } from 'store'
+import { setWalkthrough, WalkThroughType } from 'store/walkthrough.reducer'
 import { net } from 'shared/runtime'
 import { useGoToStore } from 'hooks/useGotoStore'
 
@@ -45,6 +46,8 @@ const Header = () => {
   )
   const width = useRootSelector((state: RootState) => state.ui.width)
   const theme = useRootSelector((state: RootState) => state.ui.theme)
+  const run = useRootSelector((state: RootState) => state.walkthrough.run)
+  const step = useRootSelector((state: RootState) => state.walkthrough.step)
   const dispatch = useRootDispatch<RootDispatch>()
   const history = useHistory()
 
