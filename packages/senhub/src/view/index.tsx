@@ -9,7 +9,7 @@ import Welcome from 'view/welcome'
 import Page from 'view/page'
 import Sync from 'view/sync'
 import Loading from 'view/loading'
-import Store from './store'
+import Store from 'view/store'
 
 import Watcher from 'view/watcher'
 import Walkthrough from 'view/walkthrough'
