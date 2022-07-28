@@ -1,4 +1,5 @@
-import { useHistory, useLocation } from 'react-router-dom'
+import { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 
 import { Row, Col, Button, Space } from 'antd'
@@ -7,7 +8,6 @@ import Wallet from 'view/wallet'
 import Brand from 'components/brand'
 import ActionCenter from 'view/actionCenter'
 import Navigation from './navigation'
-import Search from './search'
 
 import {
   useRootDispatch,
@@ -16,7 +16,7 @@ import {
   RootState,
 } from 'store'
 import { net } from 'shared/runtime'
-import { setVisible } from 'store/search.reducer'
+import { useGoToStore } from 'hooks/useGotoStore'
 
 export type NavButtonProps = {
   id: string
@@ -47,9 +47,15 @@ const Header = () => {
   const theme = useRootSelector((state: RootState) => state.ui.theme)
   const dispatch = useRootDispatch<RootDispatch>()
   const history = useHistory()
-  const { pathname } = useLocation()
 
-  const onSearch = () => dispatch(setVisible(true))
+  const onGoToStore = useGoToStore()
+  const onStore = useCallback(async () => {
+    if (run && step === 0)
+      await dispatch(
+        setWalkthrough({ type: WalkThroughType.NewComer, step: 1 }),
+      )
+    return onGoToStore()
+  }, [dispatch, run, step, onGoToStore])
 
   return (
     <Row gutter={[12, 12]} align="middle" wrap={false}>
@@ -67,18 +73,15 @@ const Header = () => {
       </Col>
       <Col>
         <Space align="center">
-          {pathname.startsWith('/store') ? (
-            <NavButton
-              id="search-nav-button"
-              iconName="search-outline"
-              onClick={onSearch}
-              title="Search"
-            />
-          ) : null}
+          <NavButton
+            id="store-nav-button"
+            iconName="bag-handle-outline"
+            onClick={onStore}
+            title="Store"
+          />
           {!account.isAddress(walletAddress) ? <Wallet /> : <ActionCenter />}
         </Space>
       </Col>
-      <Search />
     </Row>
   )
 }

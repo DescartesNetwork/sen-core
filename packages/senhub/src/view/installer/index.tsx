@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { Col, Modal, Row, Typography } from 'antd'
+import { Col, Modal, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import CustomAppIcon from './customAppIcon'
 
@@ -12,9 +12,9 @@ import {
   useRootSelector,
 } from 'store'
 import { setVisibleInstaller } from 'store/ui.reducer'
-import SearchEngine from 'view/header/search/searchEngine'
 import { randChoose } from 'shared/util'
 import { useInstallAppCallback } from 'hooks/useInstallApp'
+import SearchEngine from './searchEngine'
 
 const SUGGESTION_LIMIT = 6
 
@@ -79,7 +79,7 @@ const Installer = () => {
       destroyOnClose
     >
       <Row gutter={[18, 18]}>
-        {exactAppId && (
+        {exactAppId ? (
           <Fragment>
             <Col span={24}>
               <Typography.Title level={4}>
@@ -89,9 +89,24 @@ const Installer = () => {
             <Col span={24}>
               <CustomAppIcon appId={exactAppId} />
             </Col>
-            <Col span={24} />
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Col span={24}>
+              <Typography.Title level={4}>Opps!</Typography.Title>
+            </Col>
+            <Col span={24}>
+              <Space>
+                <IonIcon name="warning-outline" />
+                <Typography.Text type="secondary">
+                  Cannot find the DApp. Please make sure you have a correct
+                  link!
+                </Typography.Text>
+              </Space>
+            </Col>
           </Fragment>
         )}
+        <Col span={24} />
         <Col span={24}>
           <Typography.Title level={4}>Recommended Apps</Typography.Title>
         </Col>

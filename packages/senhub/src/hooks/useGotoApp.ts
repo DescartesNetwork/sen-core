@@ -8,7 +8,6 @@ import {
   RootState,
 } from 'store'
 import { setVisibleActionCenter, setVisibleInstaller } from 'store/ui.reducer'
-import { setVisible } from 'store/search.reducer'
 import { setWalkthrough, WalkThroughType } from 'store/walkthrough.reducer'
 
 export type GoToAppProps = {
@@ -20,7 +19,6 @@ export type GoToAppProps = {
 export const useGoToAppCallback = () => {
   const history = useHistory()
   const dispatch = useRootDispatch<RootDispatch>()
-  const visible = useRootSelector((state: RootState) => state.search.visible)
   const visibleActionCenter = useRootSelector(
     (state: RootState) => state.ui.visibleActionCenter,
   )
@@ -32,7 +30,6 @@ export const useGoToAppCallback = () => {
 
   const onGotoAppCallback = useCallback(
     async ({ appId, blank = false, search }: GoToAppProps = {}) => {
-      if (visible) await dispatch(setVisible(false))
       if (visibleActionCenter) await dispatch(setVisibleActionCenter(false))
       if (visibleInstaller) await dispatch(setVisibleInstaller(false))
       if (run && step === 2)
@@ -46,7 +43,7 @@ export const useGoToAppCallback = () => {
       url = search ? url + search : url
       return nav(url)
     },
-    [dispatch, history, visible, visibleActionCenter, visibleInstaller],
+    [dispatch, history, visibleActionCenter, visibleInstaller],
   )
 
   return onGotoAppCallback
