@@ -29,7 +29,6 @@ export const useGoToAppCallback = () => {
     async ({ appId, blank = false, search }: GoToAppProps = {}) => {
       if (visibleActionCenter) await dispatch(setVisibleActionCenter(false))
       if (visibleInstaller) await dispatch(setVisibleInstaller(false))
-
       const nav = blank
         ? (url: string) => window.open(url, '_blank')
         : history.push
