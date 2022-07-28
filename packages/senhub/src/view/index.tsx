@@ -89,14 +89,15 @@ const View = () => {
               {/* App Store */}
               <Route exact path="/app/store" component={Store} />
               <Route exact path="/app/store/:appId" component={Store} />
-              <Route exact path="/store">
-                <Redirect to="/app/store" />
-              </Route>
               <Route
-                exact
-                path="/store/:appId"
+                path="/store"
                 render={(props) => (
-                  <Redirect to={`/app/store/${props.match.params.appId}`} />
+                  <Redirect
+                    to={{
+                      pathname: `/app${props.location.pathname}`,
+                      search: props.location.search,
+                    }}
+                  />
                 )}
               />
               {/* End App Store */}
