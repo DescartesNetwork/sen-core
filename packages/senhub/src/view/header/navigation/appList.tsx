@@ -1,5 +1,6 @@
-import { useCallback } from 'react'
+import { Fragment, useCallback } from 'react'
 import { useRouteMatch } from 'react-router-dom'
+import { account } from '@senswap/sen-js'
 
 import { Row, Col, Badge, Dropdown, Divider } from 'antd'
 import AppIcon from 'components/appIcon'
@@ -43,37 +44,45 @@ const AppList = () => {
 
   const { params } = useRouteMatch<{ appId: string }>('/app/:appId') || {}
   const onGoToApp = useGoToAppCallback()
+  const walletAddress = useRootSelector(
+    (state: RootState) => state.wallet.address,
+  )
+
   return (
     <Row gutter={[12, 12]} wrap={false} align="middle">
       <Col id="store-nav-button">
         <AppStore />
       </Col>
-      <Divider type="vertical" />
-      {appIds.map((appId) => (
-        <Col key={appId}>
-          <Dropdown
-            trigger={['contextMenu']}
-            overlay={<ContextMenu appId={appId} />}
-            destroyPopupOnHide
-          >
-            <Badge
-              dot={params?.appId === appId}
-              className="sentre-active-app"
-              offset={[-5, 5]}
-            >
-              <AppIcon
-                appId={appId}
-                size={32}
-                name={false}
-                onClick={() => onGoToApp({ appId })}
-              />
-            </Badge>
-          </Dropdown>
-        </Col>
-      ))}
-      <Col>
-        <More />
-      </Col>
+      {account.isAddress(walletAddress) && (
+        <Fragment>
+          <Divider type="vertical" />
+          {appIds.map((appId) => (
+            <Col key={appId}>
+              <Dropdown
+                trigger={['contextMenu']}
+                overlay={<ContextMenu appId={appId} />}
+                destroyPopupOnHide
+              >
+                <Badge
+                  dot={params?.appId === appId}
+                  className="sentre-active-app"
+                  offset={[-5, 5]}
+                >
+                  <AppIcon
+                    appId={appId}
+                    size={32}
+                    name={false}
+                    onClick={() => onGoToApp({ appId })}
+                  />
+                </Badge>
+              </Dropdown>
+            </Col>
+          ))}
+          <Col>
+            <More />
+          </Col>
+        </Fragment>
+      )}
     </Row>
   )
 }
