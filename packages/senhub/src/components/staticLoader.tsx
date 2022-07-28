@@ -6,6 +6,7 @@ import { Spin } from 'antd'
 import ErrorBoundary from 'components/errorBoundary'
 
 import { useRootSelector, RootState } from 'store'
+import { REGISTER_APP_STORE } from 'view/store'
 
 const ONE_HOUR = 60 * 60 * 1000
 
@@ -67,7 +68,10 @@ export const StaticLoader = forwardRef<
   }
 >(({ type, appId, defaultData = '', render }, ref) => {
   const register = useRootSelector((state: RootState) => state.page.register)
-  const url = useMemo(() => register[appId]?.url || '', [register, appId])
+  const url = useMemo(
+    () => register[appId]?.url || REGISTER_APP_STORE[appId]?.url || '',
+    [register, appId],
+  )
   const manifest: RemoteModule = useMemo(
     () => ({ url, scope: appId, module: './static' }),
     [url, appId],

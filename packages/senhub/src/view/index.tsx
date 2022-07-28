@@ -7,13 +7,11 @@ import PrivateRoute from 'components/privateRoute'
 import Header from 'view/header'
 import Welcome from 'view/welcome'
 import Page from 'view/page'
-import Market from 'view/market'
-import AppViewer from 'view/market/appViewer'
 import Sync from 'view/sync'
 import Loading from 'view/loading'
+import Store from 'view/store'
 
 import Watcher from 'view/watcher'
-import Walkthrough from 'view/walkthrough'
 import Installer from 'view/installer'
 
 import {
@@ -87,9 +85,21 @@ const View = () => {
           <Col span={24}>
             <Switch>
               <Route exact path="/welcome" component={Welcome} />
+              {/* App Store */}
+              <Route exact path="/app/store/:appId?" component={Store} />
+              <Route
+                path="/store"
+                render={(props) => (
+                  <Redirect
+                    to={{
+                      pathname: `/app${props.location.pathname}`,
+                      search: props.location.search,
+                    }}
+                  />
+                )}
+              />
+              {/* End App Store */}
               <PrivateRoute path="/app/:appId" component={Page} />
-              <Route exact path="/store" component={Market} />
-              <Route exact path="/store/:appId" component={AppViewer} />
               <PrivateRoute exact path="/sync" component={Sync} />
               <Redirect from="*" to="/welcome" />
             </Switch>
@@ -98,7 +108,6 @@ const View = () => {
       </Layout>
       {/* In-Background Run Jobs */}
       <Loading />
-      <Walkthrough />
       <Watcher />
       <Installer />
     </Layout>

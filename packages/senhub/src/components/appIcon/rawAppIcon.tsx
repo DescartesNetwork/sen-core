@@ -5,6 +5,7 @@ import IonIcon from '@sentre/antd-ionicon'
 
 import { useRootSelector, RootState } from 'store'
 import configs from 'configs'
+import { REGISTER_APP_STORE } from 'view/store'
 import './index.os.less'
 
 const {
@@ -49,7 +50,7 @@ export const RawVerticalAppIcon = ({
 }: RawAppIconProps) => {
   const register = useRootSelector((state: RootState) => state.page.register)
   const { name: appName } = useMemo(
-    () => register[appId] || { name: 'Unknown' },
+    () => register[appId] || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
     [register, appId],
   )
 
@@ -90,7 +91,7 @@ export const RawHorizontalAppIcon = ({
 }: RawAppIconProps) => {
   const register = useRootSelector((state: RootState) => state.page.register)
   const { name: appName } = useMemo(
-    () => register[appId] || { name: 'Unknown' },
+    () => register[appId] || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
     [register, appId],
   )
 
