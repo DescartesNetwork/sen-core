@@ -12,7 +12,6 @@ import Loading from 'view/loading'
 import Store from 'view/store'
 
 import Watcher from 'view/watcher'
-import Walkthrough from 'view/walkthrough'
 import Installer from 'view/installer'
 
 import {
@@ -109,7 +108,6 @@ const View = () => {
       </Layout>
       {/* In-Background Run Jobs */}
       <Loading />
-      <Walkthrough />
       <Watcher />
       <Installer />
     </Layout>

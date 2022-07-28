@@ -13,7 +13,6 @@ import {
   RootDispatch,
 } from 'store'
 import { useGoToAppCallback } from 'hooks/useGotoApp'
-import { setWalkthrough, WalkThroughType } from 'store/walkthrough.reducer'
 
 import './index.os.less'
 
@@ -21,18 +20,12 @@ const STORE_ID = 'store'
 
 const AppStore = () => {
   const { params } = useRouteMatch<{ appId: string }>('/app/:appId') || {}
-  const run = useRootSelector((state: RootState) => state.walkthrough.run)
-  const step = useRootSelector((state: RootState) => state.walkthrough.step)
   const dispatch = useRootDispatch<RootDispatch>()
   const onGoToApp = useGoToAppCallback()
 
   const onStore = useCallback(async () => {
-    if (run && step === 0)
-      await dispatch(
-        setWalkthrough({ type: WalkThroughType.NewComer, step: 1 }),
-      )
     return onGoToApp({ appId: STORE_ID })
-  }, [dispatch, run, step, onGoToApp])
+  }, [dispatch, onGoToApp])
 
   return (
     <Badge

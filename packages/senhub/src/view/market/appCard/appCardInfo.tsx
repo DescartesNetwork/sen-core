@@ -11,7 +11,6 @@ import {
   useRootDispatch,
   RootDispatch,
 } from 'store'
-import { setWalkthrough, WalkThroughType } from 'store/walkthrough.reducer'
 import { openWallet } from 'store/wallet.reducer'
 import { useGoToApp } from 'hooks/useGotoApp'
 import { useInstallApp } from 'hooks/useInstallApp'
@@ -22,7 +21,6 @@ const AppCardInfo = ({ appId }: AppCardInfoProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
   const register = useRootSelector((state: RootState) => state.page.register)
   const appIds = useRootSelector((state: RootState) => state.page.appIds)
-  const run = useRootSelector((state: RootState) => state.walkthrough.run)
   const walletAddress = useRootSelector(
     (state: RootState) => state.wallet.address,
   )
@@ -39,25 +37,18 @@ const AppCardInfo = ({ appId }: AppCardInfoProps) => {
     async (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation()
       if (!account.isAddress(walletAddress)) return dispatch(openWallet())
-      if (run)
-        await dispatch(
-          setWalkthrough({ type: WalkThroughType.NewComer, step: 2 }),
-        )
+
       return onInstallApp()
     },
-    [onInstallApp, dispatch, run, walletAddress],
+    [onInstallApp, dispatch, walletAddress],
   )
 
   const onOpen = useCallback(
     async (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation()
-      if (run)
-        await dispatch(
-          setWalkthrough({ type: WalkThroughType.NewComer, step: 3 }),
-        )
-      return onGoToApp()
+      onGoToApp()
     },
-    [onGoToApp, dispatch, run],
+    [onGoToApp, dispatch],
   )
 
   return (
