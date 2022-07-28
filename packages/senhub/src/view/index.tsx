@@ -7,10 +7,9 @@ import PrivateRoute from 'components/privateRoute'
 import Header from 'view/header'
 import Welcome from 'view/welcome'
 import Page from 'view/page'
-import Market from 'view/market'
-import AppViewer from 'view/market/appViewer'
 import Sync from 'view/sync'
 import Loading from 'view/loading'
+import Store from './store'
 
 import Watcher from 'view/watcher'
 import Walkthrough from 'view/walkthrough'
@@ -87,9 +86,21 @@ const View = () => {
           <Col span={24}>
             <Switch>
               <Route exact path="/welcome" component={Welcome} />
+              {/* App Store */}
+              <Route exact path="/app/store" component={Store} />
+              <Route exact path="/app/store/:appId" component={Store} />
+              <Route exact path="/store">
+                <Redirect to="/app/store" />
+              </Route>
+              <Route
+                exact
+                path="/store/:appId"
+                render={(props) => (
+                  <Redirect to={`/app/store/${props.match.params.appId}`} />
+                )}
+              />
+              {/* End App Store */}
               <PrivateRoute path="/app/:appId" component={Page} />
-              <Route exact path="/store" component={Market} />
-              <Route exact path="/store/:appId" component={AppViewer} />
               <PrivateRoute exact path="/sync" component={Sync} />
               <Redirect from="*" to="/welcome" />
             </Switch>
