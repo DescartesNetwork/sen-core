@@ -87,8 +87,7 @@ const View = () => {
             <Switch>
               <Route exact path="/welcome" component={Welcome} />
               {/* App Store */}
-              <Route exact path="/app/store" component={Store} />
-              <Route exact path="/app/store/:appId" component={Store} />
+              <Route exact path="/app/store/:appId?" component={Store} />
               <Route
                 path="/store"
                 render={(props) => (
