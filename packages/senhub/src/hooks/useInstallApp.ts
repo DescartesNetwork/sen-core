@@ -21,7 +21,7 @@ export const useInstallAppCallback = () => {
     async (appId: string) => {
       if (!account.isAddress(walletAddress)) return dispatch(openWallet())
       await dispatch(updateVisited(true))
-      dispatch(installApp(appId))
+      return dispatch(installApp(appId))
     },
     [dispatch, walletAddress],
   )
