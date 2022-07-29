@@ -48,15 +48,6 @@ const conf: Record<Env, Conf> = {
   },
 
   /**
-   * Staging configurations
-   */
-  staging: {
-    devAppId: DEFAULT_APP_ID,
-    extra: devApp,
-    senreg: 'https://descartesnetwork.github.io/senreg/register.json',
-  },
-
-  /**
    * Production configurations
    */
   production: {
