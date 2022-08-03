@@ -10,6 +10,7 @@ import PDB from 'shared/pdb'
 type FlagsState = {
   visited: boolean
   loading: boolean
+  developerMode: boolean
 }
 
 /**
@@ -20,6 +21,7 @@ const NAME = 'flags'
 const initialState: FlagsState = {
   visited: true,
   loading: true,
+  developerMode: false,
 }
 
 /**
@@ -63,6 +65,36 @@ export const updateLoading = createAsyncThunk(
   },
 )
 
+export const loadDeveloperMode = createAsyncThunk<
+  Partial<FlagsState>,
+  void,
+  { state: any }
+>(`${NAME}/loadDeveloperMode`, async (_, { getState }) => {
+  const {
+    wallet: { address: walletAddress },
+  } = getState()
+  if (!account.isAddress(walletAddress))
+    throw new Error('Wallet is not connected yet')
+  const db = new PDB(walletAddress).createInstance('sentre')
+  const developerMode: boolean = (await db.getItem('developerMode')) || false
+  return { developerMode }
+})
+
+export const updateDeveloperMode = createAsyncThunk<
+  Partial<FlagsState>,
+  boolean,
+  { state: any }
+>(`${NAME}/updateDeveloperMode`, async (developerMode, { getState }) => {
+  const {
+    wallet: { address },
+  } = getState()
+  if (!account.isAddress(address))
+    throw new Error('Wallet is not connected yet')
+  const db = new PDB(address).createInstance('sentre')
+  await db.setItem('developerMode', developerMode)
+  return { developerMode }
+})
+
 /**
  * Usual procedure
  */
@@ -83,6 +115,14 @@ const slice = createSlice({
       )
       .addCase(
         updateLoading.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        loadDeveloperMode.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        updateDeveloperMode.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

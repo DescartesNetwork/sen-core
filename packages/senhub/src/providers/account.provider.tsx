@@ -1,3 +1,4 @@
+import { declareDeprecated } from 'decorators/deprecated.decorator'
 import {
   createContext,
   useContext,
@@ -45,6 +46,7 @@ const AccountContextComsumer = ({ children }: { children: JSX.Element }) => {
  * Account HOC
  */
 export const withAccount = (WrappedComponent: typeof Component) => {
+  declareDeprecated({ memberName: 'withAccount', deadline: 'Senhub v4' })
   class HOC extends Component<any, any> {
     render() {
       const { forwardedRef, ...rest } = this.props
@@ -64,5 +66,6 @@ export const withAccount = (WrappedComponent: typeof Component) => {
  * Account Hook
  */
 export const useAccount = () => {
+  declareDeprecated({ memberName: 'useAccount', deadline: 'Senhub v4' })
   return useContext<AccountProvider>(Context)
 }

@@ -10,7 +10,9 @@
     "build": "lerna run build --no-private",
     "predeploy": "yarn build",
     "deploy": "lerna exec --no-private --parallel --stream -- npm publish --access=public",
-    "patch": "lerna version patch --force-publish"
+    "patch": "lerna version patch --force-publish",
+    "minor": "lerna version minor --force-publish",
+    "major": "lerna version major --force-publish"
   },
   "devDependencies": {
     "lerna": "^4.0.0"

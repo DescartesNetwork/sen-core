@@ -80,16 +80,11 @@ const AppCardInfo = ({ appId }: AppCardInfoProps) => {
         </Col>
         <Col>
           {installed ? (
-            <Button ghost size="small" onClick={onOpen} id="open-action-button">
+            <Button ghost size="small" onClick={onOpen}>
               Open
             </Button>
           ) : (
-            <Button
-              type="primary"
-              onClick={onInstall}
-              size="small"
-              id="install-action-button"
-            >
+            <Button type="primary" onClick={onInstall} size="small">
               Install
             </Button>
           )}

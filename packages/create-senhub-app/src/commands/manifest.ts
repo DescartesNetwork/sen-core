@@ -109,7 +109,7 @@ export default class Manifest extends Command {
       name: 'env',
       description:
         'The NODE_ENV to generate a corresponding manifest. Default: production.',
-      options: ['development', 'staging', 'production'],
+      options: ['development', 'production'],
       default: 'production',
     },
   ]

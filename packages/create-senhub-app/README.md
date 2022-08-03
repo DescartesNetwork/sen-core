@@ -7,14 +7,16 @@ The official CLI to init a template of DApp on Senhub
 [![License](https://img.shields.io/npm/l/create-senhub-app.svg)](https://github.com/DescartesNetwork/sen-core/blob/main/package.json)
 
 <!-- toc -->
-* [create-senhub-app](#create-senhub-app)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [create-senhub-app](#create-senhub-app)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g create-senhub-app
 $ create-senhub-app COMMAND
@@ -26,15 +28,17 @@ USAGE
   $ create-senhub-app COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`create-senhub-app help [COMMAND]`](#create-senhub-app-help-command)
-* [`create-senhub-app init [PROJECT-NAME]`](#create-senhub-app-init-project-name)
-* [`create-senhub-app manifest [ENV]`](#create-senhub-app-manifest-env)
-* [`create-senhub-app publish`](#create-senhub-app-publish)
+
+- [`create-senhub-app help [COMMAND]`](#create-senhub-app-help-command)
+- [`create-senhub-app init [PROJECT-NAME]`](#create-senhub-app-init-project-name)
+- [`create-senhub-app manifest [ENV]`](#create-senhub-app-manifest-env)
+- [`create-senhub-app publish`](#create-senhub-app-publish)
 
 ## `create-senhub-app help [COMMAND]`
 
@@ -90,7 +94,7 @@ USAGE
   $ create-senhub-app manifest [ENV] [-i <value>] [-o <value>]
 
 ARGUMENTS
-  ENV  (development|staging|production) [default: production] The NODE_ENV to generate a corresponding manifest.
+  ENV  (development|production) [default: production] The NODE_ENV to generate a corresponding manifest.
        Default: production.
 
 FLAGS
@@ -128,4 +132,5 @@ EXAMPLES
 ```
 
 _See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.49/dist/commands/publish.ts)_
+
 <!-- commandsstop -->
