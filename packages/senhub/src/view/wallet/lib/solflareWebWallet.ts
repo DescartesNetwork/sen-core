@@ -5,7 +5,7 @@ import WalletAdapter from '@project-serum/sol-wallet-adapter'
 
 import BaseWallet from './baseWallet'
 import configs from 'configs'
-import { collectFee, collectFees } from './decorators'
+import { collectFee, collectFees } from 'decorators/fee.decorator'
 
 const {
   sol: { node },

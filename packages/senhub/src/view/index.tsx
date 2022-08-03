@@ -21,7 +21,11 @@ import {
   RootDispatch,
 } from 'store'
 import { loadPage, loadRegister } from 'store/page.reducer'
-import { loadVisited, updateLoading } from 'store/flags.reducer'
+import {
+  loadDeveloperMode,
+  loadVisited,
+  updateLoading,
+} from 'store/flags.reducer'
 
 import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
@@ -43,6 +47,7 @@ const View = () => {
       try {
         await dispatch(updateLoading(true))
         await dispatch(loadVisited())
+        await dispatch(loadDeveloperMode())
         const register = await dispatch(loadRegister()).unwrap()
         if (Object.keys(register).length) await dispatch(loadPage())
       } catch (er: any) {

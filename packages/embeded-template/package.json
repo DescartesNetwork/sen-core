@@ -23,12 +23,9 @@
     "start": "craco start",
     "build": "yarn build:production",
     "build:production": "craco build",
-    "build:staging": "env-cmd -f .env.staging craco build",
     "test": "craco test",
     "predeploy": "yarn build:production",
-    "deploy": "gh-pages -d build",
-    "preserve": "yarn build:staging",
-    "serve": "serve -s build -l 3000"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -61,9 +58,7 @@
     "@types/react-dom": "^17.0.11",
     "@types/react-router-dom": "^5.3.1",
     "dotenv-cra": "^3.0.2",
-    "env-cmd": "^10.1.0",
     "gh-pages": "^3.2.3",
-    "serve": "^12.0.1",
     "typescript": "^4.5.2"
   }
 }

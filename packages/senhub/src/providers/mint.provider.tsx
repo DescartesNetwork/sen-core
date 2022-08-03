@@ -19,6 +19,7 @@ import {
 } from 'store'
 import { getMint as _getMint, MintsState } from 'store/mints.reducer'
 import TokenProvider from 'shared/tokenProvider'
+import { declareDeprecated } from 'decorators/deprecated.decorator'
 
 const tokenProvider = new TokenProvider()
 const Context = createContext<MintProvider>({} as MintProvider)
@@ -87,6 +88,7 @@ const MintContextComsumer = ({ children }: { children: JSX.Element }) => {
  * Mint HOC
  */
 export const withMint = (WrappedComponent: typeof Component) => {
+  declareDeprecated({ memberName: 'withMint', deadline: 'Senhub v4' })
   class HOC extends Component<any, any> {
     render() {
       const { forwardedRef, ...rest } = this.props
@@ -106,5 +108,6 @@ export const withMint = (WrappedComponent: typeof Component) => {
  * Mint Hook
  */
 export const useMint = () => {
+  declareDeprecated({ memberName: 'useMint', deadline: 'Senhub v4' })
   return useContext<MintProvider>(Context)
 }

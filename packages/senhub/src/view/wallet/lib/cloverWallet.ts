@@ -3,7 +3,7 @@ import * as nacl from 'tweetnacl'
 import { account, SignedMessage } from '@senswap/sen-js'
 
 import BaseWallet from './baseWallet'
-import { collectFee, collectFees } from './decorators'
+import { collectFee, collectFees } from 'decorators/fee.decorator'
 
 class CloverWallet extends BaseWallet {
   constructor() {
