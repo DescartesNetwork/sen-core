@@ -4,7 +4,7 @@ import { account } from '@senswap/sen-js'
 import { decode, encode } from 'bs58'
 
 import BaseWallet from './baseWallet'
-import { collectFee, collectFees } from './decorators'
+import { collectFee, collectFees } from 'decorators/fee.decorator'
 
 class SlopeWallet extends BaseWallet {
   private provider: any

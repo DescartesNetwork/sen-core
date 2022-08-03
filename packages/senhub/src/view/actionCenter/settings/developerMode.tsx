@@ -7,14 +7,15 @@ import {
   RootDispatch,
   RootState,
 } from 'store'
-import { setTheme } from 'store/ui.reducer'
+import { updateDeveloperMode } from 'store/flags.reducer'
 
-const Theme = () => {
+const DeveloperMode = () => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const theme = useRootSelector((state: RootState) => state.ui.theme)
+  const developerMode = useRootSelector(
+    (state: RootState) => state.flags.developerMode,
+  )
 
-  const onSwitch = (checked: boolean) =>
-    dispatch(setTheme(checked ? 'dark' : 'light'))
+  const onSwitch = (checked: boolean) => dispatch(updateDeveloperMode(checked))
 
   return (
     <Card bodyStyle={{ padding: 16 }} hoverable bordered={false}>
@@ -22,14 +23,12 @@ const Theme = () => {
         <Col span={24}>
           <Row gutter={[8, 8]} wrap={false} align="middle">
             <Col flex="auto">
-              <IonIcon
-                name={theme === 'dark' ? 'moon-outline' : 'sunny-outline'}
-              />
+              <IonIcon name="bug-outline" />
             </Col>
             <Col>
               <Switch
                 size="small"
-                checked={theme === 'dark'}
+                checked={developerMode}
                 onChange={onSwitch}
               />
             </Col>
@@ -38,15 +37,14 @@ const Theme = () => {
         <Col span={24}>
           <Space direction="vertical" size={0}>
             <Typography.Text style={{ textTransform: 'capitalize' }}>
-              {theme} Mode
+              Developer Mode
             </Typography.Text>
             <Typography.Paragraph
               type="secondary"
               style={{ fontSize: 12, margin: 0 }}
             >
-              {theme === 'dark'
-                ? "Prolong your device's battery life, and reduce eye strain."
-                : "Make graphics smoother, but may decrease your device's battery life."}
+              Unverified DApps may harm your device. If you ain't a dev, disable
+              it.
             </Typography.Paragraph>
           </Space>
         </Col>
@@ -55,4 +53,4 @@ const Theme = () => {
   )
 }
 
-export default Theme
+export default DeveloperMode

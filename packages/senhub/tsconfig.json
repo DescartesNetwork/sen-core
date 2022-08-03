@@ -23,5 +23,6 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
+  "exclude": ["node_modules", "dist"],
   "include": ["src"]
 }
