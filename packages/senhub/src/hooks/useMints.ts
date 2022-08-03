@@ -55,7 +55,7 @@ export const useMintDecimals = ({
       if (tokenInfo?.decimals !== undefined)
         return setDecimals(tokenInfo.decimals)
     }
-    // Fetch from the clustters
+    // Fetch from the clusters
     if (mintData && mintData[mintAddress]?.decimals)
       return setDecimals(mintData[mintAddress].decimals)
     return setDecimals(undefined)
