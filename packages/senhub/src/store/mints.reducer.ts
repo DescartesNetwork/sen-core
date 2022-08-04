@@ -36,7 +36,7 @@ export const getMint = createAsyncThunk<
   if (!isAddress(address)) throw new Error('Invalid mint address')
   if (!force) {
     const {
-      accounts: { [address]: data },
+      mints: { [address]: data },
     } = getState()
     if (data) return { [address]: data }
   }

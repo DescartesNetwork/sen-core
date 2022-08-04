@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 
-import { RootDispatch, RootState, useRootSelector } from 'store'
+import {
+  RootDispatch,
+  RootState,
+  useRootDispatch,
+  useRootSelector,
+} from 'store'
 import { getMint, MintsState } from 'store/mints.reducer'
 import TokenProvider from 'shared/tokenProvider'
 import { isAddress } from 'shared/util'
@@ -21,7 +25,7 @@ export const useMintData = ({
   force?: boolean
 }) => {
   const [mintData, setMintData] = useState<MintsState>()
-  const dispatch = useDispatch<RootDispatch>()
+  const dispatch = useRootDispatch<RootDispatch>()
 
   const getMintData = useCallback(async () => {
     if (!isAddress(mintAddress)) return setMintData(undefined)
