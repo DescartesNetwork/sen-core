@@ -70,6 +70,5 @@ export const useMintDecimals = ({
     getDecimals()
   }, [getDecimals])
 
-  console.log(decimals)
   return decimals
 }
