@@ -48,6 +48,7 @@ export * from 'shared/dataloader'
 // Hooks
 export * from 'hooks/useRegister'
 export * from 'hooks/useAppIds'
+export * from 'hooks/useAppRoute'
 export * from 'hooks/useGotoApp'
 export * from 'hooks/useGotoStore'
 export * from 'hooks/useInstallApp'
