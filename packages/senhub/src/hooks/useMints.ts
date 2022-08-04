@@ -29,10 +29,18 @@ export const useMintData = ({
 
   const getMintData = useCallback(async () => {
     if (!isAddress(mintAddress)) return setMintData(undefined)
-    const data = await dispatch(
-      getMint({ address: mintAddress, force }),
-    ).unwrap()
-    return setMintData(data)
+    try {
+      const data = await dispatch(
+        getMint({ address: mintAddress, force }),
+      ).unwrap()
+      return setMintData(data)
+    } catch (er: any) {
+      window.notify({
+        type: 'warning',
+        description: er.message,
+      })
+      return setMintData(undefined)
+    }
   }, [dispatch, mintAddress, force])
 
   useEffect(() => {
