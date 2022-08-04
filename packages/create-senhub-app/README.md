@@ -7,38 +7,34 @@ The official CLI to init a template of DApp on Senhub
 [![License](https://img.shields.io/npm/l/create-senhub-app.svg)](https://github.com/DescartesNetwork/sen-core/blob/main/package.json)
 
 <!-- toc -->
-
-- [create-senhub-app](#create-senhub-app)
-- [Usage](#usage)
-- [Commands](#commands)
+* [create-senhub-app](#create-senhub-app)
+* [Usage](#usage)
+* [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g create-senhub-app
 $ create-senhub-app COMMAND
 running command...
 $ create-senhub-app (--version)
-create-senhub-app/3.0.48 darwin-x64 node-v18.3.0
+create-senhub-app/3.1.0 darwin-x64 node-v18.3.0
 $ create-senhub-app --help [COMMAND]
 USAGE
   $ create-senhub-app COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`create-senhub-app help [COMMAND]`](#create-senhub-app-help-command)
-- [`create-senhub-app init [PROJECT-NAME]`](#create-senhub-app-init-project-name)
-- [`create-senhub-app manifest [ENV]`](#create-senhub-app-manifest-env)
-- [`create-senhub-app publish`](#create-senhub-app-publish)
+* [`create-senhub-app help [COMMAND]`](#create-senhub-app-help-command)
+* [`create-senhub-app init [PROJECT-NAME]`](#create-senhub-app-init-project-name)
+* [`create-senhub-app manifest [ENV]`](#create-senhub-app-manifest-env)
+* [`create-senhub-app publish`](#create-senhub-app-publish)
 
 ## `create-senhub-app help [COMMAND]`
 
@@ -83,7 +79,7 @@ EXAMPLES
   $ create-senhub-app init my-dapp
 ```
 
-_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.48/dist/commands/init.ts)_
+_See code: [dist/commands/init.ts](https://github.com/tuphan-dn/sen-core/blob/v3.1.0/dist/commands/init.ts)_
 
 ## `create-senhub-app manifest [ENV]`
 
@@ -94,8 +90,8 @@ USAGE
   $ create-senhub-app manifest [ENV] [-i <value>] [-o <value>]
 
 ARGUMENTS
-  ENV  (development|production) [default: production] The NODE_ENV to generate a corresponding manifest.
-       Default: production.
+  ENV  (development|production) [default: production] The NODE_ENV to generate a corresponding manifest. Default:
+       production.
 
 FLAGS
   -i, --inDir=<value>   The directory to your project.
@@ -108,7 +104,7 @@ EXAMPLES
   $ create-senhub-app manifest
 ```
 
-_See code: [dist/commands/manifest.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.48/dist/commands/manifest.ts)_
+_See code: [dist/commands/manifest.ts](https://github.com/tuphan-dn/sen-core/blob/v3.1.0/dist/commands/manifest.ts)_
 
 ## `create-senhub-app publish`
 
@@ -131,6 +127,5 @@ EXAMPLES
   $ create-senhub-app publish
 ```
 
-_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.0.48/dist/commands/publish.ts)_
-
+_See code: [dist/commands/publish.ts](https://github.com/tuphan-dn/sen-core/blob/v3.1.0/dist/commands/publish.ts)_
 <!-- commandsstop -->
