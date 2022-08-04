@@ -43,7 +43,7 @@ export const getAccounts = createAsyncThunk(
       ownerPublicKey,
       { programId: splt.spltProgramId },
     )
-    let bulk: AccountsState = {}
+    const bulk: AccountsState = {}
     value.forEach(({ pubkey, account: { data: buf } }) => {
       const address = pubkey.toBase58()
       const data = splt.parseAccountData(buf)

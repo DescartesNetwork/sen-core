@@ -49,7 +49,9 @@ const PoolWatcher = () => {
       ;(async () => {
         try {
           await window.sentre.swap.unwatch(watchId)
-        } catch (er) {}
+        } catch (er) {
+          // Do nothing
+        }
       })()
       watchId = 0
     }

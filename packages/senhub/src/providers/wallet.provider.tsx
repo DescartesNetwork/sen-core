@@ -57,9 +57,11 @@ export const withWallet = (WrappedComponent: typeof Component) => {
       )
     }
   }
-  return forwardRef<HTMLElement, any>((props, ref) => (
+  const WrappedHOC = forwardRef<HTMLElement, any>((props, ref) => (
     <HOC {...props} ref={ref} />
   ))
+  WrappedHOC.displayName = 'WithWallet'
+  return WrappedHOC
 }
 
 /**

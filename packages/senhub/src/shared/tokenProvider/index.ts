@@ -74,7 +74,7 @@ class TokenProvider {
 
   find = async (keyword: string, limit = 10): Promise<TokenInfo[]> => {
     const [tokenMap, engine] = await this._init()
-    let tokens: TokenInfo[] = []
+    const tokens: TokenInfo[] = []
     if (!keyword) return []
     const fuzzy = `${keyword}^10 ${keyword}~1`
     engine.search(fuzzy).forEach(({ ref }) => {

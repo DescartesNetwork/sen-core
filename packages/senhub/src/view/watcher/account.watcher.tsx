@@ -7,7 +7,7 @@ import { useWalletAddress, useWalletBalance } from 'hooks/useWallet'
 
 // Watch id
 let watchId = 0
-let prevLamports: BigInt | undefined = undefined
+let prevLamports: bigint | undefined = undefined
 
 const AccountWatcher = () => {
   const dispatch = useRootDispatch<RootDispatch>()
@@ -58,7 +58,9 @@ const AccountWatcher = () => {
       ;(async () => {
         try {
           await window.sentre.splt.unwatch(watchId)
-        } catch (er) {}
+        } catch (er) {
+          // Do nothing
+        }
       })()
       watchId = 0
     }

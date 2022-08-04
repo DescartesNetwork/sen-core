@@ -39,7 +39,7 @@ class PDB {
   }
 
   all = async (): Promise<any> => {
-    let data: any = {}
+    const data: any = {}
     const appIds = (
       ((await this.createInstance('sentre').getItem('appIds')) as string[]) ||
       []

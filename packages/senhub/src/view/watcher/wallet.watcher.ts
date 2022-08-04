@@ -6,20 +6,21 @@ import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 
 // Watch id
-let watchId: any = null
+let watchId: any = undefined
 
 const WalletWatcher = () => {
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
 
   const watchData = useCallback(async () => {
-    if (!isAddress(walletAddress)) {
+    if (!isAddress(walletAddress) && watchId !== undefined) {
       try {
         await window.sentre.lamports.unwatch(watchId)
       } catch (er) {
         /* Nothing */
+      } finally {
+        watchId = undefined
       }
-      watchId = null
     } else {
       if (watchId) return console.warn('Already watched')
       watchId = window.sentre.lamports.watch(

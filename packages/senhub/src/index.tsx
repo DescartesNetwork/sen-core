@@ -1,4 +1,4 @@
-/// <reference path="./global.ts" />
+/// <reference path="@types/index.ts" />
 
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'

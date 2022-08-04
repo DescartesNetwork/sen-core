@@ -6,12 +6,7 @@ import AppIcon from 'components/appIcon'
 import More from './more'
 import ContextMenu from './contextMenu'
 
-import {
-  useRootSelector,
-  RootState,
-  useRootDispatch,
-  RootDispatch,
-} from 'store'
+import { useRootSelector, RootState } from 'store'
 import { useGoToAppCallback } from 'hooks/useGotoApp'
 import { isAddress } from 'shared/util'
 
@@ -21,12 +16,11 @@ const STORE_ID = 'store'
 
 const AppStore = () => {
   const { params } = useRouteMatch<{ appId: string }>('/app/:appId') || {}
-  const dispatch = useRootDispatch<RootDispatch>()
   const onGoToApp = useGoToAppCallback()
 
   const onStore = useCallback(async () => {
     return onGoToApp({ appId: STORE_ID })
-  }, [dispatch, onGoToApp])
+  }, [onGoToApp])
 
   return (
     <Badge

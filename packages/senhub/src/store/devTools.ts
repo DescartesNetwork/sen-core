@@ -36,6 +36,7 @@ const isPlain = (val: any): boolean => {
     Buffer.isBuffer(val)
   )
 }
+/* eslint-disable */
 BigInt.prototype.toJSON = function () {
   return this.toString() // https://github.com/GoogleChromeLabs/jsbi/issues/30
 }

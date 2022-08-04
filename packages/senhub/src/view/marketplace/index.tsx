@@ -7,20 +7,20 @@ export const REGISTER_APP_STORE: Record<string, ComponentManifest> = {
     appId: 'store',
     name: 'Store',
     author: { name: 'Sentre', email: 'hi@sentre.io' },
-    tags: ['store'],
-    description: 'Sen Store Application',
+    tags: ['system', 'store'],
+    description: 'The first DApp Store on Solana',
     verified: false,
   },
 }
 
-const Store = () => {
+const Marketplace = () => {
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        <PageLoader {...(REGISTER_APP_STORE.store as ComponentManifest)} />
+        <PageLoader {...REGISTER_APP_STORE.store} />
       </Col>
     </Row>
   )
 }
 
-export default Store
+export default Marketplace

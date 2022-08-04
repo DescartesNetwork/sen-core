@@ -21,6 +21,7 @@ const RemoteComponent = forwardRef<HTMLElement, { manifest: RemoteModule }>(
     return <Component {...props} ref={ref} />
   },
 )
+RemoteComponent.displayName = 'RemoteComponent'
 
 /**
  * Error Component
@@ -101,5 +102,6 @@ const PageLoader = forwardRef<HTMLElement, ComponentManifest>(
     )
   },
 )
+PageLoader.displayName = 'PageLoader'
 
 export default PageLoader

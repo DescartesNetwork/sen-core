@@ -37,16 +37,11 @@
     "tweetnacl": "^1.0.3"
   },
   "scripts": {
-    "prebuild": "yarn clean",
+    "lint": "eslint \"src/**/*.ts?(x)\"",
+    "prebuild": "yarn lint && yarn clean",
     "build": "tsc",
     "postbuild": "copyfiles -s -e \"**/*.ts\" -e \"**/*.tsx\" -u 1 \"src/**/*\" \"dist/\" && tsc-alias",
     "clean": "rm -rf ./dist"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": [
     "last 1 chrome version",
@@ -74,7 +69,12 @@
     "@types/react-dom": "^17.0.11",
     "@types/react-router-dom": "^5.3.1",
     "@types/remarkable": "^2.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
     "copyfiles": "^2.4.1",
+    "eslint": "^8.21.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-react": "^7.30.1",
     "tsc-alias": "^1.6.10",
     "typescript": "^4.5.2"
   }

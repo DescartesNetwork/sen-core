@@ -8,7 +8,7 @@ import Welcome from 'view/welcome'
 import Page from 'view/page'
 import Sync from 'view/sync'
 import Loading from 'view/loading'
-import Store from 'view/store'
+import Marketplace from 'view/marketplace'
 
 import Watcher from 'view/watcher'
 import Installer from 'view/installer'
@@ -51,9 +51,9 @@ const View = () => {
         const register = await dispatch(loadRegister()).unwrap()
         if (Object.keys(register).length) await dispatch(loadPage())
       } catch (er: any) {
-        return window.notify({ type: 'warning', description: er.message })
+        window.notify({ type: 'warning', description: er.message })
       } finally {
-        return dispatch(updateLoading(false))
+        dispatch(updateLoading(false))
       }
     })()
   }, [dispatch, walletAddress])
@@ -90,17 +90,12 @@ const View = () => {
           <Col span={24}>
             <Switch>
               <Route exact path="/welcome" component={Welcome} />
-              {/* App Store */}
-              <Route exact path="/app/store/:appId?" component={Store} />
+              {/* DApp Store */}
+              <Route exact path="/app/store/:appId?" component={Marketplace} />
               <Route
                 path="/store"
-                render={(props) => (
-                  <Redirect
-                    to={{
-                      pathname: `/app${props.location.pathname}`,
-                      search: props.location.search,
-                    }}
-                  />
+                render={({ location: { pathname, search } }) => (
+                  <Redirect to={{ pathname: `/app${pathname}`, search }} />
                 )}
               />
               {/* End App Store */}

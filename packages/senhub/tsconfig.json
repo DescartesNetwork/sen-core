@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "outDir": "./dist",
+    "baseUrl": "src",
+    "outDir": "dist",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

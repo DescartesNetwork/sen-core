@@ -6,7 +6,7 @@ import { Spin } from 'antd'
 import ErrorBoundary from 'components/errorBoundary'
 
 import { useRootSelector, RootState } from 'store'
-import { REGISTER_APP_STORE } from 'view/store'
+import { REGISTER_APP_STORE } from 'view/marketplace'
 
 const ONE_HOUR = 60 * 60 * 1000
 
@@ -29,7 +29,7 @@ const useRemoteStatic = ({ url, scope }: RemoteModule): any => {
         throw new Error('Invalid static asset')
       }
       const res = await fetch(root + `${appId}-asset-senhub.json`)
-      let data = await res.json()
+      const data = await res.json()
       Object.keys(data).forEach((key) => (data[key] = prefix(data[key])))
       return data
     },
@@ -54,6 +54,7 @@ const RemoteStatic = forwardRef<
   const { [type]: src } = useRemoteStatic(manifest)
   return cloneElement(render(src), ref ? { ref } : {})
 })
+RemoteStatic.displayName = 'RemoteStatic'
 
 /**
  * Static Loader
@@ -91,6 +92,7 @@ export const StaticLoader = forwardRef<
     </ErrorBoundary>
   )
 })
+StaticLoader.displayName = 'StaticLoader'
 
 /**
  * Remote Multi Statics
@@ -106,6 +108,7 @@ const RemoteMultiStatic = forwardRef<
   const { [type]: arrSrc } = useRemoteStatic(manifest)
   return cloneElement(render(arrSrc || []), ref ? { ref } : {})
 })
+RemoteMultiStatic.displayName = 'RemoteMultiStatic'
 
 /**
  * Remote Multi Loader
@@ -140,3 +143,4 @@ export const MultiStaticLoader = forwardRef<
     </ErrorBoundary>
   )
 })
+MultiStaticLoader.displayName = 'MultiStaticLoader'

@@ -5,7 +5,7 @@ import IonIcon from '@sentre/antd-ionicon'
 
 import { useRootSelector, RootState } from 'store'
 import configs from 'configs'
-import { REGISTER_APP_STORE } from 'view/store'
+import { REGISTER_APP_STORE } from 'view/marketplace'
 import './index.os.less'
 
 const {

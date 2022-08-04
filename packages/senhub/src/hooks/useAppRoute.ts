@@ -42,7 +42,7 @@ export const useAppRoute = (appId: string): AppRoute => {
       if (history.action !== 'POP') return history.goBack()
       if (fallbackRoute) return to(fallbackRoute)
     },
-    [history],
+    [history, to],
   )
 
   return { root, extend, to, back }

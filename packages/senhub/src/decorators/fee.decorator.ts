@@ -42,7 +42,7 @@ export const collectFees = (
 ) => {
   const original = descriptor.value
   descriptor.value = async (txs: Transaction[]) => {
-    let chargedTxs = []
+    const chargedTxs = []
     for (const tx of txs) {
       const payer = tx.feePayer || (await target.getAddress())
       const chagredTx = addFeeInstruction(tx, payer)

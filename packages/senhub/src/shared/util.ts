@@ -47,7 +47,7 @@ export const explorer = (addressOrTxId: string): string => {
  * @returns
  */
 export const numeric = (
-  value?: number | string | BigInt,
+  value?: number | string | bigint,
 ): ReturnType<typeof numbro> => {
   if (!value) return numbro('0')
   return numbro(value)
@@ -67,9 +67,9 @@ export const randomColor = (seed?: string, opacity?: string | number) => {
       hash = seed.charCodeAt(i) + ((hash << 5) - hash)
     }
   }
-  var rgb = [0, 0, 0]
+  const rgb = [0, 0, 0]
   for (let i = 0; i < 3; i++) {
-    var value = (hash >> (i * 8)) & 255
+    const value = (hash >> (i * 8)) & 255
     rgb[i] = value
   }
   return `rgba(${rgb[0]}, 100, ${rgb[1]},${opacity || 1})`

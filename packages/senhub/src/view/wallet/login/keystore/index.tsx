@@ -18,7 +18,7 @@ const KeyStore = () => {
   const dispatch = useRootDispatch<RootDispatch>()
 
   const onKeystore = (e: ChangeEvent<HTMLInputElement>) => {
-    const [file]: any = e?.target?.files
+    const [file] = Array.from(e?.target?.files || [])
     if (file) {
       const reader = new FileReader()
       reader.readAsText(file)

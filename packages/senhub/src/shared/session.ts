@@ -19,7 +19,7 @@ const session = {
   },
 
   get: (key: string) => {
-    let data = convert(driver.getItem(KEY))
+    const data = convert(driver.getItem(KEY))
     if (!data || typeof data !== 'object') return null
     return data[key]
   },

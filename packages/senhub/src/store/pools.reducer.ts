@@ -49,7 +49,7 @@ export const getPools = createAsyncThunk(`${NAME}/getPools`, async () => {
         { memcmp: { bytes: taxmanAddress, offset: 65 } },
       ],
     })
-  let bulk: PoolsState = {}
+  const bulk: PoolsState = {}
   value.forEach(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
     const data = swap.parsePoolData(buf)

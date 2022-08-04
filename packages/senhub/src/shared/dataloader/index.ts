@@ -13,7 +13,7 @@ export class DataLoader {
       if (instance) return instance
     }
 
-    let newSingleFlight = new SingleFlight(configs)
+    const newSingleFlight = new SingleFlight(configs)
     this.mapInstance.set(instanceKey, newSingleFlight)
     return newSingleFlight
   }
@@ -25,7 +25,7 @@ export class DataLoader {
   ): Promise<T> {
     if (typeof requestKey === 'object') requestKey = JSON.stringify(requestKey)
 
-    let singleFlight = DataLoader.getSingleFlight(configs)
+    const singleFlight = DataLoader.getSingleFlight(configs)
     DataLoader.mapInstance.set(requestKey, singleFlight)
     const newRequest = new RequestQueue(requestKey)
     return singleFlight.load<T>(newRequest, callback)
