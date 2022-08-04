@@ -24,6 +24,7 @@ export const useMintData = ({
   const dispatch = useDispatch<RootDispatch>()
 
   const getMintData = useCallback(async () => {
+    if (!account.isAddress(mintAddress)) return setMintData(undefined)
     const data = await dispatch(
       getMint({ address: mintAddress, force }),
     ).unwrap()
