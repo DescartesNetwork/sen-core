@@ -33,7 +33,7 @@ export const useMintData = ({
       getMint({ address: mintAddress, force }),
     ).unwrap()
     return setMintData(data)
-  }, [dispatch])
+  }, [dispatch, mintAddress, force])
 
   useEffect(() => {
     getMintData()
@@ -50,7 +50,7 @@ export const useMintDecimals = ({
   force?: boolean
 }) => {
   const [decimals, setDecimals] = useState<number>()
-  const mintData = useMintData({ mintAddress })
+  const mintData = useMintData({ mintAddress, force })
 
   const getDecimals = useCallback(async () => {
     if (!isAddress(mintAddress)) return setDecimals(undefined)
@@ -64,11 +64,12 @@ export const useMintDecimals = ({
     if (mintData && mintData[mintAddress]?.decimals)
       return setDecimals(mintData[mintAddress].decimals)
     return setDecimals(undefined)
-  }, [mintData])
+  }, [mintData, mintAddress, force])
 
   useEffect(() => {
     getDecimals()
   }, [getDecimals])
 
+  console.log(decimals)
   return decimals
 }

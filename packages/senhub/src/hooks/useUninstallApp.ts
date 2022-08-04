@@ -12,8 +12,7 @@ export const useUninstallAppCallback = () => {
   const onUninstallCallback = useCallback(
     async (appId: string) => {
       await dispatch(uninstallApp(appId))
-      if (!pathname.startsWith(`/app/${appId}`)) return
-      return history.push('/welcome')
+      if (pathname.startsWith(`/app/${appId}`)) return history.push('/welcome')
     },
     [dispatch, pathname, history],
   )
