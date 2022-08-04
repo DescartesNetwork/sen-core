@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import { account } from '@senswap/sen-js'
 
 import { Layout, Row, Col, Card, Affix } from 'antd'
 import PrivateRoute from 'components/privateRoute'
@@ -26,6 +25,7 @@ import {
   loadVisited,
   updateLoading,
 } from 'store/flags.reducer'
+import { isAddress } from 'shared/util'
 
 import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
@@ -43,7 +43,7 @@ const View = () => {
   // Load DApp flags, registry, page
   useEffect(() => {
     ;(async () => {
-      if (!account.isAddress(walletAddress)) return dispatch(loadRegister())
+      if (!isAddress(walletAddress)) return dispatch(loadRegister())
       try {
         await dispatch(updateLoading(true))
         await dispatch(loadVisited())

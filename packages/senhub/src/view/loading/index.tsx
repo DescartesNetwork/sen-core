@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { Row, Col, Button, Spin, Typography, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
@@ -7,18 +9,21 @@ import {
   useRootDispatch,
   useRootSelector,
 } from 'store'
-import './index.os.less'
 import { updateLoading } from 'store/flags.reducer'
-import { account } from '@senswap/sen-js'
+import { isAddress } from 'shared/util'
+import { useWalletAddress } from 'hooks/useWallet'
+
+import './index.os.less'
 
 const Loading = () => {
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
   const loading = useRootSelector((state: RootState) => state.flags.loading)
   const dispatch = useRootDispatch<RootDispatch>()
 
-  const visible = account.isAddress(walletAddress) && loading
+  const visible = useMemo(
+    () => isAddress(walletAddress) && loading,
+    [walletAddress, loading],
+  )
 
   return (
     <div

@@ -1,25 +1,19 @@
 import { useEffect, useCallback } from 'react'
-import { account } from '@senswap/sen-js'
 
-import {
-  useRootDispatch,
-  useRootSelector,
-  RootDispatch,
-  RootState,
-} from 'store'
+import { useRootDispatch, RootDispatch } from 'store'
 import { updateWallet } from 'store/wallet.reducer'
+import { isAddress } from 'shared/util'
+import { useWalletAddress } from 'hooks/useWallet'
 
 // Watch id
 let watchId: any = null
 
 const WalletWatcher = () => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
 
   const watchData = useCallback(async () => {
-    if (!account.isAddress(walletAddress)) {
+    if (!isAddress(walletAddress)) {
       try {
         await window.sentre.lamports.unwatch(watchId)
       } catch (er) {

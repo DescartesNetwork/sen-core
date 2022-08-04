@@ -1,29 +1,25 @@
 import { MouseEvent, useCallback, useMemo } from 'react'
-import { account } from '@senswap/sen-js'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import AppIcon from 'components/appIcon'
 import Verification from 'components/verification'
 
-import {
-  useRootSelector,
-  RootState,
-  useRootDispatch,
-  RootDispatch,
-} from 'store'
+import { useRootDispatch, RootDispatch } from 'store'
 import { openWallet } from 'store/wallet.reducer'
 import { useGoToApp } from 'hooks/useGotoApp'
 import { useInstallApp } from 'hooks/useInstallApp'
+import { useAppIds } from 'hooks/useAppIds'
+import { useWalletAddress } from 'hooks/useWallet'
+import { useRegister } from 'hooks/useRegister'
+import { isAddress } from 'shared/util'
 
 export type AppCardInfoProps = { appId: string }
 
 const AppCardInfo = ({ appId }: AppCardInfoProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const register = useRootSelector((state: RootState) => state.page.register)
-  const appIds = useRootSelector((state: RootState) => state.page.appIds)
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const register = useRegister()
+  const appIds = useAppIds()
+  const walletAddress = useWalletAddress()
   const onInstallApp = useInstallApp(appId)
   const onGoToApp = useGoToApp({ appId })
 
@@ -36,7 +32,7 @@ const AppCardInfo = ({ appId }: AppCardInfoProps) => {
   const onInstall = useCallback(
     async (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation()
-      if (!account.isAddress(walletAddress)) return dispatch(openWallet())
+      if (!isAddress(walletAddress)) return dispatch(openWallet())
 
       return onInstallApp()
     },

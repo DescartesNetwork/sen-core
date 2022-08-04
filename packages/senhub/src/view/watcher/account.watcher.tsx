@@ -1,13 +1,9 @@
 import { Fragment, useCallback, useEffect } from 'react'
-import { account } from '@senswap/sen-js'
 
-import {
-  useRootDispatch,
-  useRootSelector,
-  RootDispatch,
-  RootState,
-} from 'store'
+import { useRootDispatch, RootDispatch } from 'store'
 import { getAccounts, upsetAccount } from 'store/accounts.reducer'
+import { isAddress } from 'shared/util'
+import { useWalletAddress, useWalletBalance } from 'hooks/useWallet'
 
 // Watch id
 let watchId = 0
@@ -15,15 +11,13 @@ let prevLamports: BigInt | undefined = undefined
 
 const AccountWatcher = () => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
-  const lamports = useRootSelector((state: RootState) => state.wallet.lamports)
+  const walletAddress = useWalletAddress()
+  const lamports = useWalletBalance()
 
   // First-time fetching
   const fetchData = useCallback(async () => {
     try {
-      if (!account.isAddress(walletAddress)) return
+      if (!isAddress(walletAddress)) return
       await dispatch(getAccounts({ owner: walletAddress })).unwrap()
     } catch (er) {
       return window.notify({
@@ -34,7 +28,7 @@ const AccountWatcher = () => {
   }, [dispatch, walletAddress])
   // Watch account changes
   const watchData = useCallback(async () => {
-    if (!account.isAddress(walletAddress))
+    if (!isAddress(walletAddress))
       return console.warn('Wallet is not connected')
     if (watchId) return console.warn('Already watched')
     const { splt } = window.sentre || {}

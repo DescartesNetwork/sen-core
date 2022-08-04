@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { account } from '@senswap/sen-js'
 
 import { Row, Col, Card } from 'antd'
 import WelcomeSlide from './welcomeSlide'
@@ -8,16 +7,18 @@ import SocialButton from './socialButton'
 import WalletConnection from 'view/wallet/login/walletConnection'
 
 import { useRootSelector, RootState } from 'store'
+import { useWalletAddress } from 'hooks/useWallet'
+import { useAppIds } from 'hooks/useAppIds'
+import { isAddress } from 'shared/util'
+
 import './index.os.less'
 
 const Welcome = () => {
   const history = useHistory()
   const { search } = useLocation()
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
+  const appIds = useAppIds()
   const width = useRootSelector((state: RootState) => state.ui.width)
-  const appIds = useRootSelector((state: RootState) => state.page.appIds)
   const loading = useRootSelector((state: RootState) => state.flags.loading)
 
   // Redirect callback
@@ -25,7 +26,7 @@ const Welcome = () => {
     const params = new URLSearchParams(search)
     const fallback = appIds.length ? `/app/${appIds[0]}` : '/store'
     const redirect = decodeURIComponent(params.get('redirect') || fallback)
-    if (account.isAddress(walletAddress) && !loading) history.replace(redirect)
+    if (isAddress(walletAddress) && !loading) history.replace(redirect)
   }, [walletAddress, history, search, appIds, loading])
 
   return (

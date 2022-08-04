@@ -1,6 +1,6 @@
 import localForage from 'localforage'
-import { account } from '@senswap/sen-js'
 import IPFS from './ipfs'
+import { isAddress } from 'shared/util'
 
 /**
  * Persistent Database
@@ -11,7 +11,7 @@ class PDB {
   private ipfs: IPFS
 
   constructor(walletAddress: string) {
-    if (!account.isAddress(walletAddress)) throw new Error('Invalid address')
+    if (!isAddress(walletAddress)) throw new Error('Invalid address')
     this.dbName = walletAddress
     this.driver = [localForage.WEBSQL, localForage.LOCALSTORAGE]
     this.ipfs = new IPFS()
@@ -90,7 +90,7 @@ export default PDB
  * High abtraction pdb for app
  */
 export const createPDB = (walletArress: string, appId: string) => {
-  return account.isAddress(walletArress)
+  return isAddress(walletArress)
     ? new PDB(walletArress).createInstance(appId)
     : undefined
 }

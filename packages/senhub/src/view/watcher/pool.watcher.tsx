@@ -1,13 +1,9 @@
 import { Fragment, useCallback, useEffect } from 'react'
-import { account } from '@senswap/sen-js'
 
-import {
-  useRootDispatch,
-  useRootSelector,
-  RootDispatch,
-  RootState,
-} from 'store'
+import { useRootDispatch, RootDispatch } from 'store'
 import { getPools, upsetPool } from 'store/pools.reducer'
+import { isAddress } from 'shared/util'
+import { useWalletAddress } from 'hooks/useWallet'
 import configs from 'configs'
 
 const {
@@ -19,14 +15,12 @@ let watchId = 0
 
 const PoolWatcher = () => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
 
   // First-time fetching
   const fetchData = useCallback(async () => {
     try {
-      if (!account.isAddress(walletAddress)) return
+      if (!isAddress(walletAddress)) return
       await dispatch(getPools()).unwrap()
     } catch (er) {
       return window.notify({

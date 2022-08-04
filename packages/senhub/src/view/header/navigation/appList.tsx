@@ -1,6 +1,5 @@
 import { Fragment, useCallback } from 'react'
 import { useRouteMatch } from 'react-router-dom'
-import { account } from '@senswap/sen-js'
 
 import { Row, Col, Badge, Dropdown, Divider } from 'antd'
 import AppIcon from 'components/appIcon'
@@ -14,6 +13,7 @@ import {
   RootDispatch,
 } from 'store'
 import { useGoToAppCallback } from 'hooks/useGotoApp'
+import { isAddress } from 'shared/util'
 
 import './index.os.less'
 
@@ -53,7 +53,7 @@ const AppList = () => {
       <Col>
         <AppStore />
       </Col>
-      {account.isAddress(walletAddress) && (
+      {isAddress(walletAddress) && (
         <Fragment>
           <Divider type="vertical" />
           {appIds.map((appId) => (

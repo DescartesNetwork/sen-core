@@ -1,5 +1,4 @@
 import { useHistory } from 'react-router-dom'
-import { account } from '@senswap/sen-js'
 
 import { Row, Col, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -10,6 +9,7 @@ import Navigation from './navigation'
 
 import { useRootSelector, RootState } from 'store'
 import { net } from 'shared/runtime'
+import { isAddress } from 'shared/util'
 
 export type NavButtonProps = {
   id: string
@@ -54,9 +54,7 @@ const Header = () => {
       <Col flex="auto">
         <Navigation />
       </Col>
-      <Col>
-        {!account.isAddress(walletAddress) ? <Wallet /> : <ActionCenter />}
-      </Col>
+      <Col>{!isAddress(walletAddress) ? <Wallet /> : <ActionCenter />}</Col>
     </Row>
   )
 }

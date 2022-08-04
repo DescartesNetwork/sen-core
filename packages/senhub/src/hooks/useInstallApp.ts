@@ -1,25 +1,19 @@
 import { useCallback } from 'react'
-import { account } from '@senswap/sen-js'
 
-import {
-  useRootDispatch,
-  useRootSelector,
-  RootDispatch,
-  RootState,
-} from 'store'
+import { useRootDispatch, RootDispatch } from 'store'
 import { installApp } from 'store/page.reducer'
 import { openWallet } from 'store/wallet.reducer'
 import { updateVisited } from 'store/flags.reducer'
+import { isAddress } from 'shared/util'
+import { useWalletAddress } from './useWallet'
 
 export const useInstallAppCallback = () => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
 
   const onInstallCallback = useCallback(
     async (appId: string) => {
-      if (!account.isAddress(walletAddress)) return dispatch(openWallet())
+      if (!isAddress(walletAddress)) return dispatch(openWallet())
       await dispatch(updateVisited(true))
       return dispatch(installApp(appId))
     },

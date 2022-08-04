@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAccount } from '@sentre/senhub'
+import { useAccounts } from '@sentre/senhub'
 
 export const useSortMints = (mints: string[]) => {
   const [sortedMints, setSortedMints] = useState<string[]>([])
-  const { accounts } = useAccount()
+  const accounts = useAccounts()
 
   const mapMintAmounts = useMemo(() => {
     const mapMints: Record<string, number> = {}

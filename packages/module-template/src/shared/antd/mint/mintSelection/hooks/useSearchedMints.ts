@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useMint } from '@sentre/senhub'
+import { tokenProvider } from '@sentre/senhub'
 
 import { useMyMints } from './useMyMints'
 import { useSortMints } from 'shared/hooks/useSortMints'
@@ -10,7 +10,6 @@ let searching: NodeJS.Timeout
 export const useSearchedMints = (keyword: string = '') => {
   const [loading, setLoading] = useState(false)
   const [searchedMints, setSearchedMints] = useState<string[]>([])
-  const { tokenProvider } = useMint()
   const jptTokens = useJupiterTokens()
   const myMints = useMyMints()
   const { sortedMints } = useSortMints(myMints)
@@ -24,7 +23,7 @@ export const useSearchedMints = (keyword: string = '') => {
     const allMints = await tokenProvider.all()
     for (const mint of allMints) filteredMints.add(mint.address)
     return Array.from(filteredMints)
-  }, [sortedMints, tokenProvider])
+  }, [sortedMints])
 
   const search = useCallback(async () => {
     setLoading(true)
@@ -54,7 +53,7 @@ export const useSearchedMints = (keyword: string = '') => {
         setLoading(false)
       }
     }, time)
-  }, [buildDefaultTokens, jptTokens, keyword, myMints, tokenProvider])
+  }, [buildDefaultTokens, jptTokens, keyword, myMints])
 
   useEffect(() => {
     search()

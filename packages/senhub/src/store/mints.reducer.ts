@@ -1,10 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { account, MintData } from '@senswap/sen-js'
+
+import { isAddress } from 'shared/util'
 
 /**
  * Interface & Utility
  */
 
+export type MintData = {
+  mint_authority_option: number
+  mint_authority: string
+  supply: bigint
+  decimals: number
+  is_initialized: boolean
+  freeze_authority_option: number
+  freeze_authority: string
+}
 export type MintsState = Record<string, MintData>
 
 /**
@@ -23,7 +33,7 @@ export const getMint = createAsyncThunk<
   { address: string; force?: boolean },
   { state: any }
 >(`${NAME}/getMint`, async ({ address, force = false }, { getState }) => {
-  if (!account.isAddress(address)) throw new Error('Invalid mint address')
+  if (!isAddress(address)) throw new Error('Invalid mint address')
   if (!force) {
     const {
       accounts: { [address]: data },
@@ -40,7 +50,7 @@ export const upsetMint = createAsyncThunk<
   { address: string; data: MintData },
   { state: any }
 >(`${NAME}/upsetMint`, async ({ address, data }) => {
-  if (!account.isAddress(address)) throw new Error('Invalid address')
+  if (!isAddress(address)) throw new Error('Invalid address')
   if (!data) throw new Error('Data is empty')
   return { [address]: data }
 })
@@ -48,7 +58,7 @@ export const upsetMint = createAsyncThunk<
 export const deleteMint = createAsyncThunk(
   `${NAME}/deleteMint`,
   async ({ address }: { address: string }) => {
-    if (!account.isAddress(address)) throw new Error('Invalid address')
+    if (!isAddress(address)) throw new Error('Invalid address')
     return { address }
   },
 )

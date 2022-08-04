@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useMint } from '@sentre/senhub'
+import { useMintData } from '@sentre/senhub'
 import BN from 'bn.js'
 
 /**
@@ -9,25 +8,11 @@ import BN from 'bn.js'
  * @returns Decimals
  */
 const useMintSupply = (mintAddress: string) => {
-  const [supply, setSupply] = useState<BN | undefined>(undefined)
-  const { getMint } = useMint()
+  const {
+    [mintAddress]: { supply },
+  } = useMintData({ mintAddress }) || { [mintAddress]: { supply: undefined } }
 
-  const fetchSupply = useCallback(async () => {
-    try {
-      const {
-        [mintAddress]: { supply },
-      } = await getMint({ address: mintAddress })
-      return setSupply(new BN(supply.toString()))
-    } catch (er: any) {
-      return setSupply(undefined)
-    }
-  }, [mintAddress, getMint])
-
-  useEffect(() => {
-    fetchSupply()
-  }, [fetchSupply])
-
-  return supply
+  return supply !== undefined ? new BN(supply.toString()) : undefined
 }
 
 export default useMintSupply

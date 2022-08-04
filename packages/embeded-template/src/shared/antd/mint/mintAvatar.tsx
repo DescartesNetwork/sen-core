@@ -1,6 +1,5 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
-import { account } from '@senswap/sen-js'
-import { useMint, usePool } from '@sentre/senhub'
+import { util, tokenProvider, usePool } from '@sentre/senhub'
 
 import { Avatar } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -30,20 +29,16 @@ const MintAvatar = ({
   ...props
 }: MintAvatarProps) => {
   const [avatars, setAvatars] = useState(DEFAULT_AVATARS)
-  const { tokenProvider } = useMint()
   const { pools } = usePool()
 
-  const deriveAvatar = useCallback(
-    async (address: string) => {
-      const token = await tokenProvider.findByAddress(address)
-      if (token?.logoURI) return token.logoURI
-      return undefined
-    },
-    [tokenProvider],
-  )
+  const deriveAvatar = useCallback(async (address: string) => {
+    const token = await tokenProvider.findByAddress(address)
+    if (token?.logoURI) return token.logoURI
+    return undefined
+  }, [])
 
   const deriveAvatars = useCallback(async () => {
-    if (!account.isAddress(mintAddress)) return setAvatars(DEFAULT_AVATARS)
+    if (!util.isAddress(mintAddress)) return setAvatars(DEFAULT_AVATARS)
     // LP mint
     const poolData = Object.values(pools || {}).find(
       ({ mint_lpt }) => mint_lpt === mintAddress,

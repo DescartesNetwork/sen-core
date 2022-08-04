@@ -9,7 +9,6 @@ import {
   ReactNode,
   useMemo,
 } from 'react'
-import { account } from '@senswap/sen-js'
 
 import {
   useRootDispatch,
@@ -19,6 +18,7 @@ import {
 } from 'store'
 import { getMint as _getMint, MintsState } from 'store/mints.reducer'
 import TokenProvider from 'shared/tokenProvider'
+import { isAddress } from 'shared/util'
 import { declareDeprecated } from 'decorators/deprecated.decorator'
 
 const tokenProvider = new TokenProvider()
@@ -45,8 +45,7 @@ const MintContextProvider = ({ children }: { children: ReactNode }) => {
   )
   const getDecimals = useCallback(
     async (mintAddress: string) => {
-      if (!account.isAddress(mintAddress))
-        throw new Error('Invalid mint address')
+      if (!isAddress(mintAddress)) throw new Error('Invalid mint address')
       // If the token is in token provider, return its decimals
       const tokenInfo = await tokenProvider.findByAddress(mintAddress)
       if (tokenInfo?.decimals !== undefined) return tokenInfo.decimals

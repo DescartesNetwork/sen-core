@@ -1,4 +1,5 @@
-import { account, utils } from '@senswap/sen-js'
+import { PublicKey } from '@solana/web3.js'
+import { utils } from '@senswap/sen-js'
 import numbro from 'numbro'
 
 import { net } from 'shared/runtime'
@@ -34,7 +35,7 @@ export const shortenAddress = (address: string, num = 4, delimiter = '...') => {
  * @returns
  */
 export const explorer = (addressOrTxId: string): string => {
-  if (account.isAddress(addressOrTxId)) {
+  if (isAddress(addressOrTxId)) {
     return `https://solscan.io/account/${addressOrTxId}?cluster=${net}`
   }
   return `https://solscan.io/tx/${addressOrTxId}?cluster=${net}`
@@ -107,4 +108,47 @@ export const randElements = <T>(arr: T[], num: number): T[] => {
     if (!re.includes(el)) re.push(el)
   }
   return re
+}
+
+export const SPL_TOKEN_PROGRAM = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
+export const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM =
+  'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'
+
+/**
+ * Validate Solana address
+ * @param address Solana address
+ * @returns true/false
+ */
+export const isAddress = (address: string | undefined): address is string => {
+  if (!address) return false
+  try {
+    const publicKey = new PublicKey(address)
+    if (!publicKey) throw new Error('Invalid public key')
+    return true
+  } catch (er) {
+    return false
+  }
+}
+
+/**
+ * Derive SPL Associated Token Account address
+ * @param walletAddress Wallet address
+ * @param mintAddress Mint address
+ * @returns The SPL ATA address
+ */
+export const deriveAssociatedAddress = async (
+  walletAddress: string,
+  mintAddress: string,
+) => {
+  if (!isAddress(walletAddress)) throw new Error('Invalid wallet address')
+  if (!isAddress(mintAddress)) throw new Error('Invalid mint address')
+  const [publicKey] = await PublicKey.findProgramAddress(
+    [
+      new PublicKey(walletAddress).toBuffer(),
+      new PublicKey(SPL_TOKEN_PROGRAM).toBuffer(),
+      new PublicKey(mintAddress).toBuffer(),
+    ],
+    new PublicKey(SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM),
+  )
+  return publicKey.toBase58()
 }

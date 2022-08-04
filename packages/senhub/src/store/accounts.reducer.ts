@@ -1,10 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { account, AccountData } from '@senswap/sen-js'
+import { PublicKey } from '@solana/web3.js'
+
+import { isAddress } from 'shared/util'
 
 /**
  * Interface & Utility
  */
 
+export type AccountData = {
+  mint: string
+  owner: string
+  amount: bigint
+  delegate_option: number
+  delegate: string
+  state: number
+  is_native_option: number
+  is_native: bigint
+  delegated_amount: bigint
+  close_authority_option: number
+  close_authority: string
+}
 export type AccountsState = Record<string, AccountData>
 
 /**
@@ -21,10 +36,9 @@ const initialState: AccountsState = {}
 export const getAccounts = createAsyncThunk(
   `${NAME}/getAccounts`,
   async ({ owner }: { owner: string }) => {
-    if (!account.isAddress(owner))
-      throw new Error('Invalid owner/wallet address')
+    if (!isAddress(owner)) throw new Error('Invalid owner/wallet address')
     const { splt } = window.sentre
-    const ownerPublicKey = account.fromAddress(owner)
+    const ownerPublicKey = new PublicKey(owner)
     const { value } = await splt.connection.getTokenAccountsByOwner(
       ownerPublicKey,
       { programId: splt.spltProgramId },
@@ -44,7 +58,7 @@ export const getAccount = createAsyncThunk<
   { address: string },
   { state: any }
 >(`${NAME}/getAccount`, async ({ address }, { getState }) => {
-  if (!account.isAddress(address)) throw new Error('Invalid account address')
+  if (!isAddress(address)) throw new Error('Invalid account address')
   const {
     accounts: { [address]: data },
   } = getState()
@@ -59,7 +73,7 @@ export const upsetAccount = createAsyncThunk<
   { address: string; data: AccountData },
   { state: any }
 >(`${NAME}/upsetAccount`, async ({ address, data }) => {
-  if (!account.isAddress(address)) throw new Error('Invalid address')
+  if (!isAddress(address)) throw new Error('Invalid address')
   if (!data) throw new Error('Data is empty')
   return { [address]: data }
 })
@@ -67,7 +81,7 @@ export const upsetAccount = createAsyncThunk<
 export const deleteAccount = createAsyncThunk(
   `${NAME}/deleteAccount`,
   async ({ address }: { address: string }) => {
-    if (!account.isAddress(address)) throw new Error('Invalid address')
+    if (!isAddress(address)) throw new Error('Invalid address')
     return { address }
   },
 )

@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { account } from '@senswap/sen-js'
 
 import { Row, Col, Typography, Space } from 'antd'
 import AppIcon from 'components/appIcon'
@@ -11,14 +10,16 @@ import AppAuthor from './appAuthor'
 import AppShare from './appShare'
 
 import { useRootSelector, RootState } from 'store'
+import { useRegister } from 'hooks/useRegister'
+import { useAppIds } from 'hooks/useAppIds'
+import { useWalletAddress } from 'hooks/useWallet'
+import { isAddress } from 'shared/util'
 
 const AppDetails = ({ appId }: { appId: string }) => {
   const infix = useRootSelector((state: RootState) => state.ui.infix)
-  const register = useRootSelector((state: RootState) => state.page.register)
-  const appIds = useRootSelector((state: RootState) => state.page.appIds)
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const register = useRegister()
+  const appIds = useAppIds()
+  const walletAddress = useWalletAddress()
 
   const { author, name, tags, verified } = useMemo(
     () => register[appId] || ({} as ComponentManifest),
@@ -30,7 +31,7 @@ const AppDetails = ({ appId }: { appId: string }) => {
     [isMobile],
   )
   const installed = useMemo(
-    () => account.isAddress(walletAddress) && appIds.includes(appId),
+    () => isAddress(walletAddress) && appIds.includes(appId),
     [walletAddress, appIds, appId],
   )
 

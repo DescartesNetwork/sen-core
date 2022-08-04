@@ -1,17 +1,13 @@
 import { CSSProperties, Fragment, useEffect } from 'react'
-import { account } from '@senswap/sen-js'
 
 import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Login from './login'
 
+import { useRootDispatch, RootDispatch } from 'store'
+import { useWalletAddress } from 'hooks/useWallet'
 import storage from 'shared/storage'
-import {
-  useRootDispatch,
-  useRootSelector,
-  RootDispatch,
-  RootState,
-} from 'store'
+import { isAddress } from 'shared/util'
 import {
   connectWallet,
   openWallet,
@@ -30,9 +26,7 @@ import {
 
 const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
 
   const reconnect = () => {
     const walletType = storage.get('WalletType')
@@ -61,7 +55,7 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
   }
 
   useEffect(() => {
-    if (account.isAddress(walletAddress)) return
+    if (isAddress(walletAddress)) return
     try {
       const wallet = reconnect()
       if (wallet) dispatch(connectWallet(wallet)).unwrap()
@@ -70,7 +64,7 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
     }
   }, [dispatch, walletAddress])
 
-  if (account.isAddress(walletAddress))
+  if (isAddress(walletAddress))
     return (
       <Button
         type="text"

@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { account } from '@senswap/sen-js'
 
 import PDB from 'shared/pdb'
-import configs from 'configs'
 import { env } from 'shared/runtime'
+import { isAddress } from 'shared/util'
+import configs from 'configs'
 
 const {
   register: { senreg, extra, devAppId },
@@ -66,8 +66,7 @@ export const installManifest = createAsyncThunk<
     wallet: { address: walletAddress },
     page: { appIds, register },
   } = getState()
-  if (!account.isAddress(walletAddress))
-    throw new Error('Wallet is not connected yet.')
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet.')
   if (appIds.includes(manifest.appId))
     throw new Error('Cannot run sandbox for an installed application.')
   const newAppIds: AppIds = [...appIds]
@@ -90,8 +89,7 @@ export const loadPage = createAsyncThunk<
     page: { register },
   } = getState()
 
-  if (!account.isAddress(walletAddress))
-    throw new Error('Wallet is not connected yet.')
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet.')
   // Fetch user's apps
   const db = new PDB(walletAddress).createInstance('sentre')
   const appIds = troubleshoot(
@@ -110,8 +108,7 @@ export const updatePage = createAsyncThunk<
     wallet: { address: walletAddress },
     page: { register },
   } = getState()
-  if (!account.isAddress(walletAddress))
-    throw new Error('Wallet is not connected yet.')
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet.')
   appIds = troubleshoot(register, appIds)
   const db = new PDB(walletAddress).createInstance('sentre')
   await db.setItem('appIds', appIds)
@@ -127,8 +124,7 @@ export const installApp = createAsyncThunk<
     wallet: { address: walletAddress },
     page: { appIds },
   } = getState()
-  if (!account.isAddress(walletAddress))
-    throw new Error('Wallet is not connected yet.')
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet.')
   if (appIds.includes(appId)) return {}
   const newAppIds: AppIds = [...appIds]
   newAppIds.push(appId)
@@ -146,8 +142,7 @@ export const uninstallApp = createAsyncThunk<
     wallet: { address: walletAddress },
     page: { appIds },
   } = getState()
-  if (!account.isAddress(walletAddress))
-    throw new Error('Wallet is not connected yet.')
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet.')
   if (!appIds.includes(appId)) return {}
   const newAppIds = appIds.filter((_appId: string) => _appId !== appId)
   const pdb = new PDB(walletAddress)

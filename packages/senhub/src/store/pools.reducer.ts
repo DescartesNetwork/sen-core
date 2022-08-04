@@ -1,6 +1,7 @@
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { account, PoolData } from '@senswap/sen-js'
+
+import { isAddress } from 'shared/util'
 import configs from 'configs'
 
 const {
@@ -11,6 +12,20 @@ const {
  * Interface & Utility
  */
 
+export type PoolData = {
+  owner: string
+  state: number
+  mint_lpt: string
+  taxman: string
+  mint_a: string
+  treasury_a: string
+  reserve_a: bigint
+  mint_b: string
+  treasury_b: string
+  reserve_b: bigint
+  fee_ratio: bigint
+  tax_ratio: bigint
+}
 export type PoolsState = Record<string, PoolData>
 
 /**
@@ -48,7 +63,7 @@ export const getPool = createAsyncThunk<
   { address: string },
   { state: any }
 >(`${NAME}/getPool`, async ({ address }, { getState }) => {
-  if (!account.isAddress(address)) throw new Error('Invalid pool address')
+  if (!isAddress(address)) throw new Error('Invalid pool address')
   const {
     pools: { [address]: data },
   } = getState()
@@ -63,7 +78,7 @@ export const upsetPool = createAsyncThunk<
   { address: string; data: PoolData },
   { state: any }
 >(`${NAME}/upsetPool`, async ({ address, data }) => {
-  if (!account.isAddress(address)) throw new Error('Invalid pool address')
+  if (!isAddress(address)) throw new Error('Invalid pool address')
   if (!data) throw new Error('Data is empty')
   return { [address]: data }
 })

@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react'
-import { account } from '@senswap/sen-js'
+import { Keypair } from '@solana/web3.js'
 
 import { Row, Col, Typography, Input, Button, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -27,7 +27,7 @@ const SecretKey = () => {
   }
 
   const onGen = () => {
-    const acc = account.createAccount()
+    const acc = new Keypair()
     const secretKey = Buffer.from(acc.secretKey).toString('hex')
     return setSecretKey(secretKey)
   }

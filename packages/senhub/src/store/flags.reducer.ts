@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { account } from '@senswap/sen-js'
 
 import PDB from 'shared/pdb'
+import { isAddress } from 'shared/util'
 
 /**
  * Interface & Utility
@@ -36,8 +36,7 @@ export const loadVisited = createAsyncThunk<
   const {
     wallet: { address: walletAddress },
   } = getState()
-  if (!account.isAddress(walletAddress))
-    throw new Error('Wallet is not connected yet')
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet')
   const db = new PDB(walletAddress).createInstance('sentre')
   const visited: boolean = (await db.getItem('visited')) || false
   return { visited }
@@ -51,8 +50,7 @@ export const updateVisited = createAsyncThunk<
   const {
     wallet: { address },
   } = getState()
-  if (!account.isAddress(address))
-    throw new Error('Wallet is not connected yet')
+  if (!isAddress(address)) throw new Error('Wallet is not connected yet')
   const db = new PDB(address).createInstance('sentre')
   await db.setItem('visited', visited)
   return { visited }
@@ -73,8 +71,7 @@ export const loadDeveloperMode = createAsyncThunk<
   const {
     wallet: { address: walletAddress },
   } = getState()
-  if (!account.isAddress(walletAddress))
-    throw new Error('Wallet is not connected yet')
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet')
   const db = new PDB(walletAddress).createInstance('sentre')
   const developerMode: boolean = (await db.getItem('developerMode')) || false
   return { developerMode }
@@ -88,8 +85,7 @@ export const updateDeveloperMode = createAsyncThunk<
   const {
     wallet: { address },
   } = getState()
-  if (!account.isAddress(address))
-    throw new Error('Wallet is not connected yet')
+  if (!isAddress(address)) throw new Error('Wallet is not connected yet')
   const db = new PDB(address).createInstance('sentre')
   await db.setItem('developerMode', developerMode)
   return { developerMode }

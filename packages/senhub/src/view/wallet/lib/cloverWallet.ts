@@ -1,7 +1,8 @@
-import { Transaction } from '@solana/web3.js'
+import { Transaction, PublicKey } from '@solana/web3.js'
 import * as nacl from 'tweetnacl'
-import { account, SignedMessage } from '@senswap/sen-js'
+import { SignedMessage } from '@senswap/sen-js'
 
+import { isAddress } from 'shared/util'
 import BaseWallet from './baseWallet'
 import { collectFee, collectFees } from 'decorators/fee.decorator'
 
@@ -20,8 +21,7 @@ class CloverWallet extends BaseWallet {
   async getAddress(): Promise<string> {
     const provider = await this.getProvider()
     const address = await provider.getAccount()
-    if (!account.isAddress(address))
-      throw new Error('There is no Solana account')
+    if (!isAddress(address)) throw new Error('There is no Solana account')
     return address
   }
 
@@ -29,7 +29,7 @@ class CloverWallet extends BaseWallet {
   async signTransaction(transaction: Transaction): Promise<Transaction> {
     const provider = await this.getProvider()
     const address = await this.getAddress()
-    const publicKey = account.fromAddress(address)
+    const publicKey = new PublicKey(address)
     if (!transaction.feePayer) transaction.feePayer = publicKey
     return await provider.signTransaction(transaction)
   }
@@ -40,7 +40,7 @@ class CloverWallet extends BaseWallet {
   ): Promise<Transaction[]> {
     const provider = await this.getProvider()
     const address = await this.getAddress()
-    const publicKey = account.fromAddress(address)
+    const publicKey = new PublicKey(address)
     transactions.forEach((transaction) => {
       if (!transaction.feePayer) transaction.feePayer = publicKey
     })
@@ -60,7 +60,7 @@ class CloverWallet extends BaseWallet {
 
   async verifySignature(signature: string, message: string, address?: string) {
     address = address || (await this.getAddress())
-    const publicKey = account.fromAddress(address)
+    const publicKey = new PublicKey(address)
     const bufSig = Buffer.from(signature, 'hex')
     const encodedMsg = new TextEncoder().encode(message)
     const valid = nacl.sign.detached.verify(
