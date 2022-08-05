@@ -28,16 +28,14 @@ class BalansolTokenProvider extends TokenProviderBase {
     const pools = await this.getPools()
     return Promise.all(
       pools.map(async (pool) => {
-        const { mintLpt, mints } = pool.account
-        const tokens = await Promise.all(
-          mints.map((addr) => splTokenProvider.findByAddress(addr)),
-        )
+        const { mintLpt } = pool.account
+        const tokens = await this.findAtomicTokens(mintLpt)
         return {
           address: mintLpt.toBase58(),
           chainId: chainId,
           decimals: 9,
-          name: tokens.map((token) => token?.name).join(' • '),
-          symbol: tokens.map((token) => token?.symbol).join(' • '),
+          name: tokens?.map((token) => token?.name).join(' • ') || '',
+          symbol: tokens?.map((token) => token?.symbol).join(' • ') || '',
         }
       }),
     )

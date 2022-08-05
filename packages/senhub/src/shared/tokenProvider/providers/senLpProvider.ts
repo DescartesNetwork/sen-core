@@ -1,4 +1,3 @@
-import { TokenInfo } from '@solana/spl-token-registry'
 import { web3, Address } from '@project-serum/anchor'
 
 import { DataLoader } from './../../dataloader/index'
@@ -46,16 +45,14 @@ class SenLpTokenProvider extends TokenProviderBase {
     const pools = await this.getPools()
     return Promise.all(
       pools.map(async (pool) => {
-        const { mint_lpt, mint_a, mint_b } = pool.account
-        const tokens = await Promise.all(
-          [mint_a, mint_b].map((addr) => splTokenProvider.findByAddress(addr)),
-        )
+        const { mint_lpt } = pool.account
+        const tokens = await this.findAtomicTokens(mint_lpt)
         return {
           address: mint_lpt,
           chainId: chainId,
           decimals: 9,
-          name: tokens.map((token) => token?.name).join(' • '),
-          symbol: tokens.map((token) => token?.symbol).join(' • '),
+          name: tokens?.map((token) => token?.name).join(' • ') || '',
+          symbol: tokens?.map((token) => token?.symbol).join(' • ') || '',
         }
       }),
     )
