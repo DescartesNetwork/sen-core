@@ -3,9 +3,9 @@ import { MouseEvent, ReactNode, useMemo } from 'react'
 import { Space, Avatar, Typography, Badge, AvatarProps } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { useRootSelector, RootState } from 'store'
-import configs from 'configs'
 import { REGISTER_APP_STORE } from 'view/marketplace'
+import { useRegister } from 'hooks/useRegister'
+import configs from 'configs'
 import './index.os.less'
 
 const {
@@ -48,7 +48,7 @@ export const RawVerticalAppIcon = ({
   size = 64,
   name = true,
 }: RawAppIconProps) => {
-  const register = useRootSelector((state: RootState) => state.page.register)
+  const register = useRegister()
   const { name: appName } = useMemo(
     () => register[appId] || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
     [register, appId],
@@ -89,7 +89,7 @@ export const RawHorizontalAppIcon = ({
   size = 32,
   name = true,
 }: RawAppIconProps) => {
-  const register = useRootSelector((state: RootState) => state.page.register)
+  const register = useRegister()
   const { name: appName } = useMemo(
     () => register[appId] || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
     [register, appId],

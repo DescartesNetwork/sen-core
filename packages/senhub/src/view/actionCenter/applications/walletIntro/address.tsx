@@ -3,10 +3,10 @@ import copy from 'copy-to-clipboard'
 
 import { Tooltip, Space, Typography, Popover } from 'antd'
 import QRCodeCanvas from 'qrcode.react'
-
-import { useRootSelector, RootState } from 'store'
-import { asyncWait, explorer, shortenAddress } from 'shared/util'
 import IconButton from './iconButton'
+
+import { asyncWait, explorer, shortenAddress } from 'shared/util'
+import { useWalletAddress } from 'hooks/useWallet'
 
 const QR = ({ address }: { address: string }) => {
   return (
@@ -31,9 +31,7 @@ const QR = ({ address }: { address: string }) => {
 }
 
 const Address = () => {
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
   const [copied, setCopied] = useState(false)
 
   const onCopy = useCallback(async (text: string) => {

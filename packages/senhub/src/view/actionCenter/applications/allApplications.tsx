@@ -4,23 +4,20 @@ import { Button, Col, Modal, Row, Space, Typography, Switch } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import WidgetLayout from './widgetLayout'
 
-import {
-  useRootDispatch,
-  useRootSelector,
-  RootDispatch,
-  RootState,
-} from 'store'
+import { useRootDispatch, RootDispatch } from 'store'
 import { updatePage } from 'store/page.reducer'
 import { useUninstallApp } from 'hooks/useUninstallApp'
 import { useGoToStore } from 'hooks/useGotoStore'
+import { useRegister } from 'hooks/useRegister'
+import { useAppIds } from 'hooks/useAppIds'
 
 const AllApplications = () => {
   const dispatch = useRootDispatch<RootDispatch>()
   const [disabled, setDisabled] = useState(true)
   const [appId, setAppId] = useState('')
   const [visible, setVisible] = useState(false)
-  const appIds = useRootSelector((state: RootState) => state.page.appIds)
-  const register = useRootSelector((state: RootState) => state.page.register)
+  const appIds = useAppIds()
+  const register = useRegister()
   const onUninstallApp = useUninstallApp(appId)
   const onGotoStore = useGoToStore()
 

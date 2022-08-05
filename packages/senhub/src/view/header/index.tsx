@@ -10,6 +10,7 @@ import Navigation from './navigation'
 import { useRootSelector, RootState } from 'store'
 import { net } from 'shared/runtime'
 import { isAddress } from 'shared/util'
+import { useWalletAddress } from 'hooks/useWallet'
 
 export type NavButtonProps = {
   id: string
@@ -33,9 +34,7 @@ export const NavButton = ({ id, iconName, title, onClick }: NavButtonProps) => {
 }
 
 const Header = () => {
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
   const width = useRootSelector((state: RootState) => state.ui.width)
   const theme = useRootSelector((state: RootState) => state.ui.theme)
   const history = useHistory()

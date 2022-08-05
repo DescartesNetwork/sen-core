@@ -3,14 +3,12 @@ import { useEffect, useState } from 'react'
 import { Col, Row, Typography } from 'antd'
 import JsonViewer from 'components/jsonViewer'
 
-import { useRootSelector, RootState } from 'store'
 import PDB from 'shared/pdb'
+import { useWalletAddress } from 'hooks/useWallet'
 
 const ReviewData = () => {
   const [data, setData] = useState({})
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
 
   useEffect(() => {
     const pdb = new PDB(walletAddress)

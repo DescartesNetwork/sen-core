@@ -1,17 +1,15 @@
 import { ComponentProps, ElementType, useCallback } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 
-import { useRootSelector, RootState } from 'store'
 import { isAddress } from 'shared/util'
+import { useWalletAddress } from 'hooks/useWallet'
 
 export type PrivateRouteProps = {
   component: ElementType
 } & ComponentProps<typeof Route>
 
 const PrivateRoute = ({ component: Component, ...rest }: PrivateRouteProps) => {
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
 
   const render = useCallback(
     (props) => {

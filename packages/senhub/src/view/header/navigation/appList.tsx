@@ -6,8 +6,9 @@ import AppIcon from 'components/appIcon'
 import More from './more'
 import ContextMenu from './contextMenu'
 
-import { useRootSelector, RootState } from 'store'
 import { useGoToAppCallback } from 'hooks/useGotoApp'
+import { useAppIds } from 'hooks/useAppIds'
+import { useWalletAddress } from 'hooks/useWallet'
 import { isAddress } from 'shared/util'
 
 import './index.os.less'
@@ -34,13 +35,11 @@ const AppStore = () => {
 }
 
 const AppList = () => {
-  const appIds = useRootSelector((state: RootState) => state.page.appIds)
+  const appIds = useAppIds()
 
   const { params } = useRouteMatch<{ appId: string }>('/app/:appId') || {}
   const onGoToApp = useGoToAppCallback()
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
 
   return (
     <Row gutter={[12, 12]} wrap={false} align="middle">

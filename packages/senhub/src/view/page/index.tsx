@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { Fragment, useCallback, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Row, Col } from 'antd'
@@ -12,23 +12,25 @@ import {
 } from 'store'
 import { setVisibleInstaller } from 'store/ui.reducer'
 import { setValue } from 'store/search.reducer'
+import { useAppIds } from 'hooks/useAppIds'
+import { useRegister } from 'hooks/useRegister'
 
 const Page = () => {
   const { appId } = useParams<{ appId: string }>()
-  const appIds = useRootSelector((state: RootState) => state.page.appIds)
-  const register = useRootSelector((state: RootState) => state.page.register)
+  const appIds = useAppIds()
+  const register = useRegister()
   const loading = useRootSelector((state: RootState) => state.flags.loading)
   const dispatch = useRootDispatch<RootDispatch>()
 
-  const existing = useMemo(
-    () => appIds.includes(appId) && register[appId],
+  const installed = useMemo(
+    () => register[appId] && appIds.includes(appId),
     [register, appIds, appId],
   )
 
   const openInstaller = useCallback(async () => {
-    await dispatch(setVisibleInstaller(!existing))
-    await dispatch(setValue(!existing ? appId : ''))
-  }, [dispatch, existing, appId])
+    await dispatch(setVisibleInstaller(!installed))
+    await dispatch(setValue(!installed ? appId : ''))
+  }, [dispatch, installed, appId])
 
   useEffect(() => {
     if (!loading) openInstaller()
@@ -37,9 +39,11 @@ const Page = () => {
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        {existing ? (
+        {installed ? (
           <PageLoader {...(register[appId] as ComponentManifest)} />
-        ) : null}
+        ) : (
+          <Fragment />
+        )}
       </Col>
     </Row>
   )

@@ -26,6 +26,7 @@ import {
   updateLoading,
 } from 'store/flags.reducer'
 import { isAddress } from 'shared/util'
+import { useWalletAddress } from 'hooks/useWallet'
 
 import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
@@ -35,9 +36,7 @@ import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
 const View = () => {
   const theme = useRootSelector((state: RootState) => state.ui.theme)
   const background = useRootSelector((state: RootState) => state.ui.background)
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
 
   // Load DApp flags, registry, page

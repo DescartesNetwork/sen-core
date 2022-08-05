@@ -6,16 +6,14 @@ import BackupSuccess from './backupSuccess'
 import ReviewManual from './reviewManual'
 import ReviewData from './reviewData'
 
-import { useRootSelector, RootState } from 'store'
 import PDB from 'shared/pdb'
+import { useWalletAddress } from 'hooks/useWallet'
 
 const Backup = () => {
   const [link, setLink] = useState('')
   const [acceptable, setAcceptable] = useState(false)
   const [visible, setVisible] = useState(false)
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
 
   const onBackup = useCallback(async () => {
     const pdb = new PDB(walletAddress)

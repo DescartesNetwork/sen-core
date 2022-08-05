@@ -14,14 +14,16 @@ import {
 import { setVisibleInstaller } from 'store/ui.reducer'
 import { randChoose } from 'shared/util'
 import { useInstallAppCallback } from 'hooks/useInstallApp'
+import { useRegister } from 'hooks/useRegister'
+import { useAppIds } from 'hooks/useAppIds'
 import SearchEngine from './searchEngine'
 
 const SUGGESTION_LIMIT = 6
 
 const Installer = () => {
   const [recommendedApps, setRecommendeddApps] = useState<string[]>([])
-  const appIds = useRootSelector((state: RootState) => state.page.appIds)
-  const register = useRootSelector((state: RootState) => state.page.register)
+  const appIds = useAppIds()
+  const register = useRegister()
   const value = useRootSelector((state: RootState) => state.search.value)
   const visible = useRootSelector(
     (state: RootState) => state.ui.visibleInstaller,

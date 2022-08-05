@@ -3,15 +3,16 @@ import { useMemo } from 'react'
 import { Button, Space, Typography } from 'antd'
 import AppIcon from 'components/appIcon'
 
-import { RootState, useRootSelector } from 'store'
 import { useGoToApp } from 'hooks/useGotoApp'
 import { useInstallApp } from 'hooks/useInstallApp'
+import { useRegister } from 'hooks/useRegister'
+import { useAppIds } from 'hooks/useAppIds'
 
 export type CustomAppIconProps = { appId: string }
 
 const CustomAppIcon = ({ appId }: CustomAppIconProps) => {
-  const register = useRootSelector((state: RootState) => state.page.register)
-  const appIds = useRootSelector((state: RootState) => state.page.appIds)
+  const register = useRegister()
+  const appIds = useAppIds()
   const onOpen = useGoToApp({ appId })
   const onInstall = useInstallApp(appId)
 

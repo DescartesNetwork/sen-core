@@ -3,21 +3,21 @@ import { useCallback } from 'react'
 import { Modal, Row, Col, Space, Typography, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { useRootSelector, RootState } from 'store'
 import PDB from 'shared/pdb'
+import { useWalletAddress } from 'hooks/useWallet'
+
+export type ConfirmRestoreProps = {
+  cid: string
+  visible?: boolean
+  onClose?: () => void
+}
 
 const ConfirmRestore = ({
   cid,
-  visible,
+  visible = false,
   onClose = () => {},
-}: {
-  onClose?: () => void
-  cid: string
-  visible: boolean
-}) => {
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+}: ConfirmRestoreProps) => {
+  const walletAddress = useWalletAddress()
 
   const onRestore = useCallback(async () => {
     try {

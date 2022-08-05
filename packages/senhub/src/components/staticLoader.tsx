@@ -5,8 +5,8 @@ import useSWR from 'swr'
 import { Spin } from 'antd'
 import ErrorBoundary from 'components/errorBoundary'
 
-import { useRootSelector, RootState } from 'store'
 import { REGISTER_APP_STORE } from 'view/marketplace'
+import { useRegister } from 'hooks/useRegister'
 
 const ONE_HOUR = 60 * 60 * 1000
 
@@ -68,7 +68,7 @@ export const StaticLoader = forwardRef<
     render: (url: string) => JSX.Element
   }
 >(({ type, appId, defaultData = '', render }, ref) => {
-  const register = useRootSelector((state: RootState) => state.page.register)
+  const register = useRegister()
   const url = useMemo(
     () => register[appId]?.url || REGISTER_APP_STORE[appId]?.url || '',
     [register, appId],
@@ -122,7 +122,7 @@ export const MultiStaticLoader = forwardRef<
     render: (url: string[]) => JSX.Element
   }
 >(({ type, appId, defaultData = [''], render }, ref) => {
-  const register = useRootSelector((state: RootState) => state.page.register)
+  const register = useRegister()
   const url = useMemo(() => register[appId]?.url || '', [register, appId])
   const manifest: RemoteModule = useMemo(
     () => ({ url, scope: appId, module: './static' }),

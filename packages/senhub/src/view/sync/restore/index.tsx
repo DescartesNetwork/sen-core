@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { Row, Col, Button, Input, Card } from 'antd'
@@ -6,9 +6,9 @@ import IonIcon from '@sentre/antd-ionicon'
 import JsonViewer from 'components/jsonViewer'
 import ConfirmRestore from './confirm'
 
-import { useRootSelector, RootState } from 'store'
 import PDB from 'shared/pdb'
 import IPFS from 'shared/pdb/ipfs'
+import { useWalletAddress } from 'hooks/useWallet'
 
 const Restore = () => {
   const [link, setLink] = useState('')
@@ -17,9 +17,7 @@ const Restore = () => {
   const { search } = useLocation()
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const walletAddress = useWalletAddress()
 
   // Parse link
   useEffect(() => {
@@ -65,9 +63,7 @@ const Restore = () => {
                   />
                 }
                 value={link}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setLink(e.target.value || '')
-                }
+                onChange={(e) => setLink(e.target.value || '')}
               />
             </Col>
             <Col span={24}>
