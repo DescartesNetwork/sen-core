@@ -35,8 +35,7 @@ class TokenProvider {
   ): Promise<(TokenInfo | undefined)[]> => {
     for (const provider of this.providers) {
       const tokens = await provider.findAtomicTokens(addr)
-      if (!tokens) continue
-      return tokens
+      if (tokens) return tokens
     }
     return [undefined]
   }
