@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 export type AppRoute = {
   root: string
@@ -14,10 +14,11 @@ export type AppRoute = {
   back: (fallbackRoute?: string) => void
 }
 
-export const useAppRoute = (appId: string): AppRoute => {
+export const useAppRoute = (appId?: string): AppRoute => {
   const history = useHistory()
+  const { appId: defaultAppId } = useParams<{ appId: string }>()
 
-  const root = `/app/${appId}`
+  const root = `/app/${appId || defaultAppId}`
   const extend = useCallback<AppRoute['extend']>(
     (subroute) => root + subroute,
     [root],
