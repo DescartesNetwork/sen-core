@@ -83,7 +83,7 @@ export const useAccountBalanceByMintAddress = (mintAddress: string) => {
       )
       return setAccountAddress(address)
     })()
-  })
+  }, [walletAddress, mintAddress])
 
   return data
 }

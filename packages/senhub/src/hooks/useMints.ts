@@ -17,6 +17,31 @@ export const useMints = () => {
   return mints
 }
 
+export const useGetMintData = () => {
+  const dispatch = useRootDispatch<RootDispatch>()
+
+  const getMintData = useCallback(
+    async ({
+      mintAddress,
+      force = false,
+    }: {
+      mintAddress: string
+      force?: boolean
+    }) => {
+      if (!isAddress(mintAddress)) return undefined
+      try {
+        return await dispatch(getMint({ address: mintAddress, force })).unwrap()
+      } catch (er: any) {
+        window.notify({ type: 'warning', description: er.message })
+        return undefined
+      }
+    },
+    [dispatch],
+  )
+
+  return getMintData
+}
+
 export const useMintData = ({
   mintAddress,
   force = false,
@@ -25,23 +50,12 @@ export const useMintData = ({
   force?: boolean
 }) => {
   const [mintData, setMintData] = useState<MintsState>()
-  const dispatch = useRootDispatch<RootDispatch>()
+  const _getMintData = useGetMintData()
 
   const getMintData = useCallback(async () => {
-    if (!isAddress(mintAddress)) return setMintData(undefined)
-    try {
-      const data = await dispatch(
-        getMint({ address: mintAddress, force }),
-      ).unwrap()
-      return setMintData(data)
-    } catch (er: any) {
-      window.notify({
-        type: 'warning',
-        description: er.message,
-      })
-      return setMintData(undefined)
-    }
-  }, [dispatch, mintAddress, force])
+    const mintData = await _getMintData({ mintAddress, force })
+    return setMintData(mintData)
+  }, [_getMintData, mintAddress, force])
 
   useEffect(() => {
     getMintData()
@@ -58,7 +72,7 @@ export const useMintDecimals = ({
   force?: boolean
 }) => {
   const [decimals, setDecimals] = useState<number>()
-  const mintData = useMintData({ mintAddress, force })
+  const getMintData = useGetMintData()
 
   const getDecimals = useCallback(async () => {
     if (!isAddress(mintAddress)) return setDecimals(undefined)
@@ -69,10 +83,11 @@ export const useMintDecimals = ({
         return setDecimals(tokenInfo.decimals)
     }
     // Fetch from the clusters
+    const mintData = await getMintData({ mintAddress })
     if (mintData && mintData[mintAddress]?.decimals)
       return setDecimals(mintData[mintAddress].decimals)
     return setDecimals(undefined)
-  }, [mintData, mintAddress, force])
+  }, [getMintData, mintAddress, force])
 
   useEffect(() => {
     getDecimals()
