@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import copy from 'copy-to-clipboard'
 
 import { Menu } from 'antd'
@@ -12,10 +12,6 @@ export type ContextMenuProps = { appId: string }
 
 export const ContextMenu = ({ appId }: ContextMenuProps) => {
   const onOpenInNewTab = useGoToApp({ appId, blank: true })
-  const onOpenInPictureMode = useCallback(
-    () => window.open(`/app/${appId}`, '_blank'),
-    [appId],
-  )
   const onCopyInstantLink = useCallback(() => {
     copy(`${window.location.origin}/app/${appId}?autoInstall=true`)
     return window.message({
@@ -25,6 +21,14 @@ export const ContextMenu = ({ appId }: ContextMenuProps) => {
   }, [appId])
   const onViewInStore = useGoToStore({ appId, blank: true })
   const onUninstall = useUninstallApp(appId)
+
+  const fullscreen = useMemo(() => {
+    return document.getElementById(`${appId}-iframe`)
+  }, [appId])
+  const onFullscreen = useCallback(
+    () => fullscreen?.requestFullscreen(),
+    [fullscreen],
+  )
 
   return (
     <Menu
@@ -36,11 +40,11 @@ export const ContextMenu = ({ appId }: ContextMenuProps) => {
           onClick: onOpenInNewTab,
         },
         {
-          key: 'open-in-picture-mode',
-          label: 'Open in Picture Mode',
-          icon: <IonIcon name="images-outline" />,
-          onClick: onOpenInPictureMode,
-          disabled: true,
+          key: 'fullscreen',
+          label: 'Fullscreen',
+          icon: <IonIcon name="scan-outline" />,
+          onClick: onFullscreen,
+          disabled: !fullscreen,
         },
         {
           key: 'copy-instant-link',
