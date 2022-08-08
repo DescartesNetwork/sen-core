@@ -1,4 +1,4 @@
-import { Suspense, forwardRef, useCallback, useEffect } from 'react'
+import { Suspense, forwardRef, useCallback, useEffect, lazy } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
   RemoteModule,
@@ -13,7 +13,22 @@ import { RootDispatch, useRootDispatch } from 'store'
 import { setBackground } from 'store/ui.reducer'
 
 /**
- * Remote component
+ * Local Component
+ */
+const LocalComponent = forwardRef<HTMLElement, { manifest: RemoteModule }>(
+  ({ manifest, ...props }, ref) => {
+    const Component = lazy(() =>
+      import(process.env.REACT_APP_HMR as string).then((module) => ({
+        default: module.Page,
+      })),
+    )
+    return <Component {...props} ref={ref} />
+  },
+)
+LocalComponent.displayName = 'LocalComponent'
+
+/**
+ * Remote Component
  */
 const RemoteComponent = forwardRef<HTMLElement, { manifest: RemoteModule }>(
   ({ manifest, ...props }, ref) => {
@@ -93,10 +108,15 @@ const PageLoader = forwardRef<HTMLElement, ComponentManifest>(
       }
     }, [dispatch, currentAppId, props.name])
 
+    // To activate the Hot Module Replacement (HMR)
+    // We must directly mount the local component instead of the remote one.
+    const hmr = process.env.REACT_APP_HMR && appId === process.env.REACT_APP_ID
+    const Component = hmr ? LocalComponent : RemoteComponent
+
     return (
       <ErrorBoundary defaultChildren={<PageError url={url} />}>
         <Suspense fallback={<Skeleton active />}>
-          <RemoteComponent manifest={manifest} {...props} ref={ref} />
+          <Component manifest={manifest} {...props} ref={ref} />
         </Suspense>
       </ErrorBoundary>
     )
