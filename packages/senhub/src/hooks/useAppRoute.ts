@@ -30,7 +30,7 @@ export const useAppRoute = (appId?: string): AppRoute => {
         absolutePath: false,
         ...opts,
       }
-      if (!absolutePath) return root + subroute
+      if (absolutePath) return root + subroute
       return '/app/:appId' + subroute
     },
     [root],
