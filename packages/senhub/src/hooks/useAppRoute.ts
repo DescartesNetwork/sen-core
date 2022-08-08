@@ -20,8 +20,8 @@ export const useAppRoute = (appId?: string): AppRoute => {
 
   const root = `/app/${appId || defaultAppId}`
   const extend = useCallback<AppRoute['extend']>(
-    (subroute) => root + subroute,
-    [root],
+    (subroute) => '/app/:appId' + subroute,
+    [],
   )
   const to = useCallback<AppRoute['to']>(
     (route, opts) => {
