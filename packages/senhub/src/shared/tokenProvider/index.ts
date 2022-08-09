@@ -1,16 +1,10 @@
 import { Address } from '@project-serum/anchor'
 import { TokenInfo } from '@solana/spl-token-registry'
 
-import TokenProviderBase from './providers/baseProvider'
-import BalansolTokenProvider from './providers/balansolProvider'
+import BaseTokenProvider from './providers/baseProvider'
 import SplTokenProvider from './providers/splProvider'
-import SenLpTokenProvider from './providers/senLpProvider'
 
-const DEFAULT_PROVIDER: TokenProviderBase[] = [
-  new SplTokenProvider(),
-  new BalansolTokenProvider(),
-  new SenLpTokenProvider(),
-]
+const DEFAULT_PROVIDER: BaseTokenProvider[] = [new SplTokenProvider()]
 
 class TokenProvider {
   constructor(private providers = DEFAULT_PROVIDER) {}

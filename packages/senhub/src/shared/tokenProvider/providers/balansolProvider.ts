@@ -1,19 +1,20 @@
-import { TokenInfo } from '@solana/spl-token-registry'
 import { Program, AnchorProvider, web3, Address } from '@project-serum/anchor'
 
-import { DataLoader } from './../../dataloader/index'
-import TokenProviderBase from './baseProvider'
-import { chainId, net, rpc } from 'shared/runtime'
+import { chainId, Net, net, rpc } from 'shared/runtime'
+import { DataLoader } from 'shared/dataloader'
+import BaseTokenProvider from './baseProvider'
 import { splTokenProvider } from './splProvider'
 
-const programAddress =
-  net === 'mainnet'
-    ? 'D3BBjqUdCYuP18fNvvMbPAZ8DpcRi4io2EsYHQawJDag'
-    : 'Hxzy3cvdPz48RodavEN4P41TZp4g6Vd1kEMaUiZMof1u'
+const LPT_DECIMALS = 9
+const PROGRAM_CONFIGS: Record<Net, string> = {
+  devnet: 'Hxzy3cvdPz48RodavEN4P41TZp4g6Vd1kEMaUiZMof1u',
+  testnet: '',
+  mainnet: 'D3BBjqUdCYuP18fNvvMbPAZ8DpcRi4io2EsYHQawJDag',
+}
 
-class BalansolTokenProvider extends TokenProviderBase {
+class BalansolTokenProvider extends BaseTokenProvider {
   private provider = new AnchorProvider(new web3.Connection(rpc), {} as any, {})
-  private program = new Program(IDL, programAddress, this.provider)
+  private program = new Program(IDL, PROGRAM_CONFIGS[net], this.provider)
   constructor() {
     super()
     this._init()
@@ -33,8 +34,8 @@ class BalansolTokenProvider extends TokenProviderBase {
         return {
           address: mintLpt.toBase58(),
           chainId: chainId,
-          decimals: 9,
-          name: tokens?.map((token) => token?.name).join(' • ') || '',
+          decimals: LPT_DECIMALS,
+          name: 'Balansol LP',
           symbol: tokens?.map((token) => token?.symbol).join(' • ') || '',
         }
       }),

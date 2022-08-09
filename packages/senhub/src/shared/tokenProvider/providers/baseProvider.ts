@@ -5,7 +5,7 @@ import { Address } from '@project-serum/anchor'
 import { net, chainId, ChainId, Net } from 'shared/runtime'
 import { SOL_ADDRESS } from '../supplementary'
 
-class TokenProviderBase {
+class BaseTokenProvider {
   protected tokenMap: Map<string, TokenInfo>
   protected engine: Index | undefined
   readonly chainId: ChainId
@@ -93,4 +93,4 @@ class TokenProviderBase {
   }
 }
 
-export default TokenProviderBase
+export default BaseTokenProvider

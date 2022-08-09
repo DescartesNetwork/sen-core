@@ -2,9 +2,9 @@ import { Address } from '@project-serum/anchor'
 import { TokenListProvider } from '@solana/spl-token-registry'
 
 import supplementary, { sntr, sol } from '../supplementary'
-import TokenProviderBase from './baseProvider'
+import BaseTokenProvider from './baseProvider'
 
-class SplTokenProvider extends TokenProviderBase {
+class SplTokenProvider extends BaseTokenProvider {
   constructor() {
     super()
     this._init()

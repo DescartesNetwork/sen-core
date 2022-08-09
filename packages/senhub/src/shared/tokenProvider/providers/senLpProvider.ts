@@ -1,26 +1,26 @@
 import { web3, Address } from '@project-serum/anchor'
 
-import { DataLoader } from './../../dataloader/index'
-import TokenProviderBase from './baseProvider'
+import { DataLoader } from 'shared/dataloader'
 import { chainId } from 'shared/runtime'
-import configs from 'configs'
+import BaseTokenProvider from './baseProvider'
 import { splTokenProvider } from './splProvider'
+import configs from 'configs'
 
+const LPT_DECIMALS = 9
 const {
   sol: { taxmanAddress },
 } = configs
 
-class SenLpTokenProvider extends TokenProviderBase {
+class SenLpTokenProvider extends BaseTokenProvider {
   constructor() {
     super()
     this._init()
   }
 
   private getPools = async () => {
-    const key = 'SenLpTokenProvider:getPools'
     const swapProgram = window.sentre?.swap
     if (!swapProgram) return []
-
+    const key = 'SenLpTokenProvider:getPools'
     return DataLoader.load(key, async () => {
       // Get all pools
       const value: Array<{
@@ -50,7 +50,7 @@ class SenLpTokenProvider extends TokenProviderBase {
         return {
           address: mint_lpt,
           chainId: chainId,
-          decimals: 9,
+          decimals: LPT_DECIMALS,
           name: tokens?.map((token) => token?.name).join(' • ') || '',
           symbol: tokens?.map((token) => token?.symbol).join(' • ') || '',
         }
