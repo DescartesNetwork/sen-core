@@ -35,8 +35,8 @@ class SenLpTokenProvider extends BaseTokenProvider {
           ],
         },
       )
-      return value.map((elm) => {
-        return { account: { ...swapProgram.parsePoolData(elm.account.data) } }
+      return value.map(({ account: { data } }) => {
+        return { account: { ...swapProgram.parsePoolData(data) } }
       })
     })
   }

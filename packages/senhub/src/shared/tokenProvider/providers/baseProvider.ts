@@ -23,13 +23,13 @@ class BaseTokenProvider {
   }
 
   protected getTokenList = async (): Promise<TokenInfo[]> => {
-    throw new Error('Invalid getTokenList function!')
+    throw new Error('GetTokenList function is not declared yet!')
   }
 
   findAtomicTokens = async (
     addr: Address,
   ): Promise<(TokenInfo | undefined)[] | undefined> => {
-    throw new Error('Invalid findAtomicTokens function!')
+    throw new Error('FindAtomicTokens function is not declared yet!')
   }
 
   protected _init = async (): Promise<[Map<string, TokenInfo>, Index]> => {

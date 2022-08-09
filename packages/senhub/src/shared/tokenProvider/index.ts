@@ -7,7 +7,7 @@ import SplTokenProvider from './providers/splProvider'
 const DEFAULT_PROVIDER: BaseTokenProvider[] = [new SplTokenProvider()]
 
 class TokenProvider {
-  constructor(private providers = DEFAULT_PROVIDER) {}
+  constructor(private readonly providers = DEFAULT_PROVIDER) {}
 
   all = async (): Promise<TokenInfo[]> => {
     const data = await Promise.all(
@@ -31,7 +31,7 @@ class TokenProvider {
       const tokens = await provider.findAtomicTokens(addr)
       if (tokens) return tokens
     }
-    return [undefined]
+    return [await this.findByAddress(addr)]
   }
 
   find = async (keyword: string, limit = 10): Promise<TokenInfo[]> => {
