@@ -51,7 +51,7 @@ class SenLpTokenProvider extends BaseTokenProvider {
           address: mint_lpt,
           chainId: chainId,
           decimals: LPT_DECIMALS,
-          name: tokens?.map((token) => token?.name).join(' • ') || '',
+          name: 'SenSwapLP',
           symbol: tokens?.map((token) => token?.symbol).join(' • ') || '',
         }
       }),
