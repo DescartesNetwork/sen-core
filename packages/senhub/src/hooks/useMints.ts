@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { PublicKey } from '@solana/web3.js'
 
 import {
   RootDispatch,
@@ -6,9 +7,11 @@ import {
   useRootDispatch,
   useRootSelector,
 } from 'store'
-import { getMint, MintsState } from 'store/mints.reducer'
+import { getMint, MintData } from 'store/mints.reducer'
 import TokenProvider from 'shared/tokenProvider'
 import { isAddress } from 'shared/util'
+
+type Address = string | PublicKey
 
 export const tokenProvider = new TokenProvider()
 
@@ -25,12 +28,15 @@ export const useGetMintData = () => {
       mintAddress,
       force = false,
     }: {
-      mintAddress: string
+      mintAddress: Address
       force?: boolean
     }) => {
-      if (!isAddress(mintAddress)) return undefined
+      if (!isAddress(mintAddress.toString())) return undefined
       try {
-        return await dispatch(getMint({ address: mintAddress, force })).unwrap()
+        const data = await dispatch(
+          getMint({ address: mintAddress.toString(), force }),
+        ).unwrap()
+        return data[mintAddress.toString()]
       } catch (er: any) {
         window.notify({ type: 'warning', description: er.message })
         return undefined
@@ -49,7 +55,7 @@ export const useMintData = ({
   mintAddress: string
   force?: boolean
 }) => {
-  const [mintData, setMintData] = useState<MintsState>()
+  const [mintData, setMintData] = useState<MintData>()
   const _getMintData = useGetMintData()
 
   const getMintData = useCallback(async () => {
@@ -64,30 +70,34 @@ export const useMintData = ({
   return mintData
 }
 
-export const useMintDecimals = ({
-  mintAddress,
-  force = false,
-}: {
-  mintAddress: string
-  force?: boolean
-}) => {
-  const [decimals, setDecimals] = useState<number>()
+export const useGetMintDecimals = () => {
   const getMintData = useGetMintData()
 
-  const getDecimals = useCallback(async () => {
-    if (!isAddress(mintAddress)) return setDecimals(undefined)
-    // If the token is in token provider, return its decimals
-    if (!force) {
+  const getDecimals = useCallback(
+    async (mintAddress: Address) => {
+      if (!isAddress(mintAddress.toString())) return undefined
+      // If the token is in token provider, return its decimals
       const tokenInfo = await tokenProvider.findByAddress(mintAddress)
-      if (tokenInfo?.decimals !== undefined)
-        return setDecimals(tokenInfo.decimals)
-    }
-    // Fetch from the clusters
-    const mintData = await getMintData({ mintAddress })
-    if (mintData && mintData[mintAddress]?.decimals)
-      return setDecimals(mintData[mintAddress].decimals)
-    return setDecimals(undefined)
-  }, [getMintData, mintAddress, force])
+      if (tokenInfo?.decimals !== undefined) return tokenInfo.decimals
+      // Fetch from the clusters
+      const mintData = await getMintData({ mintAddress })
+      if (mintData) return mintData.decimals
+      return undefined
+    },
+    [getMintData],
+  )
+
+  return getDecimals
+}
+
+export const useMintDecimals = (mintAddress: Address) => {
+  const [decimals, setDecimals] = useState<number>()
+  const getMintDecimals = useGetMintDecimals()
+
+  const getDecimals = useCallback(async () => {
+    const decimals = await getMintDecimals(mintAddress)
+    return setDecimals(decimals)
+  }, [getMintDecimals, mintAddress])
 
   useEffect(() => {
     getDecimals()
