@@ -41,6 +41,7 @@ export { default as session } from 'shared/session'
 export { default as storage } from 'shared/storage'
 // Token Provider
 export { default as TokenProvider } from 'shared/tokenProvider'
+export * from 'shared/tokenProvider'
 // Utility
 export * as util from 'shared/util'
 // Dataloader
