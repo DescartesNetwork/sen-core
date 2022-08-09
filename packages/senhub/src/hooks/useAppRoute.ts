@@ -10,7 +10,12 @@ export type AppRoute = {
       newWindow: boolean
     }>,
   ) => void
-  extend: (subroute: string) => string
+  extend: (
+    subroute: string,
+    opts?: Partial<{
+      absolutePath: boolean
+    }>,
+  ) => string
   back: (fallbackRoute?: string) => void
 }
 
@@ -20,7 +25,14 @@ export const useAppRoute = (appId?: string): AppRoute => {
 
   const root = `/app/${appId || defaultAppId}`
   const extend = useCallback<AppRoute['extend']>(
-    (subroute) => root + subroute,
+    (subroute, opts) => {
+      const { absolutePath } = {
+        absolutePath: false,
+        ...opts,
+      }
+      if (absolutePath) return root + subroute
+      return '/app/:appId' + subroute
+    },
     [root],
   )
   const to = useCallback<AppRoute['to']>(
@@ -33,7 +45,7 @@ export const useAppRoute = (appId?: string): AppRoute => {
       const open = newWindow
         ? (r: string) => window.open(r, '_blank')
         : history.push
-      if (!absolutePath) return open(extend(route))
+      if (!absolutePath) return open(extend(route, { absolutePath: true }))
       return open(route)
     },
     [history, extend],
