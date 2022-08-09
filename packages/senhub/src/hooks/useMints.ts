@@ -28,11 +28,9 @@ export const useGetMintData = () => {
       mintAddress: string
       force?: boolean
     }) => {
-      if (!isAddress(mintAddress.toString())) return undefined
+      if (!isAddress(mintAddress)) return undefined
       try {
-        return await dispatch(
-          getMint({ address: mintAddress.toString(), force }),
-        ).unwrap()
+        return await dispatch(getMint({ address: mintAddress, force })).unwrap()
       } catch (er: any) {
         window.notify({ type: 'warning', description: er.message })
         return undefined
@@ -77,7 +75,7 @@ export const useGetMintDecimals = () => {
       mintAddress: string
       force?: boolean
     }) => {
-      if (!isAddress(mintAddress.toString())) return undefined
+      if (!isAddress(mintAddress)) return undefined
       // If the token is in token provider, return its decimals
       if (!force) {
         const tokenInfo = await tokenProvider.findByAddress(mintAddress)
