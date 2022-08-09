@@ -44,5 +44,5 @@ class TokenProvider {
 
 export default TokenProvider
 export { default as SplTokenProvider } from './providers/splProvider'
-export { default as SenLpTokenProvider } from './providers/splProvider'
+export { default as SenLpTokenProvider } from './providers/senLpProvider'
 export { default as BalansolTokenProvider } from './providers/balansolProvider'
