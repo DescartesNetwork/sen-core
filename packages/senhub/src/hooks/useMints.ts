@@ -7,27 +7,38 @@ import {
   useRootSelector,
 } from 'store'
 import { getMint, MintsState } from 'store/mints.reducer'
-import TokenProvider from 'shared/tokenProvider'
+import TokenProvider, {
+  BalansolTokenProvider,
+  SenLpTokenProvider,
+  SplTokenProvider,
+} from 'shared/tokenProvider'
 import { isAddress } from 'shared/util'
 
-export const tokenProvider = new TokenProvider()
+export const tokenProvider = new TokenProvider([
+  new SplTokenProvider(),
+  new BalansolTokenProvider(),
+  new SenLpTokenProvider(),
+])
 
 export const useMints = () => {
   const mints = useRootSelector((state: RootState) => state.mints)
   return mints
 }
 
+/**
+ * Get mint data
+ */
+
+export type GetMintDataProps = {
+  mintAddress: string
+  force?: boolean
+}
+
 export const useGetMintData = () => {
   const dispatch = useRootDispatch<RootDispatch>()
 
   const getMintData = useCallback(
-    async ({
-      mintAddress,
-      force = false,
-    }: {
-      mintAddress: string
-      force?: boolean
-    }) => {
+    async ({ mintAddress, force = false }: GetMintDataProps) => {
       if (!isAddress(mintAddress)) return undefined
       try {
         return await dispatch(getMint({ address: mintAddress, force })).unwrap()
@@ -45,10 +56,7 @@ export const useGetMintData = () => {
 export const useMintData = ({
   mintAddress,
   force = false,
-}: {
-  mintAddress: string
-  force?: boolean
-}) => {
+}: GetMintDataProps) => {
   const [mintData, setMintData] = useState<MintsState>()
   const _getMintData = useGetMintData()
 
@@ -64,17 +72,20 @@ export const useMintData = ({
   return mintData
 }
 
+/**
+ * Get mint decimals
+ */
+
+export type GetMintDecimalsProps = {
+  mintAddress: string
+  force?: boolean
+}
+
 export const useGetMintDecimals = () => {
   const getMintData = useGetMintData()
 
   const getDecimals = useCallback(
-    async ({
-      mintAddress,
-      force = false,
-    }: {
-      mintAddress: string
-      force?: boolean
-    }) => {
+    async ({ mintAddress, force = false }: GetMintDecimalsProps) => {
       if (!isAddress(mintAddress)) return undefined
       // If the token is in token provider, return its decimals
       if (!force) {
@@ -96,10 +107,7 @@ export const useGetMintDecimals = () => {
 export const useMintDecimals = ({
   mintAddress,
   force = false,
-}: {
-  mintAddress: string
-  force?: boolean
-}) => {
+}: GetMintDecimalsProps) => {
   const [decimals, setDecimals] = useState<number>()
   const getMintDecimals = useGetMintDecimals()
 
