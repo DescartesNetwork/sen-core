@@ -3,8 +3,14 @@ import { TokenInfo } from '@solana/spl-token-registry'
 
 import BaseTokenProvider from './providers/baseProvider'
 import SplTokenProvider from './providers/splProvider'
+import BalansolTokenProvider from './providers/balansolProvider'
+import SenLpTokenProvider from './providers/senLpProvider'
 
-const DEFAULT_PROVIDER: BaseTokenProvider[] = [new SplTokenProvider()]
+const DEFAULT_PROVIDER: BaseTokenProvider[] = [
+  new SplTokenProvider(),
+  new BalansolTokenProvider(),
+  new SenLpTokenProvider(),
+]
 
 class TokenProvider {
   constructor(private readonly providers = DEFAULT_PROVIDER) {}

@@ -64,6 +64,35 @@ export const useMintData = ({
   return mintData
 }
 
+export const useGetMintDecimals = () => {
+  const getMintData = useGetMintData()
+
+  const getDecimals = useCallback(
+    async ({
+      mintAddress,
+      force = false,
+    }: {
+      mintAddress: string
+      force?: boolean
+    }) => {
+      if (!isAddress(mintAddress)) return undefined
+      // If the token is in token provider, return its decimals
+      if (!force) {
+        const tokenInfo = await tokenProvider.findByAddress(mintAddress)
+        if (tokenInfo?.decimals !== undefined) return tokenInfo.decimals
+      }
+      // Fetch from the clusters
+      const mintData = await getMintData({ mintAddress })
+      if (mintData && mintData[mintAddress]?.decimals)
+        return mintData[mintAddress].decimals
+      return undefined
+    },
+    [getMintData],
+  )
+
+  return getDecimals
+}
+
 export const useMintDecimals = ({
   mintAddress,
   force = false,
@@ -72,22 +101,15 @@ export const useMintDecimals = ({
   force?: boolean
 }) => {
   const [decimals, setDecimals] = useState<number>()
-  const getMintData = useGetMintData()
+  const getMintDecimals = useGetMintDecimals()
 
   const getDecimals = useCallback(async () => {
-    if (!isAddress(mintAddress)) return setDecimals(undefined)
-    // If the token is in token provider, return its decimals
-    if (!force) {
-      const tokenInfo = await tokenProvider.findByAddress(mintAddress)
-      if (tokenInfo?.decimals !== undefined)
-        return setDecimals(tokenInfo.decimals)
-    }
-    // Fetch from the clusters
-    const mintData = await getMintData({ mintAddress })
-    if (mintData && mintData[mintAddress]?.decimals)
-      return setDecimals(mintData[mintAddress].decimals)
-    return setDecimals(undefined)
-  }, [getMintData, mintAddress, force])
+    const decimals = await getMintDecimals({
+      mintAddress,
+      force,
+    })
+    return setDecimals(decimals)
+  }, [force, getMintDecimals, mintAddress])
 
   useEffect(() => {
     getDecimals()
