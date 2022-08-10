@@ -32,6 +32,7 @@ import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
 import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
+import { authUser } from 'store/user.reducer'
 
 const View = () => {
   const theme = useRootSelector((state: RootState) => state.ui.theme)
@@ -48,7 +49,10 @@ const View = () => {
         await dispatch(loadVisited())
         await dispatch(loadDeveloperMode())
         const register = await dispatch(loadRegister()).unwrap()
-        if (Object.keys(register).length) await dispatch(loadPage())
+        if (Object.keys(register).length) {
+          const { appIds } = await dispatch(loadPage()).unwrap()
+          await dispatch(authUser(appIds)).unwrap()
+        }
       } catch (er: any) {
         window.notify({ type: 'warning', description: er.message })
       } finally {

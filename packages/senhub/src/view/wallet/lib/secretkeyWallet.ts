@@ -1,13 +1,13 @@
 import { Transaction, Keypair } from '@solana/web3.js'
 import { sign, hash } from 'tweetnacl'
-import { account, Provider } from '@senswap/sen-js'
+import { PublicKey } from '@solana/web3.js'
 
-import BaseWallet from './baseWallet'
 import session from 'shared/session'
 import storage from 'shared/storage'
 import { collectFee, collectFees } from 'decorators/fee.decorator'
+import BaseWallet from './baseWallet'
 
-type ExpanedProvider = Provider & { keypair: Keypair }
+type ExpanedProvider = WalletProvider & { keypair: Keypair }
 
 class SecretKeyWallet extends BaseWallet {
   constructor(secretKey: string, password?: string) {
@@ -35,12 +35,11 @@ class SecretKeyWallet extends BaseWallet {
     return pwd
   }
 
-  static setSecretKey(secretKeyString: string, pwd?: string): void {
-    const { secretKey } = account.fromSecretKey(secretKeyString) || {}
-    if (!secretKey) throw new Error('Invalid secret key')
+  static setSecretKey(secretKey: string, pwd?: string): void {
+    const keypair = Keypair.fromSecretKey(Buffer.from(secretKey, 'hex'))
     pwd = pwd || SecretKeyWallet.getPassword()
     const seed = hash(Buffer.from(pwd))
-    const confusedSecretKey = SecretKeyWallet.xor(seed, secretKey)
+    const confusedSecretKey = SecretKeyWallet.xor(seed, keypair.secretKey)
     storage.set('SecretKey', confusedSecretKey.toString('hex'))
   }
 
@@ -58,7 +57,7 @@ class SecretKeyWallet extends BaseWallet {
 
   async getProvider(): Promise<ExpanedProvider> {
     const secretKey = SecretKeyWallet.getSecretKey()
-    const keypair = account.fromSecretKey(secretKey)
+    const keypair = Keypair.fromSecretKey(Buffer.from(secretKey, 'hex'))
     if (!keypair) throw new Error('Cannot get the keystore-based provider')
     const provider = {
       keypair,
@@ -114,15 +113,20 @@ class SecretKeyWallet extends BaseWallet {
     )
     if (!confirmed) throw new Error('User rejects to sign the message')
     const { keypair } = await this.getProvider()
-    const secretKey = Buffer.from(keypair.secretKey).toString('hex')
-    const data = account.signMessage(message, secretKey)
-    return { ...data }
+    const address = keypair.publicKey.toBase58()
+    const buf = sign.detached(Buffer.from(message, 'hex'), keypair.secretKey)
+    const signature = Buffer.from(buf).toString('hex')
+    return { address, signature, message }
   }
 
   async verifySignature(signature: string, message: string, address?: string) {
     address = address || (await this.getAddress())
-    const valid = account.verifySignature(address, signature, message)
-    return valid as boolean
+    const valid = sign.detached.verify(
+      Buffer.from(message, 'hex'),
+      Buffer.from(signature, 'hex'),
+      new PublicKey(address).toBuffer(),
+    )
+    return valid
   }
 }
 

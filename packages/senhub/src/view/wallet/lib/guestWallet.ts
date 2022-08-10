@@ -1,11 +1,10 @@
 import { Transaction } from '@solana/web3.js'
-import { Provider } from '@senswap/sen-js'
 
 import BaseWallet from './baseWallet'
 
 export const GUEST_ADDRESS = 'GuestAccount11111111111111111111111111111111'
 
-type ExpanedProvider = Provider & { address: string }
+type ExpanedProvider = WalletProvider & { address: string }
 
 class GuestWallet extends BaseWallet {
   constructor(callback: () => void = () => {}) {

@@ -1,17 +1,19 @@
-import { Transaction } from '@solana/web3.js'
-import * as nacl from 'tweetnacl'
-import { account, Provider, SignedMessage } from '@senswap/sen-js'
+import { Transaction, PublicKey } from '@solana/web3.js'
+import { sign } from 'tweetnacl'
 import WalletAdapter from '@project-serum/sol-wallet-adapter'
 
-import BaseWallet from './baseWallet'
 import configs from 'configs'
 import { collectFee, collectFees } from 'decorators/fee.decorator'
+import BaseWallet from './baseWallet'
 
 const {
   sol: { node },
 } = configs
 const PROVIDER_URL = 'https://solflare.com/provider'
-const PROVIDER: WalletAdapter & Provider = new WalletAdapter(PROVIDER_URL, node)
+const PROVIDER: WalletAdapter & WalletProvider = new WalletAdapter(
+  PROVIDER_URL,
+  node,
+)
 
 class SolflareWebWallet extends BaseWallet {
   constructor() {
@@ -33,7 +35,7 @@ class SolflareWebWallet extends BaseWallet {
   async signTransaction(transaction: Transaction): Promise<Transaction> {
     const provider = await this.getProvider()
     const address = await this.getAddress()
-    const publicKey = account.fromAddress(address)
+    const publicKey = new PublicKey(address)
     if (!transaction.feePayer) transaction.feePayer = publicKey
     return await provider.signTransaction(transaction)
   }
@@ -44,7 +46,7 @@ class SolflareWebWallet extends BaseWallet {
   ): Promise<Transaction[]> {
     const provider = await this.getProvider()
     const address = await this.getAddress()
-    const publicKey = account.fromAddress(address)
+    const publicKey = new PublicKey(address)
     transactions.forEach((transaction) => {
       if (!transaction.feePayer) transaction.feePayer = publicKey
     })
@@ -64,14 +66,10 @@ class SolflareWebWallet extends BaseWallet {
 
   async verifySignature(signature: string, message: string, address?: string) {
     address = address || (await this.getAddress())
-    const publicKey = account.fromAddress(address)
+    const publicKey = new PublicKey(address)
     const bufSig = Buffer.from(signature, 'hex')
     const encodedMsg = new TextEncoder().encode(message)
-    const valid = nacl.sign.detached.verify(
-      encodedMsg,
-      bufSig,
-      publicKey.toBuffer(),
-    )
+    const valid = sign.detached.verify(encodedMsg, bufSig, publicKey.toBuffer())
     return valid
   }
 }

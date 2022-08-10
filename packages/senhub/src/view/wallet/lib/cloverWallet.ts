@@ -1,10 +1,9 @@
 import { Transaction, PublicKey } from '@solana/web3.js'
-import * as nacl from 'tweetnacl'
-import { SignedMessage } from '@senswap/sen-js'
+import { sign } from 'tweetnacl'
 
 import { isAddress } from 'shared/util'
-import BaseWallet from './baseWallet'
 import { collectFee, collectFees } from 'decorators/fee.decorator'
+import BaseWallet from './baseWallet'
 
 class CloverWallet extends BaseWallet {
   constructor() {
@@ -63,11 +62,7 @@ class CloverWallet extends BaseWallet {
     const publicKey = new PublicKey(address)
     const bufSig = Buffer.from(signature, 'hex')
     const encodedMsg = new TextEncoder().encode(message)
-    const valid = nacl.sign.detached.verify(
-      encodedMsg,
-      bufSig,
-      publicKey.toBuffer(),
-    )
+    const valid = sign.detached.verify(encodedMsg, bufSig, publicKey.toBuffer())
     return valid
   }
 }

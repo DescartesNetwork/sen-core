@@ -13,6 +13,7 @@ import ui from './ui.reducer'
 import flags from './flags.reducer'
 import page from './page.reducer'
 import wallet from './wallet.reducer'
+import user from './user.reducer'
 import accounts from './accounts.reducer'
 import mints from './mints.reducer'
 import pools from './pools.reducer'
@@ -45,6 +46,7 @@ const store = configureStore({
     flags,
     page,
     wallet,
+    user,
     accounts,
     mints,
     pools,

@@ -1,5 +1,5 @@
-import { Transaction } from '@solana/web3.js'
-import * as nacl from 'tweetnacl'
+import { Transaction, PublicKey } from '@solana/web3.js'
+import { sign } from 'tweetnacl'
 import { account } from '@senswap/sen-js'
 import { decode, encode } from 'bs58'
 
@@ -66,16 +66,23 @@ class SlopeWallet extends BaseWallet {
     return transactions
   }
 
+  async signMessage(message: string) {
+    if (!message) throw new Error('Message must be a non-empty string')
+    const provider = await this.getProvider()
+    const address = await this.getAddress()
+    const encodedMsg = new TextEncoder().encode(message)
+    const { signature: sig } = await provider.signMessage(encodedMsg, 'utf8')
+    const signature = Buffer.from(sig).toString('hex')
+    const data = { address, signature, message }
+    return data as SignedMessage
+  }
+
   async verifySignature(signature: string, message: string, address?: string) {
     const slopeAddress = address || (await this.getAddress())
-    const publicKey = account.fromAddress(slopeAddress)
+    const publicKey = new PublicKey(slopeAddress)
     const bufSig = Buffer.from(signature, 'hex')
     const encodedMsg = new TextEncoder().encode(message)
-    const valid = nacl.sign.detached.verify(
-      encodedMsg,
-      bufSig,
-      publicKey.toBuffer(),
-    )
+    const valid = sign.detached.verify(encodedMsg, bufSig, publicKey.toBuffer())
     return valid
   }
 }

@@ -58,7 +58,7 @@ export const loadRegister = createAsyncThunk(
 
 // For sandbox only
 export const installManifest = createAsyncThunk<
-  Partial<PageState>,
+  PageState,
   ComponentManifest,
   { state: any }
 >(`${NAME}/installManifest`, async (manifest, { getState }) => {
@@ -80,7 +80,7 @@ export const installManifest = createAsyncThunk<
  * App Actions
  */
 export const loadPage = createAsyncThunk<
-  Partial<PageState>,
+  { appIds: AppIds },
   void,
   { state: any }
 >(`${NAME}/loadPage`, async (_, { getState }) => {

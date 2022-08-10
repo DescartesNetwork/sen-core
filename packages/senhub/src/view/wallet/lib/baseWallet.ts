@@ -1,5 +1,4 @@
 import { Transaction } from '@solana/web3.js'
-import { Provider, WalletInterface, SignedMessage } from '@senswap/sen-js'
 
 import storage from 'shared/storage'
 
@@ -11,7 +10,7 @@ class BaseWallet implements WalletInterface {
     storage.set('WalletType', this.walletType)
   }
 
-  async getProvider(): Promise<Provider> {
+  async getProvider(): Promise<WalletProvider> {
     throw new Error('Wallet is not connected')
   }
 
