@@ -114,18 +114,18 @@ class SecretKeyWallet extends BaseWallet {
     if (!confirmed) throw new Error('User rejects to sign the message')
     const { keypair } = await this.getProvider()
     const address = keypair.publicKey.toBase58()
-    const buf = sign.detached(Buffer.from(message, 'hex'), keypair.secretKey)
+    const encodedMsg = new TextEncoder().encode(message)
+    const buf = sign.detached(encodedMsg, keypair.secretKey)
     const signature = Buffer.from(buf).toString('hex')
     return { address, signature, message }
   }
 
   async verifySignature(signature: string, message: string, address?: string) {
     address = address || (await this.getAddress())
-    const valid = sign.detached.verify(
-      Buffer.from(message, 'hex'),
-      Buffer.from(signature, 'hex'),
-      new PublicKey(address).toBuffer(),
-    )
+    const publicKey = new PublicKey(address)
+    const encodedMsg = new TextEncoder().encode(message)
+    const bufSig = Buffer.from(signature, 'hex')
+    const valid = sign.detached.verify(encodedMsg, bufSig, publicKey.toBuffer())
     return valid
   }
 }

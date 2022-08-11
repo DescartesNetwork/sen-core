@@ -1,4 +1,4 @@
-import { CSSProperties, Fragment, useEffect } from 'react'
+import { CSSProperties, Fragment, useCallback, useEffect } from 'react'
 
 import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -13,6 +13,7 @@ import {
   openWallet,
   disconnectWallet,
 } from 'store/wallet.reducer'
+import { logout } from 'store/user.reducer'
 import {
   Coin98Wallet,
   PhantomWallet,
@@ -28,7 +29,7 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
 
-  const reconnect = () => {
+  const reconnect = useCallback(() => {
     const walletType = storage.get('WalletType')
     switch (walletType) {
       case 'SecretKey':
@@ -52,7 +53,16 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
       default:
         return undefined
     }
-  }
+  }, [])
+
+  const disconnect = useCallback(async () => {
+    try {
+      await dispatch(logout()).unwrap()
+      await dispatch(disconnectWallet()).unwrap()
+    } catch (er: any) {
+      return console.warn(er.message)
+    }
+  }, [dispatch])
 
   useEffect(() => {
     if (isAddress(walletAddress)) return
@@ -69,7 +79,7 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
       <Button
         type="text"
         icon={<IonIcon name="power-outline" />}
-        onClick={() => dispatch(disconnectWallet())}
+        onClick={disconnect}
         style={{
           color: '#E9E9EB',
           padding: 0,

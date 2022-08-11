@@ -51,8 +51,8 @@ const validateSession = async () => {
  * Actions
  */
 
-export const authUser = createAsyncThunk<UserState, AppIds, { state: any }>(
-  `${NAME}/authUser`,
+export const login = createAsyncThunk<UserState, AppIds, { state: any }>(
+  `${NAME}/login`,
   async (appIds, { getState }) => {
     const {
       wallet: { address: walletAddress },
@@ -76,7 +76,7 @@ export const authUser = createAsyncThunk<UserState, AppIds, { state: any }>(
           return Buffer.from(signature, 'hex')
         },
       })
-      await axios.get(api.user.auth, {
+      await axios.get(api.user.login, {
         headers: {
           authorization: `Bearer ${bearer}`,
         },
@@ -96,6 +96,12 @@ export const authUser = createAsyncThunk<UserState, AppIds, { state: any }>(
     return user
   },
 )
+
+export const logout = createAsyncThunk(`${NAME}/logout`, async () => {
+  // Logout
+  await axios.get(api.user.logout, { withCredentials: true })
+  return { ...initialState }
+})
 
 export const getUser = createAsyncThunk<UserState, void, { state: any }>(
   `${NAME}/getUser`,
@@ -127,7 +133,7 @@ export const upsetUser = createAsyncThunk<
 
 export const deleteUser = createAsyncThunk(`${NAME}/deleteUser`, async () => {
   await axios.delete(api.user.index, { withCredentials: true })
-  return {}
+  return { ...initialState }
 })
 
 /**
@@ -141,7 +147,11 @@ const slice = createSlice({
   extraReducers: (builder) =>
     void builder
       .addCase(
-        authUser.fulfilled,
+        login.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        logout.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
@@ -152,7 +162,10 @@ const slice = createSlice({
         upsetUser.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
-      .addCase(deleteUser.fulfilled, (state, { payload }) => void payload),
+      .addCase(
+        deleteUser.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      ),
 })
 
 export default slice.reducer

@@ -21,8 +21,11 @@ const generator = (origin: string): Conf => ({
   },
   user: {
     index: origin + '/user',
-    get auth() {
-      return this.index + '/auth'
+    get login() {
+      return this.index + '/login'
+    },
+    get logout() {
+      return this.index + '/logout'
     },
   },
 })
@@ -32,7 +35,7 @@ const conf: Record<Env, Conf> = {
    * Development configurations
    */
   development: {
-    ...generator('https://api.sentre.io'),
+    ...generator('http://localhost:10000'),
   },
 
   /**
