@@ -32,7 +32,7 @@ const conf: Record<Env, Conf> = {
    * Development configurations
    */
   development: {
-    ...generator('http://localhost:10000'),
+    ...generator('https://api.sentre.io'),
   },
 
   /**
