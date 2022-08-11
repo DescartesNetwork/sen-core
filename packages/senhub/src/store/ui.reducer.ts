@@ -84,12 +84,17 @@ export const setVisibleInstaller = createAsyncThunk(
   },
 )
 
-export const setBackground = createAsyncThunk(
-  `${NAME}/setBackground`,
-  async (background: Background) => {
-    return { background }
-  },
-)
+export const setBackground = createAsyncThunk<
+  Partial<UIState>,
+  Background,
+  { state: any }
+>(`${NAME}/setBackground`, async (background, { getState }) => {
+  const {
+    ui: { background: preBackground },
+  } = getState()
+  if (JSON.stringify(preBackground) === JSON.stringify(background)) return {}
+  return { background }
+})
 
 /**
  * Usual procedure

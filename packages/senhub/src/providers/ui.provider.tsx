@@ -32,7 +32,7 @@ export type UIProvider = {
   ui: UIState
   setBackground: (
     ...args: Parameters<typeof _setBackground>
-  ) => Promise<{ background: Background }>
+  ) => Promise<Partial<{ background: Background }>>
 }
 
 /**
