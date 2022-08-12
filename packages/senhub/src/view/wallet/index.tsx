@@ -72,7 +72,7 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
     } catch (er: any) {
       return window.notify({ type: 'error', description: er.message })
     }
-  }, [dispatch, walletAddress])
+  }, [dispatch, reconnect, walletAddress])
 
   if (isAddress(walletAddress))
     return (
