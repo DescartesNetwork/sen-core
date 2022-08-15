@@ -35,12 +35,14 @@ const initialState: UserState = {
   updatedAt: Date.now(),
 }
 
-const validateSession = async () => {
+const validateSession = async (walletAddress: string) => {
   try {
-    const { data } = await axios.get(api.health.cookie, {
+    const {
+      data: { walletAddress: expectedWalletAddress },
+    } = await axios.get(api.user.index, {
       withCredentials: true,
     })
-    if (data !== 'OK') return false
+    if (expectedWalletAddress !== walletAddress) return false
     return true
   } catch (er: any) {
     return false
@@ -60,7 +62,7 @@ export const login = createAsyncThunk<UserState, AppIds, { state: any }>(
     if (!isAddress(walletAddress)) throw new Error('Invalid wallet address')
 
     // Check the current session
-    const auth = await validateSession()
+    const auth = await validateSession(walletAddress)
     // Login
     if (!auth) {
       const jst = OAuth.issue('hub.sentre.io')
