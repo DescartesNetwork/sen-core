@@ -1,11 +1,11 @@
-import { chainId } from 'shared/runtime'
 import { TokenInfo } from '@solana/spl-token-registry'
 import { Address } from '@project-serum/anchor'
 import { programs } from '@metaplex/js'
 
+import { chainId } from 'shared/runtime'
 import BaseTokenProvider from './baseProvider'
 
-class MetadataProvider extends BaseTokenProvider {
+class MetaplexProvider extends BaseTokenProvider {
   constructor() {
     super()
     this._init()
@@ -23,19 +23,21 @@ class MetadataProvider extends BaseTokenProvider {
     try {
       if (this.tokenMap.has(addr.toString())) this.tokenMap.get(addr.toString())
       // Fetch new data
-      const { data } = await programs.metadata.Metadata.findByMint(
+      const {
+        data: { data: metadata },
+      } = await programs.metadata.Metadata.findByMint(
         window.sentre.splt.connection,
         addr,
       )
       const mintData = await window.sentre.splt.getMintData(addr.toString())
-      const uriData = await (await fetch(data.data.uri)).json()
+      const uriData = await (await fetch(metadata.uri)).json()
       // Build Token info
       const tokenInfo: TokenInfo = {
         address: addr.toString(),
         chainId: chainId,
         decimals: mintData.decimals,
-        name: data.data.name,
-        symbol: data.data.symbol,
+        name: metadata.name,
+        symbol: metadata.symbol,
         logoURI: uriData.image,
       }
       // Cache data + build search engine
@@ -48,4 +50,4 @@ class MetadataProvider extends BaseTokenProvider {
   }
 }
 
-export default MetadataProvider
+export default MetaplexProvider
