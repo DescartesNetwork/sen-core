@@ -5,11 +5,13 @@ import BaseTokenProvider from './providers/baseProvider'
 import SplTokenProvider from './providers/splProvider'
 import BalansolTokenProvider from './providers/balansolProvider'
 import SenLpTokenProvider from './providers/senLpProvider'
+import MetadataProvider from './providers/metadataProvider'
 
 const DEFAULT_PROVIDER: BaseTokenProvider[] = [
   new SplTokenProvider(),
   new BalansolTokenProvider(),
   new SenLpTokenProvider(),
+  new MetadataProvider(),
 ]
 
 class TokenProvider {
@@ -52,3 +54,4 @@ export default TokenProvider
 export { default as SplTokenProvider } from './providers/splProvider'
 export { default as SenLpTokenProvider } from './providers/senLpProvider'
 export { default as BalansolTokenProvider } from './providers/balansolProvider'
+export { default as MetadataProvider } from './providers/metadataProvider'
