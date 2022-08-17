@@ -56,12 +56,8 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
   }, [])
 
   const disconnect = useCallback(async () => {
-    try {
-      await dispatch(logout()).unwrap()
-      await dispatch(disconnectWallet()).unwrap()
-    } catch (er: any) {
-      return console.warn(er.message)
-    }
+    await dispatch(logout())
+    await dispatch(disconnectWallet())
   }, [dispatch])
 
   useEffect(() => {
