@@ -3,6 +3,7 @@ import { Address } from '@project-serum/anchor'
 import { programs } from '@metaplex/js'
 
 import { chainId } from 'shared/runtime'
+import { isAddress } from 'shared/util'
 import BaseTokenProvider from './baseProvider'
 
 class MetaplexProvider extends BaseTokenProvider {
@@ -47,6 +48,26 @@ class MetaplexProvider extends BaseTokenProvider {
     } catch (error) {
       return undefined
     }
+  }
+
+  find = async (keyword: string, limit = 10): Promise<TokenInfo[]> => {
+    const [tokenMap, engine] = await this._init()
+    const tokens: TokenInfo[] = []
+    if (!keyword) return []
+    const fuzzy = `${keyword}^10 ${keyword}~1`
+    engine.search(fuzzy).forEach(({ ref }) => {
+      if (tokens.findIndex(({ address }) => address === ref) < 0) {
+        const token = tokenMap.get(ref)
+        if (token) tokens.push(token)
+      }
+    })
+    // Search on blockchain
+    if (!tokens.length && isAddress(keyword)) {
+      const tokenInfo = await this.findByAddress(keyword)
+      if (tokenInfo) return [tokenInfo]
+    }
+    if (limit === 0) return tokens
+    return tokens.slice(0, limit)
   }
 }
 
