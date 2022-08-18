@@ -65,13 +65,9 @@ const View = () => {
     document.body.setAttribute('id', theme)
     const DEFAULT_BG = theme === 'light' ? DEFAULT_LIGHT_BG : DEFAULT_DARK_BG
     const bg = background[theme] || DEFAULT_BG
-    if (CSS.supports('background', bg)) {
-      document.body.style.backgroundImage = ''
-      document.body.style.backgroundColor = bg
-    } else {
-      document.body.style.backgroundImage = `url(${bg})`
-      document.body.style.backgroundColor = ''
-    }
+    document.body.style.background = '' // Clear previous background
+    if (CSS.supports('background', bg)) document.body.style.background = bg
+    else document.body.style.backgroundImage = `url(${bg})`
   }, [theme, background])
 
   return (

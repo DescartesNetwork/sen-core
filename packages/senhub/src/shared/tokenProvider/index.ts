@@ -5,14 +5,12 @@ import BaseTokenProvider from './providers/baseProvider'
 import SplTokenProvider from './providers/splProvider'
 import BalansolTokenProvider from './providers/balansolProvider'
 import SenLpTokenProvider from './providers/senLpProvider'
-import MetaplexProvider from './providers/metaplexProvider'
 import { isAddress } from 'shared/util'
 
 const DEFAULT_PROVIDER: BaseTokenProvider[] = [
   new SplTokenProvider(),
   new BalansolTokenProvider(),
   new SenLpTokenProvider(),
-  new MetaplexProvider(),
 ]
 
 class TokenProvider {
