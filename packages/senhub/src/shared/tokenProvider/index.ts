@@ -6,6 +6,7 @@ import SplTokenProvider from './providers/splProvider'
 import BalansolTokenProvider from './providers/balansolProvider'
 import SenLpTokenProvider from './providers/senLpProvider'
 import MetaplexProvider from './providers/metaplexProvider'
+import { isAddress } from 'shared/util'
 
 const DEFAULT_PROVIDER: BaseTokenProvider[] = [
   new SplTokenProvider(),
@@ -46,7 +47,20 @@ class TokenProvider {
     const data = await Promise.all(
       this.providers.map((provider) => provider.find(keyword, limit)),
     )
-    return data.flat()
+    const tokens = data.flat()
+    if (!tokens.length && isAddress(keyword)) {
+      const tokenInfo = await this.findByAddress(keyword)
+      if (tokenInfo) return [tokenInfo]
+    }
+    return []
+  }
+
+  getPrice = async (addr: Address): Promise<number | undefined> => {
+    for (const provider of this.providers) {
+      const tokenInfo = await provider.findByAddress(addr)
+      if (tokenInfo) return provider.getPrice(addr)
+    }
+    return undefined
   }
 }
 

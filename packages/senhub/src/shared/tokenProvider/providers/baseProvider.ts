@@ -1,6 +1,6 @@
 import lunr, { Index } from 'lunr'
 import { TokenInfo } from '@solana/spl-token-registry'
-import { Address } from '@project-serum/anchor'
+import { Address, BN } from '@project-serum/anchor'
 
 import { net, chainId, ChainId, Net } from 'shared/runtime'
 import { SOL_ADDRESS } from '../supplementary'
@@ -29,6 +29,14 @@ class BaseTokenProvider {
   findAtomicTokens = async (
     addr: Address,
   ): Promise<(TokenInfo | undefined)[] | undefined> => {
+    throw new Error('FindAtomicTokens function is not declared yet!')
+  }
+
+  getPrice = async (addr: Address): Promise<number | undefined> => {
+    throw new Error('FindAtomicTokens function is not declared yet!')
+  }
+
+  getTotal = async (addr: Address, amountBN: BN): Promise<number> => {
     throw new Error('FindAtomicTokens function is not declared yet!')
   }
 

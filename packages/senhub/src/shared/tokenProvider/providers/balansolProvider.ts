@@ -4,6 +4,7 @@ import { chainId, Net, net, rpc } from 'shared/runtime'
 import { DataLoader } from 'shared/dataloader'
 import BaseTokenProvider from './baseProvider'
 import { splTokenProvider } from './splProvider'
+import { utils } from '@senswap/sen-js'
 
 const LPT_DECIMALS = 9
 const PROGRAM_CONFIGS: Record<Net, string> = {
@@ -50,6 +51,31 @@ class BalansolTokenProvider extends BaseTokenProvider {
       return Promise.all(
         poolData.mints.map((mint) => splTokenProvider.findByAddress(mint)),
       )
+    }
+    return undefined
+  }
+
+  getPrice = async (addr: Address): Promise<number | undefined> => {
+    console.log('Call price Balansol')
+    await this._init()
+    if (!this.tokenMap.has(addr.toString())) return undefined
+    const pools = await this.getPools()
+    for (const pool of pools) {
+      const { mintLpt, mints, reserves } = pool.account
+      if (mintLpt.toString() !== addr.toString()) continue
+      // Get pool TVL
+      let tvl = 0
+      await Promise.all(
+        mints.map(async (mint, index) => {
+          const total = await splTokenProvider.getTotal(mint, reserves[index])
+          tvl += total
+        }),
+      )
+      // Get total supply
+      const mintData = await window.sentre.splt.getMintData(addr.toString())
+      const amount = utils.undecimalize(mintData.supply, mintData.decimals)
+      if (!amount) return 0
+      return tvl / Number(amount)
     }
     return undefined
   }
