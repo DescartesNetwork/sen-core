@@ -1,6 +1,6 @@
 {
   "name": "embeded-template",
-  "version": "3.2.12",
+  "version": "3.2.13",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.0",
@@ -8,7 +8,7 @@
     "@sentre/antd-ionicon": "^1.0.38",
     "@sentre/embeded-view": "^1.0.38",
     "@sentre/react-lazyload": "^3.2.2",
-    "@sentre/senhub": "^3.2.12",
+    "@sentre/senhub": "^3.2.13",
     "antd": "^4.21.1",
     "bn.js": "^5.2.0",
     "react": "^17.0.2",
