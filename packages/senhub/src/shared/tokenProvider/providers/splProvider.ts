@@ -29,7 +29,7 @@ class SplTokenProvider extends BaseTokenProvider {
   }
 
   getPrice = async (addr: Address): Promise<number | undefined> => {
-    console.log('Call price SPLT')
+    await this._init()
     if (!this.tokenMap.has(addr.toString())) return undefined
     try {
       const price = await this.getPriceCgk(addr.toString())

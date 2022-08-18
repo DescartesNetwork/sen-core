@@ -97,7 +97,7 @@ class SenLpTokenProvider extends BaseTokenProvider {
       // Get total supply
       const mintData = await window.sentre.splt.getMintData(addr.toString())
       const amount = utils.undecimalize(mintData.supply, mintData.decimals)
-      if (!amount) return 0
+      if (!Number(amount)) return 0
       return tvl / Number(amount)
     }
     return undefined
