@@ -1,24 +1,12 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useWalletAddress, tokenProvider, rpc } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { Row, Col, Typography, Button, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { AppDispatch, AppState } from 'model'
 import { increaseCounter } from 'model/main.controller'
-
-import { programs } from '@metaplex/js'
-import { Connection } from '@solana/web3.js'
-
-async function test() {
-  const tokenMetadata = await programs.metadata.Metadata.findByMint(
-    new Connection(rpc),
-    'xALGoH1zUfRmpCriy94qbfoMXHtK6NDnMKzT4Xdvgms',
-  )
-  console.log('tokenMetadata', tokenMetadata)
-}
-test()
 
 const View = () => {
   const walletAddress = useWalletAddress()
