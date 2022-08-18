@@ -11,7 +11,6 @@ import TokenProvider, {
   BalansolTokenProvider,
   SenLpTokenProvider,
   SplTokenProvider,
-  MetaplexProvider,
 } from 'shared/tokenProvider'
 import { isAddress } from 'shared/util'
 
@@ -19,7 +18,6 @@ export const tokenProvider = new TokenProvider([
   new SplTokenProvider(),
   new BalansolTokenProvider(),
   new SenLpTokenProvider(),
-  new MetaplexProvider(),
 ])
 
 export const useMints = () => {
