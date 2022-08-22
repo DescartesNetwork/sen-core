@@ -1,11 +1,11 @@
 {
   "name": "embeded-template",
-  "version": "3.2.14",
+  "version": "3.2.15",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.0",
     "@sentre/embeded-view": "^1.0.38",
-    "@sentre/senhub": "^3.2.14",
+    "@sentre/senhub": "^3.2.15",
     "antd": "^4.21.1",
     "bn.js": "^5.2.0",
     "react": "^17.0.2",
