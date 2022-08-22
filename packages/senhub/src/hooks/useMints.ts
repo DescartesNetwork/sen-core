@@ -25,6 +25,11 @@ export const useMints = () => {
   return mints
 }
 
+export const useMintSelector = <T>(selector: (mints: MintsState) => T) => {
+  const data = useRootSelector((state: RootState) => selector(state.mints))
+  return data
+}
+
 /**
  * Get mint data
  */
