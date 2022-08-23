@@ -116,7 +116,9 @@ const PageLoader = forwardRef<HTMLElement, ComponentManifest>(
     return (
       <ErrorBoundary defaultChildren={<PageError url={url} />}>
         <Suspense fallback={<Skeleton active />}>
-          <Component manifest={manifest} {...props} ref={ref} />
+          <section id={appId} style={{ backgroundColor: 'transparent' }}>
+            <Component manifest={manifest} {...props} ref={ref} />
+          </section>
         </Suspense>
       </ErrorBoundary>
     )

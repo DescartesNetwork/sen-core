@@ -31,6 +31,9 @@ export default Senhub
 
 // Senhub providers
 export * from 'providers'
+export { default as TokenProvider } from 'shared/tokenProvider'
+export * from 'shared/tokenProvider'
+export * from 'providers/antd.provider'
 // PDB
 export { default as PDB } from 'shared/pdb'
 export * from 'shared/pdb'
@@ -39,9 +42,6 @@ export * from 'shared/runtime'
 // Session/Storage
 export { default as session } from 'shared/session'
 export { default as storage } from 'shared/storage'
-// Token Provider
-export { default as TokenProvider } from 'shared/tokenProvider'
-export * from 'shared/tokenProvider'
 // Utility
 export * as util from 'shared/util'
 // Dataloader
@@ -57,3 +57,4 @@ export * from 'hooks/useUninstallApp'
 export * from 'hooks/useWallet'
 export * from 'hooks/useAccounts'
 export * from 'hooks/useMints'
+export * from 'hooks/useUI'

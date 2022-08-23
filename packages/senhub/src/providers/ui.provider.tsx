@@ -1,3 +1,4 @@
+import { declareDeprecated } from 'decorators/deprecated.decorator'
 import {
   createContext,
   useContext,
@@ -7,11 +8,10 @@ import {
   forwardRef,
   ReactNode,
   useMemo,
-  CSSProperties,
   useCallback,
 } from 'react'
 
-import { ConfigProvider } from 'antd'
+import { AntdProvider } from './antd.provider'
 
 import {
   useRootSelector,
@@ -41,12 +41,10 @@ export type UIProvider = {
 const UIContextProvider = ({
   children,
   appId,
-  style = {},
   antd = false,
 }: {
   children: ReactNode
   appId: string
-  style?: CSSProperties
   antd?: boolean | ConfigProviderProps
 }) => {
   const dispatch = useRootDispatch<RootDispatch>()
@@ -57,22 +55,12 @@ const UIContextProvider = ({
     [dispatch],
   )
   const provider = useMemo(() => ({ ui, setBackground }), [ui, setBackground])
-  const configProvider = antd
-    ? {
-        getPopupContainer: () => document.getElementById(appId) as HTMLElement,
-        ...(typeof antd === 'object' ? antd : {}),
-      }
-    : undefined
 
   return (
     <Context.Provider value={provider}>
-      <section id={appId} style={{ backgroundColor: 'transparent', ...style }}>
-        {configProvider ? (
-          <ConfigProvider {...configProvider}>{children}</ConfigProvider>
-        ) : (
-          children
-        )}
-      </section>
+      <AntdProvider appId={appId} {...(typeof antd === 'object' ? antd : {})}>
+        {children}
+      </AntdProvider>
     </Context.Provider>
   )
 }
@@ -95,6 +83,7 @@ const UIComsumer = ({ children }: { children: JSX.Element }) => {
  * UI HOC
  */
 export const withUI = (WrappedComponent: typeof Component) => {
+  declareDeprecated({ memberName: 'withUI', deadline: 'Senhub v4' })
   class HOC extends Component<any, any> {
     render() {
       const { forwardedRef, ...rest } = this.props
@@ -116,5 +105,6 @@ export const withUI = (WrappedComponent: typeof Component) => {
  * UI Hook
  */
 export const useUI = () => {
+  declareDeprecated({ memberName: 'useUI', deadline: 'Senhub v4' })
   return useContext<UIProvider>(Context)
 }
