@@ -4,7 +4,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
  * Interface & Utility
  */
 
-export type Infix = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+export enum Infix {
+  xs = 0,
+  sm = 576,
+  md = 768,
+  lg = 992,
+  xl = 1200,
+  xxl = 1400,
+}
 export type Theme = 'light' | 'dark'
 export type Background = Record<Theme, string | undefined>
 
@@ -20,12 +27,12 @@ export type UIState = {
 
 const getInfix = (): Infix => {
   const width = window.innerWidth
-  if (width < 576) return 'xs'
-  if (width < 768) return 'sm'
-  if (width < 992) return 'md'
-  if (width < 1200) return 'lg'
-  if (width < 1400) return 'xl'
-  return 'xxl'
+  if (width >= Infix.xxl) return Infix.xxl
+  if (width >= Infix.xl) return Infix.xl
+  if (width >= Infix.lg) return Infix.lg
+  if (width >= Infix.md) return Infix.md
+  if (width >= Infix.sm) return Infix.sm
+  return Infix.xs
 }
 const isTouchable = () => {
   return 'ontouchstart' in window || navigator.maxTouchPoints > 0

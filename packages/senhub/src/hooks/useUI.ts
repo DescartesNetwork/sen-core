@@ -8,6 +8,8 @@ import {
 } from 'store'
 import { Background, setBackground } from 'store/ui.reducer'
 
+export { Infix } from 'store/ui.reducer'
+
 export const useWidth = () => {
   const width = useRootSelector((state: RootState) => state.ui.width)
   return width
