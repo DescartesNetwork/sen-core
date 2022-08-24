@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Row, Col } from 'antd'
@@ -13,18 +13,18 @@ import {
 import { setVisibleInstaller } from 'store/ui.reducer'
 import { setValue } from 'store/search.reducer'
 import { useAppIds } from 'hooks/useAppIds'
-import { useRegister } from 'hooks/useRegister'
+import { useRegisterSelector } from 'hooks/useRegister'
 
 const Page = () => {
   const { appId } = useParams<{ appId: string }>()
   const appIds = useAppIds()
-  const register = useRegister()
+  const manifest = useRegisterSelector((register) => register[appId])
   const loading = useRootSelector((state: RootState) => state.flags.loading)
   const dispatch = useRootDispatch<RootDispatch>()
 
   const installed = useMemo(
-    () => register[appId] && appIds.includes(appId),
-    [register, appIds, appId],
+    () => manifest && appIds.includes(appId),
+    [manifest, appIds],
   )
 
   const openInstaller = useCallback(async () => {
@@ -39,11 +39,7 @@ const Page = () => {
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        {installed ? (
-          <PageLoader {...(register[appId] as ComponentManifest)} />
-        ) : (
-          <Fragment />
-        )}
+        {installed && manifest && <PageLoader {...manifest} />}
       </Col>
     </Row>
   )

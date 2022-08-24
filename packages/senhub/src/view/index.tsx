@@ -27,6 +27,7 @@ import {
 } from 'store/flags.reducer'
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
+import { useTheme } from 'hooks/useUI'
 
 import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
@@ -35,7 +36,7 @@ import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
 import { login } from 'store/user.reducer'
 
 const View = () => {
-  const theme = useRootSelector((state: RootState) => state.ui.theme)
+  const theme = useTheme()
   const background = useRootSelector((state: RootState) => state.ui.background)
   const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()

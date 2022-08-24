@@ -1,4 +1,11 @@
-import { Suspense, forwardRef, useCallback, useEffect, lazy } from 'react'
+import {
+  Suspense,
+  forwardRef,
+  useCallback,
+  useEffect,
+  lazy,
+  useMemo,
+} from 'react'
 import { useLocation } from 'react-router-dom'
 import {
   RemoteModule,
@@ -15,14 +22,14 @@ import { setBackground } from 'store/ui.reducer'
 /**
  * Local Component
  */
+const LazyLocalComponent = lazy(() =>
+  import(process.env.REACT_APP_HMR as string).then((module) => ({
+    default: module.Page,
+  })),
+)
 const LocalComponent = forwardRef<HTMLElement, { manifest: RemoteModule }>(
   ({ manifest, ...props }, ref) => {
-    const Component = lazy(() =>
-      import(process.env.REACT_APP_HMR as string).then((module) => ({
-        default: module.Page,
-      })),
-    )
-    return <Component {...props} ref={ref} />
+    return <LazyLocalComponent {...props} ref={ref} />
   },
 )
 LocalComponent.displayName = 'LocalComponent'

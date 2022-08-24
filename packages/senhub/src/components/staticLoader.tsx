@@ -6,7 +6,7 @@ import { Spin } from 'antd'
 import ErrorBoundary from 'components/errorBoundary'
 
 import { REGISTER_APP_STORE } from 'view/marketplace'
-import { useRegister } from 'hooks/useRegister'
+import { useRegisterSelector } from 'hooks/useRegister'
 
 const ONE_HOUR = 60 * 60 * 1000
 
@@ -68,10 +68,11 @@ export const StaticLoader = forwardRef<
     render: (url: string) => JSX.Element
   }
 >(({ type, appId, defaultData = '', render }, ref) => {
-  const register = useRegister()
+  const { url: appUrl } =
+    useRegisterSelector((register) => register[appId]) || {}
   const url = useMemo(
-    () => register[appId]?.url || REGISTER_APP_STORE[appId]?.url || '',
-    [register, appId],
+    () => appUrl || REGISTER_APP_STORE[appId]?.url || '',
+    [appUrl, appId],
   )
   const manifest: RemoteModule = useMemo(
     () => ({ url, scope: appId, module: './static' }),
@@ -122,8 +123,9 @@ export const MultiStaticLoader = forwardRef<
     render: (url: string[]) => JSX.Element
   }
 >(({ type, appId, defaultData = [''], render }, ref) => {
-  const register = useRegister()
-  const url = useMemo(() => register[appId]?.url || '', [register, appId])
+  const { url: appUrl } =
+    useRegisterSelector((register) => register[appId]) || {}
+  const url = useMemo(() => appUrl || '', [appUrl, appId])
   const manifest: RemoteModule = useMemo(
     () => ({ url, scope: appId, module: './static' }),
     [url, appId],

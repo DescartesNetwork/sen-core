@@ -5,20 +5,20 @@ import AppIcon from 'components/appIcon'
 
 import { useGoToApp } from 'hooks/useGotoApp'
 import { useInstallApp } from 'hooks/useInstallApp'
-import { useRegister } from 'hooks/useRegister'
+import { useRegisterSelector } from 'hooks/useRegister'
 import { useAppIds } from 'hooks/useAppIds'
 
 export type CustomAppIconProps = { appId: string }
 
 const CustomAppIcon = ({ appId }: CustomAppIconProps) => {
-  const register = useRegister()
+  const manifest = useRegisterSelector((register) => register[appId])
   const appIds = useAppIds()
   const onOpen = useGoToApp({ appId })
   const onInstall = useInstallApp(appId)
 
   const { name: appName } = useMemo(
-    () => register[appId] || { name: 'Unknown' },
-    [register, appId],
+    () => manifest || { name: 'Unknown' },
+    [manifest, appId],
   )
   const installed = useMemo(() => appIds.includes(appId), [appIds, appId])
 

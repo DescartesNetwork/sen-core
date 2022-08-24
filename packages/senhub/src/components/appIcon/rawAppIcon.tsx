@@ -4,7 +4,7 @@ import { Space, Avatar, Typography, Badge, AvatarProps } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { REGISTER_APP_STORE } from 'view/marketplace'
-import { useRegister } from 'hooks/useRegister'
+import { useRegisterSelector } from 'hooks/useRegister'
 import configs from 'configs'
 import './index.os.less'
 
@@ -48,10 +48,10 @@ export const RawVerticalAppIcon = ({
   size = 64,
   name = true,
 }: RawAppIconProps) => {
-  const register = useRegister()
+  const manifest = useRegisterSelector((register) => register[appId])
   const { name: appName } = useMemo(
-    () => register[appId] || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
-    [register, appId],
+    () => manifest || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
+    [manifest, appId],
   )
 
   return (
@@ -89,10 +89,10 @@ export const RawHorizontalAppIcon = ({
   size = 32,
   name = true,
 }: RawAppIconProps) => {
-  const register = useRegister()
+  const manifest = useRegisterSelector((register) => register[appId])
   const { name: appName } = useMemo(
-    () => register[appId] || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
-    [register, appId],
+    () => manifest || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
+    [manifest, appId],
   )
 
   return (

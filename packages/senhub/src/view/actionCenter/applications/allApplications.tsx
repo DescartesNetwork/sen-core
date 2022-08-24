@@ -8,7 +8,7 @@ import { useRootDispatch, RootDispatch } from 'store'
 import { updatePage } from 'store/page.reducer'
 import { useUninstallApp } from 'hooks/useUninstallApp'
 import { useGoToStore } from 'hooks/useGotoStore'
-import { useRegister } from 'hooks/useRegister'
+import { useRegisterSelector } from 'hooks/useRegister'
 import { useAppIds } from 'hooks/useAppIds'
 
 const AllApplications = () => {
@@ -17,7 +17,7 @@ const AllApplications = () => {
   const [appId, setAppId] = useState('')
   const [visible, setVisible] = useState(false)
   const appIds = useAppIds()
-  const register = useRegister()
+  const manifest = useRegisterSelector((register) => register[appId])
   const onUninstallApp = useUninstallApp(appId)
   const onGotoStore = useGoToStore()
 
@@ -80,7 +80,7 @@ const AllApplications = () => {
               </Typography.Text>
               <Space direction="vertical">
                 <Typography.Title level={5}>
-                  Do you want to uninstall {register[appId]?.name}?
+                  Do you want to uninstall {manifest?.name}?
                 </Typography.Title>
                 <Typography.Text>
                   Uninstalling this application will clear all its data.

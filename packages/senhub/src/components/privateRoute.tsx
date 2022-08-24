@@ -1,4 +1,4 @@
-import { ComponentProps, ElementType, useCallback } from 'react'
+import { ComponentProps, ElementType, useCallback, useEffect } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 
 import { isAddress } from 'shared/util'
