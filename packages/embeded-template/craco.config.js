@@ -15,7 +15,7 @@ const {
 module.exports = {
   plugins: [
     {
-      plugin: CracoModuleFederation,
+      plugin: CracoModuleFederation.enableHMR(),
       options: {
         uniqueName: process.env.REACT_APP_ID,
       },

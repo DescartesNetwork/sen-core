@@ -18,7 +18,7 @@ const CustomAppIcon = ({ appId }: CustomAppIconProps) => {
 
   const { name: appName } = useMemo(
     () => manifest || { name: 'Unknown' },
-    [manifest, appId],
+    [manifest],
   )
   const installed = useMemo(() => appIds.includes(appId), [appIds, appId])
 

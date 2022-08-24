@@ -123,9 +123,9 @@ export const MultiStaticLoader = forwardRef<
     render: (url: string[]) => JSX.Element
   }
 >(({ type, appId, defaultData = [''], render }, ref) => {
-  const { url: appUrl } =
-    useRegisterSelector((register) => register[appId]) || {}
-  const url = useMemo(() => appUrl || '', [appUrl, appId])
+  const { url } = useRegisterSelector((register) => register[appId]) || {
+    url: '',
+  }
   const manifest: RemoteModule = useMemo(
     () => ({ url, scope: appId, module: './static' }),
     [url, appId],

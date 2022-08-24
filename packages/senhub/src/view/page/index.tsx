@@ -24,7 +24,7 @@ const Page = () => {
 
   const installed = useMemo(
     () => manifest && appIds.includes(appId),
-    [manifest, appIds],
+    [manifest, appId, appIds],
   )
 
   const openInstaller = useCallback(async () => {

@@ -1,5 +1,3 @@
-import { ReactNode } from 'react'
-
 import { ConfigProvider } from 'antd'
 import { ConfigProviderProps } from 'antd/lib/config-provider'
 
