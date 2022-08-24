@@ -110,7 +110,6 @@ const PageLoader = forwardRef<HTMLElement, ComponentManifest>(
 
     // To activate the Hot Module Replacement (HMR)
     // We must directly mount the local component instead of the remote one.
-    console.log(process.env.REACT_APP_HMR, appId)
     const hmr = process.env.REACT_APP_HMR && appId === process.env.REACT_APP_ID
     const Component = hmr ? LocalComponent : RemoteComponent
 
