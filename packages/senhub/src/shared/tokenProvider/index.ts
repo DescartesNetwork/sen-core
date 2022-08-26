@@ -45,12 +45,7 @@ class TokenProvider {
     const data = await Promise.all(
       this.providers.map((provider) => provider.find(keyword, limit)),
     )
-    const tokens = data.flat()
-    if (!tokens.length && isAddress(keyword)) {
-      const tokenInfo = await this.findByAddress(keyword)
-      if (tokenInfo) return [tokenInfo]
-    }
-    return []
+    return data.flat()
   }
 
   getPrice = async (addr: Address): Promise<number | undefined> => {
