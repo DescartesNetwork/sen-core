@@ -1,10 +1,10 @@
 import { Program, AnchorProvider, web3, Address } from '@project-serum/anchor'
+import { MintData, utils } from '@senswap/sen-js'
 
 import { chainId, Net, net, rpc } from 'shared/runtime'
 import { DataLoader } from 'shared/dataloader'
 import BaseTokenProvider from './baseProvider'
 import { splTokenProvider } from './splProvider'
-import { utils } from '@senswap/sen-js'
 
 const LPT_DECIMALS = 9
 const PROGRAM_CONFIGS: Record<Net, string> = {
@@ -24,6 +24,29 @@ class BalansolTokenProvider extends BaseTokenProvider {
   private getPools = async () => {
     const key = 'BalansolTokenProvider:getPools'
     return DataLoader.load(key, () => this.program.account.pool.all())
+  }
+
+  private getMintLptData = async (mintAddress: Address) => {
+    const key = 'BalansolTokenProvider:getMintLptData'
+    const connection = this.provider.connection
+    const mapMintLpt = await DataLoader.load(key, async () => {
+      const result = new Map<string, MintData>()
+      const pools = await this.getPools()
+      const mintLpts = pools.map((pool) => pool.account.mintLpt)
+      const mintLptDatas = await utils.wrappedGetMultipleAccountsInfo(
+        connection,
+        mintLpts,
+      )
+      mintLptDatas.forEach((mintLptData, index) => {
+        if (!mintLptData?.data) return
+        const mintData = window.sentre.splt.parseMintData(
+          mintLptData.data as Buffer,
+        )
+        result.set(mintLpts[index].toBase58(), mintData)
+      })
+      return result
+    })
+    return await mapMintLpt.get(mintAddress.toString())
   }
 
   getTokenList = async () => {
@@ -55,28 +78,43 @@ class BalansolTokenProvider extends BaseTokenProvider {
     return undefined
   }
 
-  getPrice = async (mint: Address): Promise<number> => {
-    await this._init()
-    const pools = await this.getPools()
-    for (const pool of pools) {
+  getPrice = async (mintLp: Address): Promise<number> => {
+    return DataLoader.load(`getPrice:${mintLp}`, async () => {
+      await this._init()
+      const pools = await this.getPools()
       // Find pool with mintLpt
-      const { mintLpt, mints, reserves } = pool.account
-      if (mintLpt.toString() !== mint.toString()) continue
-      // Get pool TVL
-      let tvl = 0
-      await Promise.all(
-        mints.map(async (mint, index) => {
-          const total = await splTokenProvider.getTotal(mint, reserves[index])
-          tvl += total
-        }),
-      )
-      // Get total supply
-      const mintData = await window.sentre.splt.getMintData(mint.toString())
-      const amount = utils.undecimalize(mintData.supply, mintData.decimals)
-      if (!Number(amount)) return 0
-      return tvl / Number(amount)
-    }
-    return 0
+      for (const pool of pools) {
+        const { mintLpt, mints, reserves } = pool.account
+        if (mintLpt.toString() !== mintLp.toString()) continue
+        // Get Mint LPT data
+        const mintLptData = await this.getMintLptData(mintLp)
+        if (!mintLptData) return 0
+        const amount = utils.undecimalize(mintLptData.supply, LPT_DECIMALS)
+        if (!Number(amount)) return 0
+        // Get pool TVL
+        let tvl = 0
+        await Promise.all(
+          mints.map(async (mint, index) => {
+            const amountBN = BigInt(reserves[index].toString())
+            const tokenInfo = await splTokenProvider.findByAddress(mint)
+            let decimals = tokenInfo?.decimals
+            if (!decimals) {
+              const mintData = await window.sentre.splt.getMintData(
+                mint.toBase58(),
+              )
+              decimals = mintData.decimals
+            }
+            const mintAmount = Number(utils.undecimalize(amountBN, decimals))
+            if (!mintAmount) return 0
+
+            const mintPrice = await splTokenProvider.getPrice(mint)
+            tvl += mintAmount * mintPrice
+          }),
+        )
+        return tvl / Number(amount)
+      }
+      return 0
+    })
   }
 }
 

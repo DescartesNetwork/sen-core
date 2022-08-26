@@ -28,68 +28,51 @@ class SplTokenProvider extends BaseTokenProvider {
     return [this.tokenMap.get(addr.toString())]
   }
 
-  getPrice = async (addr: Address): Promise<number> => {
-    await this._init()
-    if (!this.tokenMap.has(addr.toString())) return 0
-    // Check price Cgk
-    const price = await this.getPriceCgk(addr.toString())
-    if (price) return price
-    // Check price Jup
-    return this.getJupiterPrice(addr.toString())
+  getPrice = async (mint: Address): Promise<number> => {
+    return DataLoader.load(`getPrice:${mint}`, async () => {
+      await this._init()
+      // Check price Cgk
+      const price = await this.getPriceCgk(mint.toString())
+      if (price) return price
+      // Check price Jup
+      return this.getJupiterPrice(mint.toString())
+    })
   }
 
-  getTotal = async (addr: Address, amountBN: BN): Promise<number> => {
-    const token = await this.findByAddress(addr)
-    if (!token || amountBN.isZero()) return 0
-    // Get price
-    const price = await this.getPrice(addr)
-    if (!price) return 0
-    // Get decimals
-    let decimals = token?.decimals
-    if (!decimals) {
-      const mintData = await window.sentre.splt.getMintData(addr.toString())
-      decimals = mintData.decimals
-    }
-    const amount = Number(
-      utils.undecimalize(BigInt(amountBN.toString()), decimals),
-    )
-    return price * amount
-  }
-
-  private getPriceCgk = async (mintAddress: Address): Promise<number> => {
+  private getPriceCgk = async (mintAddress: string): Promise<number> => {
     try {
       const token = await this.findByAddress(mintAddress)
       const ticket = token?.extensions?.coingeckoId
       if (!ticket) return 0
 
-      const CGKTokenInfo = await DataLoader.load(`getPriceCgk${ticket}`, () =>
-        utils.parseCGK(ticket),
-      )
+      const CGKTokenInfo = await utils.parseCGK(ticket)
       const price = CGKTokenInfo.price
       return price
-    } catch (error) {
+    } catch {
       return 0
     }
   }
 
-  private getJupiterPrice = async (mintAddress: string) => {
-    const USDC_PRICE = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
-    const priceUrl = `https://quote-api.jup.ag/v1/quote?inputMint=${USDC_PRICE}&outputMint=${mintAddress}&amount=1000000&slippage=1`
-    const { data: routes } = await DataLoader.load(
-      `getJupiterPrice${mintAddress}`,
-      async () => (await fetch(priceUrl)).json(),
-    )
-    const token = await this.findByAddress(mintAddress)
-    let decimals = token?.decimals
-    if (!decimals) {
-      const mintData = await window.sentre.splt.getMintData(mintAddress)
-      decimals = mintData.decimals
+  public getJupiterPrice = async (mintAddress: string) => {
+    try {
+      const USDC_PRICE = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
+      const priceUrl = `https://quote-api.jup.ag/v1/quote?inputMint=${USDC_PRICE}&outputMint=${mintAddress}&amount=1000000&slippage=1`
+      const { data: routes } = await (await fetch(priceUrl)).json()
+
+      const token = await this.findByAddress(mintAddress)
+      let decimals = token?.decimals
+      if (!decimals) {
+        const mintData = await window.sentre.splt.getMintData(mintAddress)
+        decimals = mintData.decimals
+      }
+      const bestOutput = await utils.undecimalize(
+        BigInt(routes[0].outAmount),
+        decimals,
+      )
+      return 1 / Number(bestOutput)
+    } catch {
+      return 0
     }
-    const bestOutput = await utils.undecimalize(
-      BigInt(routes[0].outAmount),
-      decimals,
-    )
-    return 1 / Number(bestOutput)
   }
 }
 
