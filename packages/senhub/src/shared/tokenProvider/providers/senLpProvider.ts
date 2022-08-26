@@ -64,7 +64,7 @@ class SenLpTokenProvider extends BaseTokenProvider {
       })
       return result
     })
-    return await mapMintLpt.get(mintAddress.toString())
+    return mapMintLpt.get(mintAddress.toString())
   }
 
   getTokenList = async () => {
