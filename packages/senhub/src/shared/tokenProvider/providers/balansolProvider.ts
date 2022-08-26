@@ -55,13 +55,13 @@ class BalansolTokenProvider extends BaseTokenProvider {
     return undefined
   }
 
-  getPrice = async (addr: Address): Promise<number | undefined> => {
+  getPrice = async (mint: Address): Promise<number> => {
     await this._init()
-    if (!this.tokenMap.has(addr.toString())) return undefined
     const pools = await this.getPools()
     for (const pool of pools) {
+      // Find pool with mintLpt
       const { mintLpt, mints, reserves } = pool.account
-      if (mintLpt.toString() !== addr.toString()) continue
+      if (mintLpt.toString() !== mint.toString()) continue
       // Get pool TVL
       let tvl = 0
       await Promise.all(
@@ -71,12 +71,12 @@ class BalansolTokenProvider extends BaseTokenProvider {
         }),
       )
       // Get total supply
-      const mintData = await window.sentre.splt.getMintData(addr.toString())
+      const mintData = await window.sentre.splt.getMintData(mint.toString())
       const amount = utils.undecimalize(mintData.supply, mintData.decimals)
       if (!Number(amount)) return 0
       return tvl / Number(amount)
     }
-    return undefined
+    return 0
   }
 }
 

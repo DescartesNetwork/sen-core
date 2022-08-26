@@ -32,12 +32,8 @@ class BaseTokenProvider {
     throw new Error('FindAtomicTokens function is not declared yet!')
   }
 
-  getPrice = async (addr: Address): Promise<number | undefined> => {
-    throw new Error('FindAtomicTokens function is not declared yet!')
-  }
-
-  getTotal = async (addr: Address, amountBN: BN): Promise<number> => {
-    throw new Error('FindAtomicTokens function is not declared yet!')
+  getPrice = async (addr: Address): Promise<number> => {
+    throw new Error('GetPrice function is not declared yet!')
   }
 
   protected _init = async (): Promise<[Map<string, TokenInfo>, Index]> => {

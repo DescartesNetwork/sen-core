@@ -5,7 +5,6 @@ import BaseTokenProvider from './providers/baseProvider'
 import SplTokenProvider from './providers/splProvider'
 import BalansolTokenProvider from './providers/balansolProvider'
 import SenLpTokenProvider from './providers/senLpProvider'
-import { isAddress } from 'shared/util'
 
 const DEFAULT_PROVIDER: BaseTokenProvider[] = [
   new SplTokenProvider(),
@@ -48,12 +47,12 @@ class TokenProvider {
     return data.flat()
   }
 
-  getPrice = async (addr: Address): Promise<number | undefined> => {
+  getPrice = async (addr: Address): Promise<number> => {
     for (const provider of this.providers) {
       const tokenInfo = await provider.findByAddress(addr)
       if (tokenInfo) return provider.getPrice(addr)
     }
-    return undefined
+    return 0
   }
 }
 

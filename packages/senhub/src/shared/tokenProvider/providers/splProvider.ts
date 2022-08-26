@@ -28,9 +28,9 @@ class SplTokenProvider extends BaseTokenProvider {
     return [this.tokenMap.get(addr.toString())]
   }
 
-  getPrice = async (addr: Address): Promise<number | undefined> => {
+  getPrice = async (addr: Address): Promise<number> => {
     await this._init()
-    if (!this.tokenMap.has(addr.toString())) return undefined
+    if (!this.tokenMap.has(addr.toString())) return 0
     try {
       const price = await this.getPriceCgk(addr.toString())
       if (price) return price

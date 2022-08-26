@@ -71,14 +71,14 @@ class SenLpTokenProvider extends BaseTokenProvider {
     return undefined
   }
 
-  getPrice = async (addr: Address): Promise<number | undefined> => {
-    console.log('Call price SPL')
+  getPrice = async (mint: Address): Promise<number> => {
     await this._init()
-    if (!this.tokenMap.has(addr.toString())) return undefined
+    if (!this.tokenMap.has(mint.toString())) return 0
     const pools = await this.getPools()
     for (const pool of pools) {
+      // Find pool with mintLpt
       const { mint_lpt, mint_a, mint_b, reserve_a, reserve_b } = pool.account
-      if (mint_lpt !== addr.toString()) continue
+      if (mint_lpt !== mint.toString()) continue
       const mints = [
         { mint: mint_a, amount: reserve_a },
         { mint: mint_b, amount: reserve_b },
@@ -95,12 +95,12 @@ class SenLpTokenProvider extends BaseTokenProvider {
         }),
       )
       // Get total supply
-      const mintData = await window.sentre.splt.getMintData(addr.toString())
+      const mintData = await window.sentre.splt.getMintData(mint.toString())
       const amount = utils.undecimalize(mintData.supply, mintData.decimals)
       if (!Number(amount)) return 0
       return tvl / Number(amount)
     }
-    return undefined
+    return 0
   }
 }
 
