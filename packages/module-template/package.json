@@ -5,7 +5,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.0",
     "@senswap/sen-js": "^1.4.0",
-    "@sentre/antd-ionicon": "^1.0.44",
+    "@sentre/antd-ionicon": "^1.0.45",
     "@sentre/react-lazyload": "^3.2.2",
     "@sentre/senhub": "^3.2.21",
     "antd": "^4.21.1",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.0.0-alpha.5",
-    "@sentre/craco-plugins": "^1.0.44",
+    "@sentre/craco-plugins": "^1.0.45",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.2.1",
