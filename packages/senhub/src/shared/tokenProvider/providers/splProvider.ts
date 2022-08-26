@@ -31,12 +31,10 @@ class SplTokenProvider extends BaseTokenProvider {
   getPrice = async (addr: Address): Promise<number> => {
     await this._init()
     if (!this.tokenMap.has(addr.toString())) return 0
-    try {
-      const price = await this.getPriceCgk(addr.toString())
-      if (price) return price
-    } catch (err) {
-      console.log(err)
-    }
+    // Check price Cgk
+    const price = await this.getPriceCgk(addr.toString())
+    if (price) return price
+    // Check price Jup
     return this.getJupiterPrice(addr.toString())
   }
 
@@ -58,16 +56,20 @@ class SplTokenProvider extends BaseTokenProvider {
     return price * amount
   }
 
-  private getPriceCgk = async (mintAddress: Address) => {
-    const token = await this.findByAddress(mintAddress)
-    const ticket = token?.extensions?.coingeckoId
-    if (!ticket) return undefined
+  private getPriceCgk = async (mintAddress: Address): Promise<number> => {
+    try {
+      const token = await this.findByAddress(mintAddress)
+      const ticket = token?.extensions?.coingeckoId
+      if (!ticket) return 0
 
-    const CGKTokenInfo = await DataLoader.load('getPriceCgk' + ticket, () =>
-      utils.parseCGK(ticket),
-    )
-    const price = CGKTokenInfo.price
-    return price
+      const CGKTokenInfo = await DataLoader.load('getPriceCgk' + ticket, () =>
+        utils.parseCGK(ticket),
+      )
+      const price = CGKTokenInfo.price
+      return price
+    } catch (error) {
+      return 0
+    }
   }
 
   private getJupiterPrice = async (mintAddress: string) => {
@@ -77,9 +79,14 @@ class SplTokenProvider extends BaseTokenProvider {
       async () => (await fetch(priceUrl)).json(),
     )
     const token = await this.findByAddress(mintAddress)
+    let decimals = token?.decimals
+    if (!decimals) {
+      const mintData = await window.sentre.splt.getMintData(mintAddress)
+      decimals = mintData.decimals
+    }
     const bestOutput = await utils.undecimalize(
       BigInt(data[0].outAmount),
-      token?.decimals || 0,
+      decimals,
     )
     return 1 / Number(bestOutput)
   }
