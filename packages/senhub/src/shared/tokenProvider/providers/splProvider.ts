@@ -62,7 +62,7 @@ class SplTokenProvider extends BaseTokenProvider {
       const ticket = token?.extensions?.coingeckoId
       if (!ticket) return 0
 
-      const CGKTokenInfo = await DataLoader.load('getPriceCgk' + ticket, () =>
+      const CGKTokenInfo = await DataLoader.load(`getPriceCgk${ticket}`, () =>
         utils.parseCGK(ticket),
       )
       const price = CGKTokenInfo.price
@@ -73,9 +73,10 @@ class SplTokenProvider extends BaseTokenProvider {
   }
 
   private getJupiterPrice = async (mintAddress: string) => {
-    const priceUrl = `https://quote-api.jup.ag/v1/quote?inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&outputMint=${mintAddress}&amount=1000000&slippage=1`
+    const USDC_PRICE = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
+    const priceUrl = `https://quote-api.jup.ag/v1/quote?inputMint=${USDC_PRICE}&outputMint=${mintAddress}&amount=1000000&slippage=1`
     const { data } = await DataLoader.load(
-      'getJupiterPrice' + mintAddress,
+      `getJupiterPrice${mintAddress}`,
       async () => (await fetch(priceUrl)).json(),
     )
     const token = await this.findByAddress(mintAddress)
