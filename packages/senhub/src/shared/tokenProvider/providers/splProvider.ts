@@ -75,7 +75,7 @@ class SplTokenProvider extends BaseTokenProvider {
   private getJupiterPrice = async (mintAddress: string) => {
     const USDC_PRICE = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
     const priceUrl = `https://quote-api.jup.ag/v1/quote?inputMint=${USDC_PRICE}&outputMint=${mintAddress}&amount=1000000&slippage=1`
-    const { data } = await DataLoader.load(
+    const { data: routes } = await DataLoader.load(
       `getJupiterPrice${mintAddress}`,
       async () => (await fetch(priceUrl)).json(),
     )
@@ -86,7 +86,7 @@ class SplTokenProvider extends BaseTokenProvider {
       decimals = mintData.decimals
     }
     const bestOutput = await utils.undecimalize(
-      BigInt(data[0].outAmount),
+      BigInt(routes[0].outAmount),
       decimals,
     )
     return 1 / Number(bestOutput)
