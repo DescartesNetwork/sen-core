@@ -2,7 +2,7 @@ import { Address } from '@project-serum/anchor'
 import { TokenInfo } from '@solana/spl-token-registry'
 
 import BaseTokenProvider from './providers/baseProvider'
-import SplTokenProvider from './providers/splProvider'
+import SplTokenProvider, { splTokenProvider } from './providers/splProvider'
 import BalansolTokenProvider from './providers/balansolProvider'
 import SenLpTokenProvider from './providers/senLpProvider'
 
@@ -45,6 +45,14 @@ class TokenProvider {
       this.providers.map((provider) => provider.find(keyword, limit)),
     )
     return data.flat()
+  }
+
+  getPrice = async (addr: Address): Promise<number | undefined> => {
+    for (const provider of this.providers) {
+      const tokenInfo = await provider.findByAddress(addr)
+      if (tokenInfo) return provider.getPrice(addr)
+    }
+    return splTokenProvider.getPrice(addr)
   }
 }
 
