@@ -99,7 +99,7 @@ export const useGetMintDecimals = () => {
       }
       // Fetch from the clusters
       const mintData = await getMintData({ mintAddress })
-      if (mintData && mintData[mintAddress]?.decimals)
+      if (mintData && mintData[mintAddress]?.decimals !== undefined)
         return mintData[mintAddress].decimals
       return undefined
     },
