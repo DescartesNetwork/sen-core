@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.0",
-    "@sentre/embeded-view": "^1.0.45",
+    "@sentre/embeded-view": "^1.0.46",
     "@sentre/senhub": "^3.2.24",
     "antd": "^4.21.1",
     "bn.js": "^5.2.0",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.0.0-alpha.5",
-    "@sentre/craco-plugins": "^1.0.45",
+    "@sentre/craco-plugins": "^1.0.46",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.2.1",

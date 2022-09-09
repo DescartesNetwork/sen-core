@@ -11,7 +11,6 @@ const View = () => {
     <EmbededView
       appId={appId}
       src={'https://sentre.io/'}
-      title="Please replace the src and title to your original DApp."
       wallet={window.sentre.wallet}
     />
   )
