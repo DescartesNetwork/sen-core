@@ -30,6 +30,7 @@
     "isomorphic-git": "^1.18.3",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
+    "snake-case": "^3.0.4",
     "tmp": "^0.2.1"
   },
   "devDependencies": {

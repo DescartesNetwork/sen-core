@@ -129,6 +129,11 @@ type ComponentManifest = {
   description: string
   verified: boolean
 }
+type DAppManifest = ComponentManifest & {
+  author: { walletAddress: string }
+  createdAt: Date
+  updatedAt: Date
+}
 // List of application manifests
 type SenReg = Record<string, ComponentManifest | undefined>
 // Coingeckko Data

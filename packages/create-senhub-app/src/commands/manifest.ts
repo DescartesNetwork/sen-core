@@ -3,6 +3,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import { format } from 'prettier'
 import { config } from 'dotenv-cra'
+import { snakeCase } from 'snake-case'
 
 export const buildManifest = async ({
   inDir = process.cwd(),
@@ -41,7 +42,7 @@ export const buildManifest = async ({
     throw new Error('Invalid App name. App name cannot be blank!')
 
   // Validate app ID
-  const expectedAppID = REACT_APP_NAME.toLowerCase().replace(/ /g, '_')
+  const expectedAppID = snakeCase(REACT_APP_NAME)
   if (!REACT_APP_ID) throw new Error('Invalid AppID. AppID cannot be blank!')
   if (expectedAppID !== REACT_APP_ID)
     throw new Error(
