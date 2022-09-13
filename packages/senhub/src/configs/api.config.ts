@@ -9,6 +9,7 @@ type Conf = {
   origin: string
   health: BasicEndpoint
   user: BasicEndpoint
+  dapp: BasicEndpoint
 }
 
 const generator = (origin: string): Conf => ({
@@ -27,6 +28,9 @@ const generator = (origin: string): Conf => ({
     get logout() {
       return this.index + '/logout'
     },
+  },
+  dapp: {
+    index: origin + '/dapp',
   },
 })
 

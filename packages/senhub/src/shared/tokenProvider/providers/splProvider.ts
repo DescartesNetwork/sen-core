@@ -1,4 +1,4 @@
-import { Address, BN } from '@project-serum/anchor'
+import { Address } from '@project-serum/anchor'
 import { utils } from '@senswap/sen-js'
 import { TokenListProvider } from '@solana/spl-token-registry'
 

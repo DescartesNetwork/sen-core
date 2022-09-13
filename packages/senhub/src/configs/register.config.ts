@@ -34,6 +34,8 @@ const devApp = {
       .map((tag) => tag.trim()),
     description: process.env.REACT_APP_DESCRIPTION || '',
     verified: false,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   },
 }
 

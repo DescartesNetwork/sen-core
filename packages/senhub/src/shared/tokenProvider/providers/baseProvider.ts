@@ -1,6 +1,6 @@
 import lunr, { Index } from 'lunr'
 import { TokenInfo } from '@solana/spl-token-registry'
-import { Address, BN } from '@project-serum/anchor'
+import { Address } from '@project-serum/anchor'
 
 import { net, chainId, ChainId, Net } from 'shared/runtime'
 import { SOL_ADDRESS } from '../supplementary'

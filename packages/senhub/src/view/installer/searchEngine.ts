@@ -1,10 +1,11 @@
 import lunr, { Index } from 'lunr'
+import { RegisterState } from 'store/register.reducer'
 
 class SearchEngine {
-  register: SenReg
+  register: RegisterState
   index: Index
 
-  constructor(register: SenReg) {
+  constructor(register: RegisterState) {
     this.register = register
     this.index = lunr(function () {
       // Document id
