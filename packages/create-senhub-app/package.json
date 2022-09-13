@@ -1,6 +1,6 @@
 {
   "name": "create-senhub-app",
-  "version": "3.2.26",
+  "version": "3.3.0",
   "description": "The official CLI to init a template of DApp on Senhub",
   "author": "tuphan-dn @tuphan-dn",
   "bin": {
