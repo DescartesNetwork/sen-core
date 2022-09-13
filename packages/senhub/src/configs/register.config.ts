@@ -20,13 +20,14 @@ type Conf = {
 }
 
 const DEFAULT_APP_ID = process.env.REACT_APP_ID
-const devApp = {
+const devApp: SenReg = {
   [DEFAULT_APP_ID]: {
     url: process.env.REACT_APP_URL,
     appId: DEFAULT_APP_ID,
     name: process.env.REACT_APP_NAME,
     author: {
       name: process.env.REACT_APP_AUTHOR_NAME || '',
+      walletAddress: '',
       email: process.env.REACT_APP_AUTHOR_EMAIL || '',
     },
     tags: (process.env.REACT_APP_TAGS || '')
@@ -34,8 +35,8 @@ const devApp = {
       .map((tag) => tag.trim()),
     description: process.env.REACT_APP_DESCRIPTION || '',
     verified: false,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 }
 

@@ -16,7 +16,7 @@ const Login = () => {
   const dispatch = useRootDispatch<RootDispatch>()
   return (
     <Modal
-      visible={visible}
+      open={visible}
       onCancel={() => dispatch(closeWallet())}
       closeIcon={<IonIcon name="close" />}
       footer={null}

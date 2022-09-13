@@ -77,7 +77,7 @@ const Installer = () => {
       closeIcon={<IonIcon name="close-outline" />}
       footer={null}
       onCancel={closeInstaller}
-      visible={visible}
+      open={visible}
       destroyOnClose
     >
       <Row gutter={[18, 18]}>

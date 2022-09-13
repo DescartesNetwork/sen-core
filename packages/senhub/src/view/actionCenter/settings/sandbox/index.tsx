@@ -2,17 +2,27 @@ import { Row, Col, Card, Typography, Upload } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { useRootDispatch, RootDispatch } from 'store'
-import { installManifest } from 'store/page.reducer'
+import { installManifest } from 'store/register.reducer'
+import { installApp } from 'store/page.reducer'
+import { useWalletAddress } from 'hooks/useWallet'
 
 const Sandbox = () => {
   const dispatch = useRootDispatch<RootDispatch>()
+  const walletAddress = useWalletAddress()
 
   const upload = async (file: File) => {
     const reader = new FileReader()
     reader.onload = async (e) => {
-      const manifest = JSON.parse(e.target?.result as string)
+      const data: ComponentManifest = JSON.parse(e.target?.result as string)
+      const manifest: DAppManifest = {
+        ...data,
+        author: { ...data.author, walletAddress },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
       try {
         await dispatch(installManifest(manifest)).unwrap()
+        await dispatch(installApp(manifest.appId)).unwrap()
         return window.notify({
           type: 'success',
           description: 'The DApp has been added to your workspace.',

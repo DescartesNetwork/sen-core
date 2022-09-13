@@ -71,7 +71,7 @@ const AllApplications = () => {
           </Button>
         </Col>
       ) : null}
-      <Modal closable={false} visible={visible} footer={null} centered>
+      <Modal closable={false} open={visible} footer={null} centered>
         <Row gutter={[24, 24]} justify="end">
           <Col span={24}>
             <Space align="baseline">

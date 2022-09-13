@@ -38,7 +38,7 @@ const NewKeyStore = ({
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       onCancel={onClose}
       closeIcon={<IonIcon name="close" />}
       footer={null}

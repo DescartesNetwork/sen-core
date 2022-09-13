@@ -33,7 +33,7 @@ const ConfirmRestore = ({
   }, [walletAddress, cid])
 
   return (
-    <Modal visible={visible} footer={null} centered>
+    <Modal open={visible} footer={null} centered>
       <Row gutter={[24, 24]} justify="end">
         <Col span={24}>
           <Space align="baseline">

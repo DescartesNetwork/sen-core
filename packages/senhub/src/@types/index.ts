@@ -131,11 +131,11 @@ type ComponentManifest = {
 }
 type DAppManifest = ComponentManifest & {
   author: { walletAddress: string }
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
 }
 // List of application manifests
-type SenReg = Record<string, ComponentManifest | undefined>
+type SenReg = Record<string, DAppManifest>
 // Coingeckko Data
 type CgkData = {
   icon: any

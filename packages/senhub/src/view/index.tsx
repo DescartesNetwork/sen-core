@@ -19,10 +19,7 @@ import {
   useRootDispatch,
   RootDispatch,
 } from 'store'
-import {
-  loadPage,
-  loadRegister as loadLegacyRegister,
-} from 'store/page.reducer'
+import { loadPage } from 'store/page.reducer'
 import { loadRegister } from 'store/register.reducer'
 import {
   loadDeveloperMode,
@@ -48,17 +45,14 @@ const View = () => {
   // Load DApp flags, registry, page
   useEffect(() => {
     ;(async () => {
-      if (!isAddress(walletAddress)) {
-        dispatch(loadLegacyRegister())
-        return dispatch(loadRegister())
-      }
+      if (!isAddress(walletAddress)) return dispatch(loadRegister())
       try {
         await dispatch(updateLoading(true))
         await dispatch(loadVisited())
         await dispatch(loadDeveloperMode())
         const register = await dispatch(loadRegister()).unwrap()
         if (Object.keys(register).length) {
-          const { appIds } = await dispatch(loadPage()).unwrap()
+          const appIds = await dispatch(loadPage()).unwrap()
           await dispatch(login(appIds)).unwrap()
         }
       } catch (er: any) {

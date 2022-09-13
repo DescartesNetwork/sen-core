@@ -9,7 +9,7 @@ module.exports = {
     'react-router-dom': { singleton: true, requiredVersion: '^5.3.0' },
     '@reduxjs/toolkit': { singleton: true, requiredVersion: '^1.6.2' },
     'react-redux': { singleton: true, requiredVersion: '^7.2.5' },
-    antd: { singleton: true, requiredVersion: '^4.21.0' },
+    antd: { singleton: true, requiredVersion: '^4.23.0' },
     '@sentre/senhub': { singleton: true, requiredVersion: '^3' },
   },
   exposes: {

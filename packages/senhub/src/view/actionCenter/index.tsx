@@ -32,7 +32,7 @@ const ActionCenter = () => {
         id="button-action-center"
       />
       <Drawer
-        visible={visible}
+        open={visible}
         onClose={() => dispatch(setVisibleActionCenter(false))}
         closable={false}
         contentWrapperStyle={{ width: '95%', maxWidth: 400 }}

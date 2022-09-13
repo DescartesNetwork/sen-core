@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import configs from 'configs'
+import { isAddress } from 'shared/util'
 
 const {
   register: { extra },
@@ -20,7 +21,7 @@ const fetchRegister = async (): Promise<DAppManifest[]> => {
  * Interface & Utility
  */
 
-export type RegisterState = Record<string, DAppManifest>
+export type RegisterState = SenReg
 
 /**
  * Store constructor
@@ -44,6 +45,25 @@ export const loadRegister = createAsyncThunk(
   },
 )
 
+// For sandbox only
+export const installManifest = createAsyncThunk<
+  RegisterState,
+  DAppManifest,
+  { state: any }
+>(`${NAME}/installManifest`, async (manifest, { getState }) => {
+  const {
+    wallet: { address: walletAddress },
+    register,
+    page,
+  } = getState()
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet.')
+  if (page.includes(manifest.appId))
+    throw new Error('Cannot run sandbox for an installed application.')
+  const newRegister: RegisterState = { ...register }
+  newRegister[manifest.appId] = manifest
+  return newRegister
+})
+
 /**
  * Usual procedure
  */
@@ -53,10 +73,15 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) =>
-    void builder.addCase(
-      loadRegister.fulfilled,
-      (state, { payload }) => void Object.assign(state, payload),
-    ),
+    void builder
+      .addCase(
+        loadRegister.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        installManifest.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      ),
 })
 
 export default slice.reducer

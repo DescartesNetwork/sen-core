@@ -44,12 +44,12 @@ const BackupSuccess = ({
   return (
     <Modal
       closable={false}
-      centered
-      visible={visible}
+      open={visible}
       maskClosable={false}
       onCancel={onClose}
       footer={null}
       destroyOnClose
+      centered
     >
       <Row
         gutter={[20, 20]}

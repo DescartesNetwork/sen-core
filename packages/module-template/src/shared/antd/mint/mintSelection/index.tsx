@@ -33,7 +33,7 @@ const MintSelection = ({
       <Button
         type="text"
         onClick={() => setVisible(true)}
-        style={{ padding: 4, ...style }}
+        style={{ padding: 4, ...style } as any} // Patch Antd bugs
         disabled={disabled}
       >
         <Space>
@@ -43,7 +43,7 @@ const MintSelection = ({
         </Space>
       </Button>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={() => setVisible(false)}
         footer={null}
         closable={false}
