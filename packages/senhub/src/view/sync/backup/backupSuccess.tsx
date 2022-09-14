@@ -74,7 +74,7 @@ const BackupSuccess = ({
               />
             }
             suffix={
-              <Tooltip title="Copied" visible={copied}>
+              <Tooltip title="Copied" open={copied}>
                 <Button
                   type="text"
                   size="small"

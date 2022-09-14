@@ -13,6 +13,29 @@ import {
 } from 'store'
 import { setVisibleActionCenter } from 'store/ui.reducer'
 
+const items = [
+  {
+    label: (
+      <span>
+        <IonIcon name="grid-outline" />
+        Apps
+      </span>
+    ),
+    key: 'applications',
+    children: <Applications />,
+  },
+  {
+    label: (
+      <span>
+        <IonIcon name="settings-outline" />
+        Settings
+      </span>
+    ),
+    key: 'system-settings',
+    children: <Settings />,
+  },
+]
+
 const ActionCenter = () => {
   const dispatch = useRootDispatch<RootDispatch>()
   const visible = useRootSelector(
@@ -49,31 +72,9 @@ const ActionCenter = () => {
                   onClick={() => dispatch(setVisibleActionCenter(false))}
                 />
               }
+              items={items}
               destroyInactiveTabPane
-            >
-              <Tabs.TabPane
-                tab={
-                  <span>
-                    <IonIcon name="grid-outline" />
-                    Apps
-                  </span>
-                }
-                key="applications"
-              >
-                <Applications />
-              </Tabs.TabPane>
-              <Tabs.TabPane
-                tab={
-                  <span>
-                    <IonIcon name="settings-outline" />
-                    Settings
-                  </span>
-                }
-                key="system-settings"
-              >
-                <Settings />
-              </Tabs.TabPane>
-            </Tabs>
+            />
           </Col>
         </Row>
       </Drawer>

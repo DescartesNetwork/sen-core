@@ -49,7 +49,7 @@ const Address = () => {
       >
         {shortenAddress(walletAddress, 3, '...')}
       </Typography.Text>
-      <Tooltip title="Copied" visible={copied}>
+      <Tooltip title="Copied" open={copied}>
         <IconButton name="copy-outline" onClick={() => onCopy(walletAddress)} />
       </Tooltip>
       <QR address={walletAddress} />
