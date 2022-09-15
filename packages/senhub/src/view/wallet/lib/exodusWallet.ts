@@ -5,14 +5,14 @@ import { isAddress } from 'shared/util'
 import { collectFee, collectFees } from 'decorators/fee.decorator'
 import BaseWallet from './baseWallet'
 
-class PhantomWallet extends BaseWallet {
+class ExodusWallet extends BaseWallet {
   constructor() {
-    super('Phantom')
+    super('Exodus')
   }
 
   async getProvider() {
-    const { solana } = window.phantom
-    if (!solana?.isPhantom) throw new Error('Wallet is not connected')
+    const { solana } = window.exodus
+    if (!solana.isExodus) throw new Error('Wallet is not connected')
     if (solana.isConnected) return solana
 
     return await new Promise((resolve) => {
@@ -71,4 +71,4 @@ class PhantomWallet extends BaseWallet {
   }
 }
 
-export default PhantomWallet
+export default ExodusWallet
