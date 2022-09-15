@@ -2,22 +2,22 @@ import { Row, Card, Col, Avatar, Typography } from 'antd'
 
 import { useRootDispatch, RootDispatch } from 'store'
 import { connectWallet } from 'store/wallet.reducer'
-import { PhantomWallet } from '../../lib'
+import { ExodusWallet } from '../../lib'
 
-import PHANTOM from 'static/images/wallet/phantom.png'
+import EXODUS from 'static/images/wallet/exodus.svg'
 
-const Phantom = () => {
+const Exodus = () => {
   const dispatch = useRootDispatch<RootDispatch>()
 
   const connect = async () => {
-    const { solana } = window.phantom
-    if (!solana.isPhantom)
+    const { exodus } = window
+    if (!exodus)
       return window.notify({
         type: 'warning',
         description:
-          'Phantom Wallet is not installed. If this is the first time you install Phantom wallet, please restart your browser to complete the setup.',
+          'Exodus Wallet is not installed. If this is the first time you install Phantom wallet, please restart your browser to complete the setup.',
       })
-    const wallet = new PhantomWallet()
+    const wallet = new ExodusWallet()
     try {
       await dispatch(connectWallet(wallet)).unwrap()
     } catch (er: any) {
@@ -36,14 +36,14 @@ const Phantom = () => {
     >
       <Row gutter={[16, 16]} align="middle">
         <Col>
-          <Avatar size={32} shape="square" src={PHANTOM} />
+          <Avatar size={32} shape="square" src={EXODUS} />
         </Col>
         <Col>
-          <Typography.Text>Phantom</Typography.Text>
+          <Typography.Text>Exodus</Typography.Text>
         </Col>
       </Row>
     </Card>
   )
 }
 
-export default Phantom
+export default Exodus
