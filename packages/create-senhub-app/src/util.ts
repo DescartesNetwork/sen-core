@@ -23,4 +23,5 @@ export const clone = async ({ url, dir }: { url: string; dir: string }) =>
     dir,
     url,
     ref: 'master',
+    depth: 1,
   })
