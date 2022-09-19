@@ -107,6 +107,8 @@ interface Window {
   Slope: any
   solflare: any
   clover_solana: any
+  exodus: any
+  phantom: any
 }
 
 // For bigint serialization

@@ -11,6 +11,7 @@ import SolletWeb from './solletWeb'
 import KeyStore from './keystore'
 import SecretKey from './secretKey'
 import CloverWallet from './clover'
+import Exodus from './exodus'
 
 import { env } from 'shared/runtime'
 import NetSwitch from 'view/actionCenter/settings/network/netSwitch'
@@ -38,6 +39,9 @@ const SecureMethods = () => {
       </Col>
       <Col span={24}>
         <CloverWallet />
+      </Col>
+      <Col span={24}>
+        <Exodus />
       </Col>
     </Row>
   )
