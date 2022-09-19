@@ -23,6 +23,7 @@ import {
   SolflareWebWallet,
   SolflareExtensionWallet,
   CloverWallet,
+  ExodusWallet,
 } from './lib'
 
 const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
@@ -50,6 +51,8 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
         return new SolflareExtensionWallet()
       case 'Clover':
         return new CloverWallet()
+      case 'Exodus':
+        return new ExodusWallet()
       default:
         return undefined
     }
