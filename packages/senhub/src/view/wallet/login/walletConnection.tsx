@@ -26,22 +26,22 @@ const SecureMethods = () => {
         <Phantom />
       </Col>
       <Col span={24}>
-        <SolletWeb />
-      </Col>
-      <Col span={24}>
-        <Slope />
-      </Col>
-      <Col span={24}>
-        <SolflareWeb />
-      </Col>
-      <Col span={24}>
-        <SolflareExtension />
+        <Exodus />
       </Col>
       <Col span={24}>
         <CloverWallet />
       </Col>
       <Col span={24}>
-        <Exodus />
+        <SolflareExtension />
+      </Col>
+      <Col span={24}>
+        <SolflareWeb />
+      </Col>
+      <Col span={24}>
+        <SolletWeb />
+      </Col>
+      <Col span={24}>
+        <Slope />
       </Col>
     </Row>
   )

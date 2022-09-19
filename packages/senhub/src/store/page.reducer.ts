@@ -15,8 +15,9 @@ const {
 
 export type PageState = AppIds
 
-const troubleshoot = (register: SenReg, appIds?: AppIds): AppIds => {
-  if (!appIds || !Array.isArray(appIds)) return []
+const troubleshoot = (register: SenReg, page?: AppIds): AppIds => {
+  if (!page || !Array.isArray(page)) return []
+  const appIds = [...page]
   if (env === 'development' && !appIds.includes(devAppId))
     appIds.unshift(devAppId)
   return appIds.filter((appId) => register[appId])
@@ -63,10 +64,10 @@ export const updatePage = createAsyncThunk<PageState, AppIds, { state: any }>(
     } = getState()
     if (!isAddress(walletAddress))
       throw new Error('Wallet is not connected yet.')
-    appIds = troubleshoot(register, appIds)
+    const page = troubleshoot(register, appIds)
     const db = new PDB(walletAddress).createInstance('sentre')
-    await db.setItem<AppIds>('appIds', appIds)
-    return appIds
+    await db.setItem<AppIds>('appIds', page)
+    return page
   },
 )
 
