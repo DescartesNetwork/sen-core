@@ -172,6 +172,11 @@ interface WalletInterface {
   walletType: string
 
   /**
+   * Async public key
+   */
+  publicKey: import('@solana/web3.js').PublicKey | null
+
+  /**
    * Wallet providers are varied from the original wallet (Coin98, Slope, ...).
    * Seems there is no single common standard, thus we only require `disconnect` method for the returned `provider`.
    * @return Provider

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { Lamports, SPLT, Swap, WalletInterface } from '@senswap/sen-js'
+import { Lamports, SPLT, Swap } from '@senswap/sen-js'
+import { PublicKey } from '@solana/web3.js'
 
 import configs from 'configs'
 import { GuestWallet } from 'view/wallet/lib'
@@ -14,7 +15,7 @@ export type WalletState = {
   lamports: bigint
 }
 
-const initializeWindow = async (wallet?: WalletInterface) => {
+const initializeWindow = (wallet?: WalletInterface) => {
   const {
     sol: { node, spltAddress, splataAddress, swapAddress },
   } = configs
@@ -28,7 +29,7 @@ const initializeWindow = async (wallet?: WalletInterface) => {
 
 const destroyWindow = async () => {
   if (window.sentre?.wallet) window.sentre.wallet.disconnect()
-  await initializeWindow()
+  initializeWindow()
 }
 
 /**
@@ -56,10 +57,11 @@ export const closeWallet = createAsyncThunk(`${NAME}/closeWallet`, async () => {
 
 export const connectWallet = createAsyncThunk(
   `${NAME}/connectWallet`,
-  async (wallet: any) => {
+  async (wallet: WalletInterface) => {
     if (!wallet) throw new Error('Invalid wallet instance')
     await initializeWindow(wallet)
     const address = await wallet.getAddress()
+    wallet.publicKey = new PublicKey(address)
     const lamports = await window.sentre.lamports.getLamports(address)
     return { address, lamports: BigInt(lamports), visible: false }
   },

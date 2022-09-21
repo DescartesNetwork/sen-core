@@ -1,12 +1,14 @@
-import { Transaction } from '@solana/web3.js'
+import { PublicKey, Transaction } from '@solana/web3.js'
 
 import storage from 'shared/storage'
 
 class BaseWallet implements WalletInterface {
   readonly walletType: string
+  public publicKey: PublicKey | null
 
   constructor(walletType: string) {
     this.walletType = walletType
+    this.publicKey = null
     storage.set('WalletType', this.walletType)
   }
 
