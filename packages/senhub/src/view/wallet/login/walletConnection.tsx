@@ -17,14 +17,14 @@ import { env } from 'shared/runtime'
 import NetSwitch from 'view/actionCenter/settings/network/netSwitch'
 
 const LIST_WALLET = [
-  { key: 'coin98', value: <Coin98 />, priority: 1 },
-  { key: 'phantom', value: <Phantom />, priority: 2 },
-  { key: 'exodus', value: <Exodus />, priority: 3 },
-  { key: 'clover_solana', value: <CloverWallet />, priority: 4 },
-  { key: 'solflare', value: <SolflareExtension />, priority: 5 },
-  { key: 'solflareWeb', value: <SolflareWeb />, priority: 6 },
-  { key: 'solletWeb', value: <SolletWeb />, priority: 7 },
-  { key: 'Slope', value: <Slope />, priority: 8 },
+  { key: 'coin98', component: Coin98, priority: 1 },
+  { key: 'phantom', component: Phantom, priority: 2 },
+  { key: 'exodus', component: Exodus, priority: 3 },
+  { key: 'clover_solana', component: CloverWallet, priority: 4 },
+  { key: 'solflare', component: SolflareExtension, priority: 5 },
+  { key: 'solflareWeb', component: SolflareWeb, priority: 6 },
+  { key: 'solletWeb', component: SolletWeb, priority: 7 },
+  { key: 'Slope', component: Slope, priority: 8 },
 ]
 
 const SecureMethods = () => {
@@ -40,11 +40,14 @@ const SecureMethods = () => {
 
   return (
     <Row gutter={[12, 12]}>
-      {sortedWallet.map((wallet) => (
-        <Col span={24} key={wallet.key}>
-          {wallet.value}
-        </Col>
-      ))}
+      {sortedWallet.map((wallet) => {
+        const WalletAdapter = wallet.component
+        return (
+          <Col span={24} key={wallet.key}>
+            <WalletAdapter />
+          </Col>
+        )
+      })}
     </Row>
   )
 }
