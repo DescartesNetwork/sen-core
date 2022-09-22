@@ -41,10 +41,10 @@ const SecureMethods = () => {
   return (
     <Row gutter={[12, 12]}>
       {sortedWallet.map((wallet) => {
-        const WalletAdapter = wallet.component
+        const WalletComponent = wallet.component
         return (
           <Col span={24} key={wallet.key}>
-            <WalletAdapter />
+            <WalletComponent />
           </Col>
         )
       })}
