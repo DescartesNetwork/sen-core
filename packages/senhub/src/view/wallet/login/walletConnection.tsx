@@ -17,14 +17,14 @@ import { env } from 'shared/runtime'
 import NetSwitch from 'view/actionCenter/settings/network/netSwitch'
 
 const LIST_WALLET = {
-  solflareWeb: <SolflareWeb />,
-  solflareExt: <SolflareExtension />,
-  clover: <CloverWallet />,
-  exodus: <Exodus />,
-  sollet: <SolletWeb />,
-  slope: <Slope />,
   coin98: <Coin98 />,
   phantom: <Phantom />,
+  exodus: <Exodus />,
+  clover: <CloverWallet />,
+  solflareExt: <SolflareExtension />,
+  solflareWeb: <SolflareWeb />,
+  sollet: <SolletWeb />,
+  slope: <Slope />,
 }
 
 type WalletKey = keyof typeof LIST_WALLET
