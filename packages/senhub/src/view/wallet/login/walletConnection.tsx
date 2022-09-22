@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Row, Col, Tooltip, Switch, Typography, Divider, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -16,33 +16,45 @@ import Exodus from './exodus'
 import { env } from 'shared/runtime'
 import NetSwitch from 'view/actionCenter/settings/network/netSwitch'
 
+const LIST_WALLET = {
+  solflareWeb: <SolflareWeb />,
+  solflareExt: <SolflareExtension />,
+  clover: <CloverWallet />,
+  exodus: <Exodus />,
+  sollet: <SolletWeb />,
+  slope: <Slope />,
+  coin98: <Coin98 />,
+  phantom: <Phantom />,
+}
+
+type WalletKey = keyof typeof LIST_WALLET
+
 const SecureMethods = () => {
+  const listWallet = useMemo(() => {
+    const wallets: WalletKey[] = []
+
+    let listWalletKey = Object.keys(LIST_WALLET) as WalletKey[]
+    const { Slope, coin98, phantom, exodus, clover_solana, solflare } = window
+
+    if (coin98) wallets.push('coin98')
+    if (phantom) wallets.push('phantom')
+    if (exodus) wallets.push('exodus')
+    if (clover_solana) wallets.push('clover')
+    if (Slope) wallets.push('slope')
+    if (solflare) wallets.push('solflareExt')
+
+    listWalletKey = listWalletKey.filter((val) => !wallets.includes(val))
+
+    return wallets.concat(listWalletKey)
+  }, [])
+
   return (
     <Row gutter={[12, 12]}>
-      <Col span={24}>
-        <Coin98 />
-      </Col>
-      <Col span={24}>
-        <Phantom />
-      </Col>
-      <Col span={24}>
-        <Exodus />
-      </Col>
-      <Col span={24}>
-        <CloverWallet />
-      </Col>
-      <Col span={24}>
-        <SolflareExtension />
-      </Col>
-      <Col span={24}>
-        <SolflareWeb />
-      </Col>
-      <Col span={24}>
-        <SolletWeb />
-      </Col>
-      <Col span={24}>
-        <Slope />
-      </Col>
+      {listWallet.map((walletKey) => (
+        <Col span={24} key={walletKey}>
+          {LIST_WALLET[walletKey]}
+        </Col>
+      ))}
     </Row>
   )
 }
