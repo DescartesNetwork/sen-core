@@ -16,43 +16,33 @@ import Exodus from './exodus'
 import { env } from 'shared/runtime'
 import NetSwitch from 'view/actionCenter/settings/network/netSwitch'
 
-const LIST_WALLET = {
-  coin98: <Coin98 />,
-  phantom: <Phantom />,
-  exodus: <Exodus />,
-  clover: <CloverWallet />,
-  solflareExt: <SolflareExtension />,
-  solflareWeb: <SolflareWeb />,
-  sollet: <SolletWeb />,
-  slope: <Slope />,
-}
-
-type WalletKey = keyof typeof LIST_WALLET
+const LIST_WALLET = [
+  { key: 'coin98', value: <Coin98 />, priority: 1 },
+  { key: 'phantom', value: <Phantom />, priority: 2 },
+  { key: 'exodus', value: <Exodus />, priority: 3 },
+  { key: 'clover_solana', value: <CloverWallet />, priority: 4 },
+  { key: 'solflare', value: <SolflareExtension />, priority: 5 },
+  { key: 'solflareWeb', value: <SolflareWeb />, priority: 6 },
+  { key: 'solletWeb', value: <SolletWeb />, priority: 7 },
+  { key: 'Slope', value: <Slope />, priority: 8 },
+]
 
 const SecureMethods = () => {
-  const listWallet = useMemo(() => {
-    const wallets: WalletKey[] = []
-
-    let listWalletKey = Object.keys(LIST_WALLET) as WalletKey[]
-    const { Slope, coin98, phantom, exodus, clover_solana, solflare } = window
-
-    if (coin98) wallets.push('coin98')
-    if (phantom) wallets.push('phantom')
-    if (exodus) wallets.push('exodus')
-    if (clover_solana) wallets.push('clover')
-    if (Slope) wallets.push('slope')
-    if (solflare) wallets.push('solflareExt')
-
-    listWalletKey = listWalletKey.filter((val) => !wallets.includes(val))
-
-    return wallets.concat(listWalletKey)
-  }, [])
+  const sortedWallet = useMemo(
+    () =>
+      LIST_WALLET.sort((a: any, b: any) => {
+        if (window?.[a.key] && !window?.[b.key]) return -1
+        if (!window?.[a.key] && window?.[b.key]) return 1
+        return a.priority - b.priority
+      }),
+    [],
+  )
 
   return (
     <Row gutter={[12, 12]}>
-      {listWallet.map((walletKey) => (
-        <Col span={24} key={walletKey}>
-          {LIST_WALLET[walletKey]}
+      {sortedWallet.map((wallet) => (
+        <Col span={24} key={wallet.key}>
+          {wallet.value}
         </Col>
       ))}
     </Row>
