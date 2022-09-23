@@ -30,7 +30,7 @@ const Welcome = () => {
   }, [walletAddress, history, search, appIds, loading])
 
   return (
-    <Row gutter={[24, 24]} justify="center" className="welcome">
+    <Row gutter={[0, 24]} justify="center" className="welcome">
       <Col xs={24} lg={12} className="welcome-slide">
         <WelcomeSlide />
         <SocialButton />

@@ -1,17 +1,16 @@
 import { useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import { Layout, Row, Col, Card, Affix } from 'antd'
+import { Layout, Row, Col } from 'antd'
 import PrivateRoute from 'components/privateRoute'
-import Header from 'view/header'
 import Welcome from 'view/welcome'
 import Page from 'view/page'
 import Sync from 'view/sync'
 import Loading from 'view/loading'
 import Marketplace from 'view/marketplace'
-
 import Watcher from 'view/watcher'
 import Installer from 'view/installer'
+import SideBar from './sidebar'
 
 import {
   useRootSelector,
@@ -29,12 +28,12 @@ import {
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 import { useTheme } from 'hooks/useUI'
+import { login } from 'store/user.reducer'
 
-import 'static/styles/dark.os.less'
-import 'static/styles/light.os.less'
 import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
-import { login } from 'store/user.reducer'
+import 'static/styles/dark.os.less'
+import 'static/styles/light.os.less'
 
 const View = () => {
   const theme = useTheme()
@@ -74,21 +73,15 @@ const View = () => {
 
   return (
     <Layout>
-      {/* Header */}
-      <Affix>
-        <Card
-          className="glass"
-          style={{ borderRadius: '0px 0px 16px 16px' }}
-          bodyStyle={{ padding: 16 }}
-          bordered={false}
-        >
-          <Header />
-        </Card>
-      </Affix>
       {/* Body */}
-      <Layout style={{ padding: '24px 12px 0px 12px' }}>
-        <Row gutter={[24, 24]}>
-          <Col span={24}>
+      {/* remove padding cause sidebar need full screen */}
+      {/* <Layout style={{ padding: '24px 12px 0px 12px' }}> */}
+      <Layout>
+        <Row wrap={false}>
+          <Col>
+            <SideBar />
+          </Col>
+          <Col flex="auto">
             <Switch>
               <Route exact path="/welcome" component={Welcome} />
               {/* DApp Store */}
@@ -107,6 +100,7 @@ const View = () => {
           </Col>
         </Row>
       </Layout>
+
       {/* In-Background Run Jobs */}
       <Loading />
       <Watcher />
