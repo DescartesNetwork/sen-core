@@ -1,11 +1,11 @@
 import { Col, Divider, Row } from 'antd'
-import MenuItem from '../menuItem'
 import SenMarket from './market'
-import IonIcon from '@sentre/antd-ionicon'
+import Nofitications from './nofitications'
+import AppSettings from './appSettings'
+import Wallet from 'view/wallet'
 
-import { MenuSystemItem } from '../index'
-import { useWalletAddress } from 'hooks/useWallet'
 import { isAddress } from 'shared/util'
+import { useWalletAddress } from 'hooks/useWallet'
 import { RootState, useRootSelector } from 'store'
 
 const System = () => {
@@ -18,30 +18,20 @@ const System = () => {
     <Row gutter={[12, 12]} style={{ flexFlow: 'column' }} align={rowAlign}>
       {isAddress(walletAddress) && (
         <Col>
-          <MenuItem
-            value={MenuSystemItem.AppSettings}
-            onClick={() => {}}
-            name={visible}
-          >
-            {MenuSystemItem.AppSettings}
-          </MenuItem>
+          <AppSettings visible={visible} />
         </Col>
       )}
       <Col>
-        <MenuItem
-          icon={<IonIcon name="notifications-outline" />}
-          value={MenuSystemItem.Notify}
-          onClick={() => {}}
-          name={visible}
-        >
-          {MenuSystemItem.Notify}
-        </MenuItem>
+        <Nofitications visible={visible} />
       </Col>
       <Col>
         <Divider style={{ margin: 0 }} type="horizontal" />
       </Col>
       <Col>
         <SenMarket />
+      </Col>
+      <Col>
+        <Wallet />
       </Col>
     </Row>
   )

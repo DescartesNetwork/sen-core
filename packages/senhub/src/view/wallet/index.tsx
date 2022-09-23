@@ -1,13 +1,13 @@
 import { CSSProperties, Fragment, useCallback, useEffect } from 'react'
 
-import { Button } from 'antd'
+import { Avatar, Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Login from './login'
 
 import { useRootDispatch, RootDispatch } from 'store'
 import { useWalletAddress } from 'hooks/useWallet'
 import storage from 'shared/storage'
-import { isAddress } from 'shared/util'
+import { isAddress, shortenAddress } from 'shared/util'
 import {
   connectWallet,
   openWallet,
@@ -75,20 +75,31 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
 
   if (isAddress(walletAddress))
     return (
-      <Button
-        type="text"
-        icon={<IonIcon name="power-outline" />}
-        onClick={disconnect}
-        style={{
-          color: '#E9E9EB',
-          padding: 0,
-          background: 'transparent',
-          height: 'auto',
-          ...style,
-        }}
+      <Card
+        bordered={false}
+        style={{ background: 'transparent', borderRadius: 12 }}
+        bodyStyle={{ padding: 8 }}
       >
-        Disconnect
-      </Button>
+        <Row gutter={[12, 12]} align="middle" wrap={false}>
+          <Col>
+            <Avatar size={32} />
+          </Col>
+          <Col flex="auto">
+            <Space align="start">
+              <Space direction="vertical" size={0}>
+                <Typography.Text style={{ fontWeight: 600 }}>
+                  {shortenAddress(walletAddress)}
+                </Typography.Text>
+                <Typography.Text type="secondary" onClick={disconnect}>
+                  Name
+                </Typography.Text>
+              </Space>
+              <Button type="text" icon={<IonIcon name="copy-outline" />} />
+              <Button type="text" icon={<IonIcon name="qr-code-outline" />} />
+            </Space>
+          </Col>
+        </Row>
+      </Card>
     )
   return (
     <Fragment>

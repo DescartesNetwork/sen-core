@@ -2,10 +2,10 @@ import { Card, Col, Row } from 'antd'
 import Brand from 'components/brand'
 import Navigation from './navigation'
 import System from './system'
-import ActionVisibleSideBar from './buttonVisibleSidebar'
+import ActionVisibleSideBar from './components/buttonVisibleSidebar'
 
-import './index.os.less'
 import { RootState, useRootSelector } from 'store'
+import './index.os.less'
 
 export enum MenuSystemItem {
   Notify = 'Notifications',

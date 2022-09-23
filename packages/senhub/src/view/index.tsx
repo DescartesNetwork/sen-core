@@ -76,9 +76,9 @@ const View = () => {
       {/* Body */}
       {/* remove padding cause sidebar need full screen */}
       {/* <Layout style={{ padding: '24px 12px 0px 12px' }}> */}
-      <Layout>
+      <Layout style={{ overflow: 'hidden' }}>
         <Row wrap={false}>
-          <Col>
+          <Col style={{ minWidth: 80 }}>
             <SideBar />
           </Col>
           <Col flex="auto">
