@@ -1,9 +1,7 @@
 @import '../../static/styles/common/vars.os.less';
 
 .card-sidebar {
-  position: fixed !important;
   background: @WHITE !important;
-  left: 0;
   top: 0;
   width: 80px;
   height: 100vh;
@@ -11,8 +9,20 @@
   box-shadow: none !important;
   transition: all 0.1s linear;
   z-index: 9;
-  &.active {
-    width: 230px;
+  @media (max-width: 575px) {
+    position: fixed !important;
+  }
+  &.sb-mobile {
+    left: -80px;
+    &.active {
+      left: 0;
+    }
+  }
+  &.sb-desk {
+    left: 0;
+    &.active {
+      width: 230px;
+    }
   }
   > .@{ant-prefix}-card-body {
     position: relative;

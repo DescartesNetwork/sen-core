@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useMemo } from 'react'
 
 import { Row, Col } from 'antd'
 import AppList from './appList'
@@ -8,19 +8,26 @@ import { useWalletAddress } from 'hooks/useWallet'
 import { isAddress } from 'shared/util'
 import { RootState, useRootSelector } from 'store'
 
-const Navigation = () => {
+type NavigationProps = { isMobile?: boolean }
+const Navigation = ({ isMobile = false }: NavigationProps) => {
   const walletAddress = useWalletAddress()
   const visible = useRootSelector((state: RootState) => state.sidebar.visible)
-  const moreSpan = visible ? 24 : undefined
+  const moreSpan = visible && !isMobile ? 24 : undefined
+
+  const nextVisible = useMemo(() => {
+    if (!isMobile) return visible
+    return false
+  }, [isMobile, visible])
+
   if (!isAddress(walletAddress)) return <Fragment />
 
   return (
     <Row gutter={[16, 16]} justify="center">
       <Col span={24} style={{ maxHeight: 275 }} className="scrollbar">
-        <AppList visible={visible} />
+        <AppList visible={nextVisible} />
       </Col>
       <Col span={moreSpan}>
-        <More visible={visible} />
+        <More visible={nextVisible} />
       </Col>
     </Row>
   )

@@ -4,7 +4,10 @@ import Navigation from './navigation'
 import System from './system'
 import ActionVisibleSideBar from './components/buttonVisibleSidebar'
 
+import { useInfix } from 'hooks/useUI'
 import { RootState, useRootSelector } from 'store'
+import { Infix } from 'store/ui.reducer'
+
 import './index.os.less'
 
 export enum MenuSystemItem {
@@ -14,10 +17,16 @@ export enum MenuSystemItem {
 }
 
 const SideBar = () => {
+  const infix = useInfix()
   const visible = useRootSelector((state: RootState) => state.sidebar.visible)
+
+  const isMobile = infix < Infix.sm
   const brandDirection = visible ? 'horizontal' : 'vertical'
-  const sidebarCln = visible ? 'card-sidebar active' : 'card-sidebar'
-  const rowAlign = visible ? 'start' : 'center'
+  const defaultSideBarCln = isMobile
+    ? 'card-sidebar sb-mobile'
+    : 'card-sidebar sb-desk'
+  const sidebarCln = visible ? `${defaultSideBarCln} active` : defaultSideBarCln
+  const rowAlign = visible && !isMobile ? 'start' : 'center'
 
   return (
     <Card className={sidebarCln} bordered={false}>
@@ -28,12 +37,12 @@ const SideBar = () => {
               <Brand direction={brandDirection} />
             </Col>
             <Col span={24}>
-              <Navigation />
+              <Navigation isMobile={isMobile} />
             </Col>
           </Row>
         </Col>
         <Col>
-          <System />
+          <System isMobile={isMobile} />
         </Col>
       </Row>
       <ActionVisibleSideBar />

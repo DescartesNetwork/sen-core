@@ -27,19 +27,28 @@ import {
 } from 'store/flags.reducer'
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
-import { useTheme } from 'hooks/useUI'
+import { useInfix, useTheme } from 'hooks/useUI'
 import { login } from 'store/user.reducer'
+import { Infix } from 'store/ui.reducer'
 
 import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
 import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
 
+const ROW_STICKY = { overflow: 'auto', maxHeight: '100vh' }
+const COL_STICKY = { position: 'sticky', top: 0, left: 0, zIndex: 9 }
+
 const View = () => {
   const theme = useTheme()
   const background = useRootSelector((state: RootState) => state.ui.background)
   const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
+  const infix = useInfix()
+
+  const isMobile = infix < Infix.sm
+  const rowStyle = !isMobile ? ROW_STICKY : {}
+  const colStyle = !isMobile ? COL_STICKY : {}
 
   // Load DApp flags, registry, page
   useEffect(() => {
@@ -77,8 +86,8 @@ const View = () => {
       {/* remove padding cause sidebar need full screen */}
       {/* <Layout style={{ padding: '24px 12px 0px 12px' }}> */}
       <Layout style={{ overflow: 'hidden' }}>
-        <Row gutter={[0, 24]} wrap={false}>
-          <Col style={{ minWidth: 80 }}>
+        <Row gutter={[0, 24]} style={{ ...rowStyle }} wrap={false}>
+          <Col style={{ ...colStyle }}>
             <SideBar />
           </Col>
           <Col flex="auto">

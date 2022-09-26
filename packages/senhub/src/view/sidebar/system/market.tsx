@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useRouteMatch } from 'react-router-dom'
 
 import { Card } from 'antd'
@@ -9,10 +9,16 @@ import { RootState, useRootSelector } from 'store'
 
 const STORE_ID = 'store'
 
-const SenMarket = () => {
+type SenMarketProps = { isMobile?: boolean }
+const SenMarket = ({ isMobile }: SenMarketProps) => {
   const visible = useRootSelector((state: RootState) => state.sidebar.visible)
   const { params } = useRouteMatch<{ appId: string }>('/app/:appId') || {}
   const onGoToApp = useGoToAppCallback()
+
+  const nextVisible = useMemo(() => {
+    if (!isMobile) return visible
+    return false
+  }, [isMobile, visible])
 
   const onStore = useCallback(async () => {
     return onGoToApp({ appId: STORE_ID })
@@ -27,7 +33,7 @@ const SenMarket = () => {
         appId={STORE_ID}
         size={32}
         direction="horizontal"
-        name={visible}
+        name={nextVisible}
         onClick={onStore}
       />
     </Card>
