@@ -26,6 +26,8 @@ import {
   ExodusWallet,
 } from './lib'
 import WalletConnected from './walletConnected'
+import { useInfix } from 'hooks/useUI'
+import { Infix } from 'store/ui.reducer'
 
 const Wallet = ({
   style = {},
@@ -34,6 +36,8 @@ const Wallet = ({
   style?: CSSProperties
   visible?: boolean
 }) => {
+  const infix = useInfix()
+  const isMobile = infix < Infix.md
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
 
@@ -90,7 +94,7 @@ const Wallet = ({
         icon={<IonIcon name="wallet-outline" />}
         onClick={() => dispatch(openWallet())}
       >
-        Connect Wallet
+        {!isMobile && 'Connect Wallet'}
       </Button>
       <Login />
     </Fragment>

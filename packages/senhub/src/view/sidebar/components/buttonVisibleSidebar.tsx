@@ -16,11 +16,18 @@ const enum WindowMouseEvent {
   MouseDown = 'mousedown',
   MouseUp = 'mouseup',
   MouseMove = 'mousemove',
+  TouchStart = 'touchstart',
+  TouchMove = 'touchmove',
+  TouchEnd = 'touchend',
 }
 type KeyofMouseEvent =
   | WindowMouseEvent.MouseDown
   | WindowMouseEvent.MouseMove
   | WindowMouseEvent.MouseUp
+type KeyofTouchEvent =
+  | WindowMouseEvent.TouchStart
+  | WindowMouseEvent.TouchMove
+  | WindowMouseEvent.TouchEnd
 
 let mouseDown = false
 
@@ -32,17 +39,38 @@ const ActionVisibleSideBar = () => {
 
   const btnName = visible ? 'chevron-back-outline' : 'chevron-forward-outline'
 
-  const onMouseDown = useCallback((event: KeyofMouseEvent) => {
-    const btnElm = btnRef.current
-    if (!btnElm) return
-    window.addEventListener(event, (e) => {
-      if (btnElm.contains(e.target as Node)) return (mouseDown = true)
-    })
-  }, [])
+  const onStartAction = useCallback(
+    (event: KeyofMouseEvent | KeyofTouchEvent) => {
+      const btnElm = btnRef.current
+      if (!btnElm) return
+      window.addEventListener(event, (e) => {
+        if (btnElm.contains(e.target as Node)) return (mouseDown = true)
+      })
+    },
+    [],
+  )
 
   const onMouseMove = useCallback((event: KeyofMouseEvent) => {
     window.addEventListener(event, (e) => {
       const posY = e.pageY
+      const wHeight = window.innerHeight
+
+      if (
+        mouseDown &&
+        posY > DEFAULT_POSITION_Y &&
+        posY < wHeight - DEFAULT_POSITION_Y
+      )
+        setBtnPosY(wHeight - posY)
+    })
+  }, [])
+
+  const onTouchMove = useCallback((event: KeyofTouchEvent) => {
+    const btnElm = btnRef.current
+    if (!btnElm) return
+
+    window.addEventListener(event, (e) => {
+      const touch = e.touches[0] || e.changedTouches[0]
+      const posY = touch.pageY
       const wHeight = window.innerHeight
 
       if (
@@ -61,7 +89,7 @@ const ActionVisibleSideBar = () => {
 
   // Mouse down
   useEffect(() => {
-    onMouseDown(WindowMouseEvent.MouseDown)
+    onStartAction(WindowMouseEvent.MouseDown)
     return () => windowRemoveEvent(WindowMouseEvent.MouseDown)
   })
 
@@ -75,6 +103,27 @@ const ActionVisibleSideBar = () => {
   useEffect(() => {
     onMouseMove(WindowMouseEvent.MouseMove)
     return () => windowRemoveEvent(WindowMouseEvent.MouseMove)
+  })
+
+  // Touch start
+  useEffect(() => {
+    onStartAction(WindowMouseEvent.TouchStart)
+    return () => windowRemoveEvent(WindowMouseEvent.TouchStart)
+  })
+
+  // Touch end
+  useEffect(() => {
+    window.addEventListener(
+      WindowMouseEvent.TouchEnd,
+      () => (mouseDown = false),
+    )
+    return () => windowRemoveEvent(WindowMouseEvent.TouchEnd)
+  })
+
+  // Touch move
+  useEffect(() => {
+    onTouchMove(WindowMouseEvent.TouchMove)
+    return () => windowRemoveEvent(WindowMouseEvent.TouchMove)
   })
 
   return (

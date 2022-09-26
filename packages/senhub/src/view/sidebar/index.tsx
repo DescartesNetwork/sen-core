@@ -20,8 +20,8 @@ const SideBar = () => {
   const infix = useInfix()
   const visible = useRootSelector((state: RootState) => state.sidebar.visible)
 
-  const isMobile = infix < Infix.sm
-  const brandDirection = visible ? 'horizontal' : 'vertical'
+  const isMobile = infix < Infix.md
+  const brandDirection = visible && !isMobile ? 'horizontal' : 'vertical'
   const defaultSideBarCln = isMobile
     ? 'card-sidebar sb-mobile'
     : 'card-sidebar sb-desk'
