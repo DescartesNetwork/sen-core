@@ -32,24 +32,21 @@ const ActionVisibleSideBar = () => {
 
   const btnName = visible ? 'chevron-back-outline' : 'chevron-forward-outline'
 
-  const onMouseEvent = useCallback((event: KeyofMouseEvent) => {
+  const onMouseDown = useCallback((event: KeyofMouseEvent) => {
+    const btnElm = btnRef.current
+    if (!btnElm) return
     window.addEventListener(event, (e) => {
-      const btnElm = btnRef.current
-      if (!btnElm) return
+      if (btnElm.contains(e.target as Node)) return (mouseDown = true)
+    })
+  }, [])
 
+  const onMouseMove = useCallback((event: KeyofMouseEvent) => {
+    window.addEventListener(event, (e) => {
       const posY = e.pageY
-      const type = e.type
       const wHeight = window.innerHeight
 
       if (
-        type === WindowMouseEvent.MouseDown &&
-        btnElm.contains(e.target as Node)
-      )
-        mouseDown = true
-      if (type === WindowMouseEvent.MouseUp) mouseDown = false
-      if (
         mouseDown &&
-        type === WindowMouseEvent.MouseMove &&
         posY > DEFAULT_POSITION_Y &&
         posY < wHeight - DEFAULT_POSITION_Y
       )
@@ -64,19 +61,19 @@ const ActionVisibleSideBar = () => {
 
   // Mouse down
   useEffect(() => {
-    onMouseEvent(WindowMouseEvent.MouseDown)
+    onMouseDown(WindowMouseEvent.MouseDown)
     return () => windowRemoveEvent(WindowMouseEvent.MouseDown)
   })
 
   // Mouse up
   useEffect(() => {
-    onMouseEvent(WindowMouseEvent.MouseUp)
+    window.addEventListener(WindowMouseEvent.MouseUp, () => (mouseDown = false))
     return () => windowRemoveEvent(WindowMouseEvent.MouseUp)
   })
 
   // Mouse move
   useEffect(() => {
-    onMouseEvent(WindowMouseEvent.MouseMove)
+    onMouseMove(WindowMouseEvent.MouseMove)
     return () => windowRemoveEvent(WindowMouseEvent.MouseMove)
   })
 
