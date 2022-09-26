@@ -53,7 +53,7 @@ const ActionVisibleSideBar = () => {
         posY > DEFAULT_POSITION_Y &&
         posY < wHeight - DEFAULT_POSITION_Y
       )
-        setBtnPosY(posY)
+        setBtnPosY(wHeight - posY)
     })
   }, [])
 
@@ -83,7 +83,7 @@ const ActionVisibleSideBar = () => {
   return (
     <Button
       ref={btnRef}
-      style={{ top: btnPosY }}
+      style={{ bottom: btnPosY }}
       className="btn-visible-sidebar"
       icon={<IonIcon name={btnName} />}
       onClick={() => dispatch(setVisibleSideBar(!visible))}
