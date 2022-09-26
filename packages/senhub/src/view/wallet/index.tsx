@@ -1,13 +1,13 @@
 import { CSSProperties, Fragment, useCallback, useEffect } from 'react'
 
-import { Avatar, Button, Card, Col, Row, Space, Typography } from 'antd'
+import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Login from './login'
 
 import { useRootDispatch, RootDispatch } from 'store'
 import { useWalletAddress } from 'hooks/useWallet'
 import storage from 'shared/storage'
-import { isAddress, shortenAddress } from 'shared/util'
+import { isAddress } from 'shared/util'
 import {
   connectWallet,
   openWallet,
@@ -25,8 +25,15 @@ import {
   CloverWallet,
   ExodusWallet,
 } from './lib'
+import WalletConnected from './walletConnected'
 
-const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
+const Wallet = ({
+  style = {},
+  visible = false,
+}: {
+  style?: CSSProperties
+  visible?: boolean
+}) => {
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
 
@@ -74,33 +81,7 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
   }, [dispatch, reconnect, walletAddress])
 
   if (isAddress(walletAddress))
-    return (
-      <Card
-        bordered={false}
-        style={{ background: 'transparent', borderRadius: 12 }}
-        bodyStyle={{ padding: 8 }}
-      >
-        <Row gutter={[12, 12]} align="middle" wrap={false}>
-          <Col>
-            <Avatar size={32} />
-          </Col>
-          <Col flex="auto">
-            <Space align="start">
-              <Space direction="vertical" size={0}>
-                <Typography.Text style={{ fontWeight: 600 }}>
-                  {shortenAddress(walletAddress)}
-                </Typography.Text>
-                <Typography.Text type="secondary" onClick={disconnect}>
-                  Name
-                </Typography.Text>
-              </Space>
-              <Button type="text" icon={<IonIcon name="copy-outline" />} />
-              <Button type="text" icon={<IonIcon name="qr-code-outline" />} />
-            </Space>
-          </Col>
-        </Row>
-      </Card>
-    )
+    return <WalletConnected onDisconnect={disconnect} visible={visible} />
   return (
     <Fragment>
       <Button

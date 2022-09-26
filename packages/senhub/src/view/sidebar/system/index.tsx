@@ -31,7 +31,7 @@ const System = () => {
         <SenMarket />
       </Col>
       <Col>
-        <Wallet />
+        <Wallet visible={visible} />
       </Col>
     </Row>
   )
