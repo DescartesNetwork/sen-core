@@ -15,7 +15,7 @@ const Exodus = () => {
       return window.notify({
         type: 'warning',
         description:
-          'Exodus Wallet is not installed. If this is the first time you install Phantom wallet, please restart your browser to complete the setup.',
+          'Exodus Wallet is not installed. If this is the first time you install Exodus wallet, please restart your browser to complete the setup.',
       })
     const wallet = new ExodusWallet()
     try {

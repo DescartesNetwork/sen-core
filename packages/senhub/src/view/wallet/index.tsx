@@ -4,7 +4,12 @@ import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Login from './login'
 
-import { useRootDispatch, RootDispatch } from 'store'
+import {
+  useRootDispatch,
+  RootDispatch,
+  useRootSelector,
+  RootState,
+} from 'store'
 import { useWalletAddress } from 'hooks/useWallet'
 import storage from 'shared/storage'
 import { isAddress } from 'shared/util'
@@ -25,10 +30,24 @@ import {
   CloverWallet,
   ExodusWallet,
 } from './lib'
+import WalletConnected from './walletConnected'
+import { useInfix } from 'hooks/useUI'
+import { Infix } from 'store/ui.reducer'
 
-const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
+const Wallet = ({
+  style = {},
+  visible = false,
+}: {
+  style?: CSSProperties
+  visible?: boolean
+}) => {
+  const infix = useInfix()
+  const isMobile = infix < Infix.md
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
+  const visibleNavigation = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
 
   const reconnect = useCallback(() => {
     const walletType = storage.get('WalletType')
@@ -74,22 +93,7 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
   }, [dispatch, reconnect, walletAddress])
 
   if (isAddress(walletAddress))
-    return (
-      <Button
-        type="text"
-        icon={<IonIcon name="power-outline" />}
-        onClick={disconnect}
-        style={{
-          color: '#E9E9EB',
-          padding: 0,
-          background: 'transparent',
-          height: 'auto',
-          ...style,
-        }}
-      >
-        Disconnect
-      </Button>
-    )
+    return <WalletConnected onDisconnect={disconnect} visible={visible} />
   return (
     <Fragment>
       <Button
@@ -98,7 +102,7 @@ const Wallet = ({ style = {} }: { style?: CSSProperties }) => {
         icon={<IonIcon name="wallet-outline" />}
         onClick={() => dispatch(openWallet())}
       >
-        Connect Wallet
+        {!isMobile && visibleNavigation && 'Connect Wallet'}
       </Button>
       <Login />
     </Fragment>

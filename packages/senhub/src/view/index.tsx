@@ -1,17 +1,16 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import { Layout, Row, Col, Card, Affix } from 'antd'
+import { Layout } from 'antd'
 import PrivateRoute from 'components/privateRoute'
-import Header from 'view/header'
 import Welcome from 'view/welcome'
 import Page from 'view/page'
 import Sync from 'view/sync'
 import Loading from 'view/loading'
 import Marketplace from 'view/marketplace'
-
 import Watcher from 'view/watcher'
 import Installer from 'view/installer'
+import SideBar from './sidebar'
 
 import {
   useRootSelector,
@@ -28,19 +27,34 @@ import {
 } from 'store/flags.reducer'
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
-import { useTheme } from 'hooks/useUI'
+import { useInfix, useTheme } from 'hooks/useUI'
+import { login } from 'store/user.reducer'
+import { Infix } from 'store/ui.reducer'
 
-import 'static/styles/dark.os.less'
-import 'static/styles/light.os.less'
 import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
-import { login } from 'store/user.reducer'
+import 'static/styles/dark.os.less'
+import 'static/styles/light.os.less'
+import './index.os.less'
 
 const View = () => {
   const theme = useTheme()
   const background = useRootSelector((state: RootState) => state.ui.background)
+  const visibleNavigation = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
   const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
+  const infix = useInfix()
+
+  const isMobile = infix < Infix.md
+  const containerCln = !isMobile
+    ? 'sentre-container sticky-menu'
+    : 'sentre-container fixed-menu'
+  const colBodyCln = useMemo(() => {
+    if (isMobile) return 'sentre-body-mobile'
+    return visibleNavigation ? 'sentre-body navigation-actived' : 'sentre-body'
+  }, [isMobile, visibleNavigation])
 
   // Load DApp flags, registry, page
   useEffect(() => {
@@ -74,21 +88,12 @@ const View = () => {
 
   return (
     <Layout>
-      {/* Header */}
-      <Affix>
-        <Card
-          className="glass"
-          style={{ borderRadius: '0px 0px 16px 16px' }}
-          bodyStyle={{ padding: 16 }}
-          bordered={false}
-        >
-          <Header />
-        </Card>
-      </Affix>
       {/* Body */}
-      <Layout style={{ padding: '24px 12px 0px 12px' }}>
-        <Row gutter={[24, 24]}>
-          <Col span={24}>
+      {/* <Layout style={{ padding: '24px 12px 0px 12px' }}> */}
+      <Layout style={{ overflow: 'hidden' }}>
+        <div className={containerCln}>
+          <SideBar />
+          <div className={colBodyCln} style={{ padding: '0px 12px' }}>
             <Switch>
               <Route exact path="/welcome" component={Welcome} />
               {/* DApp Store */}
@@ -104,9 +109,10 @@ const View = () => {
               <PrivateRoute exact path="/sync" component={Sync} />
               <Redirect from="*" to="/welcome" />
             </Switch>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Layout>
+
       {/* In-Background Run Jobs */}
       <Loading />
       <Watcher />

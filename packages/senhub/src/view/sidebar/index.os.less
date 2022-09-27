@@ -1,0 +1,76 @@
+@import '../../static/styles/common/vars.os.less';
+
+.card-sidebar {
+  background: @WHITE !important;
+  top: 0;
+  width: 80px;
+  height: 100vh;
+  border-radius: unset !important;
+  box-shadow: none !important;
+  transition: all 0.05s linear;
+  z-index: 9;
+  &.sb-mobile {
+    left: -80px;
+    &.active {
+      left: 0;
+    }
+  }
+  &.sb-desk {
+    left: 0;
+    &.active {
+      width: 230px;
+    }
+  }
+  > .@{ant-prefix}-card-body {
+    position: relative;
+    padding: 24px 16px !important;
+    height: 100%;
+    .wrapper-sidebar {
+      height: 100%;
+      flex-flow: column !important;
+      justify-content: space-between;
+    }
+  }
+  .card-app-icon {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 12px !important;
+    .@{ant-prefix}-card-body {
+      padding: 8px !important;
+    }
+    &.active {
+      background: rgba(249, 87, 94, 0.1) !important;
+    }
+  }
+  .btn-visible-sidebar {
+    background: @WHITE !important;
+    position: absolute !important;
+    border: none !important;
+    right: -25px;
+    border-radius: 0 8px 8px 0 !important;
+    transition: none !important;
+    @media (max-width: 768px) {
+      transition: all 0.1s linear;
+    }
+    z-index: 9;
+    .anticon {
+      &::after {
+        content: none !important;
+      }
+    }
+  }
+}
+
+#dark {
+  .card-sidebar {
+    background: @NEUTRAL100 !important;
+    .card-app-icon {
+      &.active {
+        background: rgba(249, 87, 94, 0.1) !important;
+      }
+    }
+    .btn-visible-sidebar {
+      background: @NEUTRAL100 !important;
+    }
+  }
+}

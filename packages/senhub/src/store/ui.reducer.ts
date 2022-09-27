@@ -23,6 +23,7 @@ export type UIState = {
   visibleActionCenter: boolean
   visibleInstaller: boolean
   background: Background
+  visibleNavigation: boolean
 }
 
 const getInfix = (): Infix => {
@@ -54,6 +55,7 @@ const initialState: UIState = {
   touchable: isTouchable(),
   visibleActionCenter: false,
   visibleInstaller: false,
+  visibleNavigation: false,
   background: {
     light: '',
     dark: '',
@@ -103,6 +105,13 @@ export const setBackground = createAsyncThunk<
   return { background }
 })
 
+export const setVisibleNagivation = createAsyncThunk(
+  `${NAME}/setVisibleNagivation`,
+  async (visibleNavigation: boolean) => {
+    return { visibleNavigation }
+  },
+)
+
 /**
  * Usual procedure
  */
@@ -131,6 +140,10 @@ const slice = createSlice({
       )
       .addCase(
         setBackground.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        setVisibleNagivation.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })
