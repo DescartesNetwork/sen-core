@@ -1,0 +1,13 @@
+.sentre-container {
+  display: flex;
+  flex: 1 1 100%;
+  flex-flow: row nowrap;
+  &.sticky-menu {
+    overflow: auto;
+    max-height: 100vh;
+  }
+  .sentre-sidebar,
+  .sentre-body {
+    transition: all 0.05s linear;
+  }
+}

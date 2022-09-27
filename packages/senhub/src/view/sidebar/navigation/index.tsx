@@ -24,8 +24,12 @@ const Navigation = ({ isMobile = false }: NavigationProps) => {
   if (!isAddress(walletAddress)) return <Fragment />
 
   return (
-    <Row gutter={[16, 16]} justify="center">
-      <Col span={24} style={{ maxHeight: 275 }} className="scrollbar">
+    <Row gutter={[16, 16]} style={{ height: '100%' }} justify="center">
+      <Col
+        span={24}
+        style={{ maxHeight: 'calc(100% - 48px' }}
+        className="scrollbar"
+      >
         <AppList visible={nextVisible} />
       </Col>
       <Col span={moreSpan}>

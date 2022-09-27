@@ -21,10 +21,17 @@ const MenuItem = ({
   return (
     <Space
       size={12}
-      style={{ width: '100%', paddingLeft: 8, paddingRight: 8, ...style }}
+      style={{
+        width: '100%',
+        minWidth: 32,
+        minHeight: 32,
+        padding: 8,
+        ...style,
+        cursor: 'pointer',
+      }}
       onClick={() => onClick(value)}
     >
-      {icon}
+      <Typography.Text style={{ fontSize: 18 }}>{icon}</Typography.Text>
       {name && (
         <Typography.Text style={{ fontWeight: 600 }}>
           {children || value}
