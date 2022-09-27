@@ -11,7 +11,9 @@ import { RootState, useRootSelector } from 'store'
 type NavigationProps = { isMobile?: boolean }
 const Navigation = ({ isMobile = false }: NavigationProps) => {
   const walletAddress = useWalletAddress()
-  const visible = useRootSelector((state: RootState) => state.sidebar.visible)
+  const visible = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
   const moreSpan = visible && !isMobile ? 24 : undefined
 
   const nextVisible = useMemo(() => {

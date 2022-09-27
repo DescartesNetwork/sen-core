@@ -4,7 +4,12 @@ import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Login from './login'
 
-import { useRootDispatch, RootDispatch } from 'store'
+import {
+  useRootDispatch,
+  RootDispatch,
+  useRootSelector,
+  RootState,
+} from 'store'
 import { useWalletAddress } from 'hooks/useWallet'
 import storage from 'shared/storage'
 import { isAddress } from 'shared/util'
@@ -40,6 +45,9 @@ const Wallet = ({
   const isMobile = infix < Infix.md
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
+  const visibleNavigation = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
 
   const reconnect = useCallback(() => {
     const walletType = storage.get('WalletType')
@@ -94,7 +102,7 @@ const Wallet = ({
         icon={<IonIcon name="wallet-outline" />}
         onClick={() => dispatch(openWallet())}
       >
-        {!isMobile && 'Connect Wallet'}
+        {!isMobile && visibleNavigation && 'Connect Wallet'}
       </Button>
       <Login />
     </Fragment>

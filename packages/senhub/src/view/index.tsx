@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import { Layout, Row, Col } from 'antd'
+import { Layout } from 'antd'
 import PrivateRoute from 'components/privateRoute'
 import Welcome from 'view/welcome'
 import Page from 'view/page'
@@ -35,20 +35,26 @@ import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
 import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
-
-const ROW_STICKY = { overflow: 'auto', maxHeight: '100vh' }
-const COL_STICKY = { position: 'sticky', top: 0, left: 0, zIndex: 9 }
+import './index.os.less'
 
 const View = () => {
   const theme = useTheme()
   const background = useRootSelector((state: RootState) => state.ui.background)
+  const visibleNavigation = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
   const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
   const infix = useInfix()
 
-  const isMobile = infix < Infix.sm
-  const rowStyle = !isMobile ? ROW_STICKY : {}
-  const colStyle = !isMobile ? COL_STICKY : {}
+  const isMobile = infix < Infix.md
+  const containerCln = !isMobile
+    ? 'sentre-container sticky-menu'
+    : 'sentre-container fixed-menu'
+  const colBodyCln = useMemo(() => {
+    if (isMobile) return 'sentre-body-mobile'
+    return visibleNavigation ? 'sentre-body navigation-actived' : 'sentre-body'
+  }, [isMobile, visibleNavigation])
 
   // Load DApp flags, registry, page
   useEffect(() => {
@@ -83,14 +89,11 @@ const View = () => {
   return (
     <Layout>
       {/* Body */}
-      {/* remove padding cause sidebar need full screen */}
       {/* <Layout style={{ padding: '24px 12px 0px 12px' }}> */}
       <Layout style={{ overflow: 'hidden' }}>
-        <Row gutter={[0, 24]} style={{ ...rowStyle }} wrap={false}>
-          <Col style={{ ...colStyle }}>
-            <SideBar />
-          </Col>
-          <Col flex="auto">
+        <div className={containerCln}>
+          <SideBar />
+          <div className={colBodyCln} style={{ padding: '0px 12px' }}>
             <Switch>
               <Route exact path="/welcome" component={Welcome} />
               {/* DApp Store */}
@@ -106,8 +109,8 @@ const View = () => {
               <PrivateRoute exact path="/sync" component={Sync} />
               <Redirect from="*" to="/welcome" />
             </Switch>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Layout>
 
       {/* In-Background Run Jobs */}

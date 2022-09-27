@@ -18,7 +18,9 @@ export enum MenuSystemItem {
 
 const SideBar = () => {
   const infix = useInfix()
-  const visible = useRootSelector((state: RootState) => state.sidebar.visible)
+  const visible = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
 
   const isMobile = infix < Infix.md
   const brandDirection = visible && !isMobile ? 'horizontal' : 'vertical'

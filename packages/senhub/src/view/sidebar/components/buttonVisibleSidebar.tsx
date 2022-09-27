@@ -9,7 +9,7 @@ import {
 import IonIcon from '@sentre/antd-ionicon'
 import { Button } from 'antd'
 
-import { setVisibleSideBar } from 'store/sidebar.reducer'
+import { setVisibleNagivation } from 'store/ui.reducer'
 
 const DEFAULT_POSITION_Y = 80
 const enum WindowMouseEvent {
@@ -32,7 +32,9 @@ type KeyofTouchEvent =
 let mouseDown = false
 
 const ActionVisibleSideBar = () => {
-  const visible = useRootSelector((state: RootState) => state.sidebar.visible)
+  const visible = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
   const dispatch = useRootDispatch<RootDispatch>()
   const [btnPosY, setBtnPosY] = useState(DEFAULT_POSITION_Y)
   const btnRef = useRef<HTMLElement>(null)
@@ -91,25 +93,25 @@ const ActionVisibleSideBar = () => {
   useEffect(() => {
     onStartAction(WindowMouseEvent.MouseDown)
     return () => windowRemoveEvent(WindowMouseEvent.MouseDown)
-  })
+  }, [onStartAction, windowRemoveEvent])
 
   // Mouse up
   useEffect(() => {
     window.addEventListener(WindowMouseEvent.MouseUp, () => (mouseDown = false))
     return () => windowRemoveEvent(WindowMouseEvent.MouseUp)
-  })
+  }, [windowRemoveEvent])
 
   // Mouse move
   useEffect(() => {
     onMouseMove(WindowMouseEvent.MouseMove)
     return () => windowRemoveEvent(WindowMouseEvent.MouseMove)
-  })
+  }, [onMouseMove, windowRemoveEvent])
 
   // Touch start
   useEffect(() => {
     onStartAction(WindowMouseEvent.TouchStart)
     return () => windowRemoveEvent(WindowMouseEvent.TouchStart)
-  })
+  }, [onStartAction, windowRemoveEvent])
 
   // Touch end
   useEffect(() => {
@@ -118,13 +120,13 @@ const ActionVisibleSideBar = () => {
       () => (mouseDown = false),
     )
     return () => windowRemoveEvent(WindowMouseEvent.TouchEnd)
-  })
+  }, [windowRemoveEvent])
 
   // Touch move
   useEffect(() => {
     onTouchMove(WindowMouseEvent.TouchMove)
     return () => windowRemoveEvent(WindowMouseEvent.TouchMove)
-  })
+  }, [onTouchMove, windowRemoveEvent])
 
   return (
     <Button
@@ -132,7 +134,7 @@ const ActionVisibleSideBar = () => {
       style={{ bottom: btnPosY }}
       className="btn-visible-sidebar"
       icon={<IonIcon name={btnName} />}
-      onClick={() => dispatch(setVisibleSideBar(!visible))}
+      onClick={() => dispatch(setVisibleNagivation(!visible))}
     />
   )
 }

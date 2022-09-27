@@ -11,7 +11,9 @@ const STORE_ID = 'store'
 
 type SenMarketProps = { isMobile?: boolean }
 const SenMarket = ({ isMobile }: SenMarketProps) => {
-  const visible = useRootSelector((state: RootState) => state.sidebar.visible)
+  const visible = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
   const { params } = useRouteMatch<{ appId: string }>('/app/:appId') || {}
   const onGoToApp = useGoToAppCallback()
 

@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { Col, Divider, Row } from 'antd'
 import SenMarket from './market'
 import Nofitications from './nofitications'
@@ -7,11 +9,12 @@ import Wallet from 'view/wallet'
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 import { RootState, useRootSelector } from 'store'
-import { useMemo } from 'react'
 
 type SystemProps = { isMobile?: boolean }
 const System = ({ isMobile = false }: SystemProps) => {
-  const visible = useRootSelector((state: RootState) => state.sidebar.visible)
+  const visible = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
   const walletAddress = useWalletAddress()
 
   const rowAlign = visible && !isMobile ? 'stretch' : 'middle'
