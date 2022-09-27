@@ -1,5 +1,17 @@
 @import '../../../static/styles/common/vars.os.less';
 
+.card-app-icon {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 12px !important;
+  .@{ant-prefix}-card-body {
+    padding: 8px !important;
+  }
+  &.active {
+    background: rgba(249, 87, 94, 0.1) !important;
+  }
+}
+
 #light {
   .@{ant-prefix}-active-app {
     .@{ant-prefix}-badge-dot {

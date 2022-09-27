@@ -1,26 +1,12 @@
 @import '../../static/styles/common/vars.os.less';
 
 .card-sidebar {
+  width: 100%;
   background: @WHITE !important;
-  top: 0;
-  width: 80px;
   height: 100vh;
   border-radius: unset !important;
   box-shadow: none !important;
-  transition: all 0.05s linear;
   z-index: 9;
-  &.sb-mobile {
-    left: -80px;
-    &.active {
-      left: 0;
-    }
-  }
-  &.sb-desk {
-    left: 0;
-    &.active {
-      width: 230px;
-    }
-  }
   > .@{ant-prefix}-card-body {
     position: relative;
     padding: 24px 16px !important;
@@ -31,17 +17,6 @@
       justify-content: space-between;
     }
   }
-  .card-app-icon {
-    background: transparent !important;
-    box-shadow: none !important;
-    border-radius: 12px !important;
-    .@{ant-prefix}-card-body {
-      padding: 8px !important;
-    }
-    &.active {
-      background: rgba(249, 87, 94, 0.1) !important;
-    }
-  }
   .btn-visible-sidebar {
     background: @WHITE !important;
     position: absolute !important;
@@ -49,10 +24,14 @@
     right: -25px;
     border-radius: 0 8px 8px 0 !important;
     transition: none !important;
+    z-index: 9;
+    &::after,
+    &::before {
+      content: none !important;
+    }
     @media (max-width: 768px) {
       transition: all 0.1s linear;
     }
-    z-index: 9;
     .anticon {
       &::after {
         content: none !important;
