@@ -9,12 +9,12 @@ export const SIDEBAR_MAX_WIDTH = 230
 export const SIDEBAR_MIN_WIDTH = 80
 const CONTAINER_CLN = 'sentre-container'
 
-type LayoutNavigateProps = {
+type SentreLayoutProps = {
   children?: ReactNode
   gap?: number
   style?: CSSProperties
 }
-const LayoutNavigate = ({ gap = 0, style, children }: LayoutNavigateProps) => {
+const SentreLayout = ({ gap = 0, style, children }: SentreLayoutProps) => {
   const infix = useInfix()
   const isMobile = infix < Infix.md
 
@@ -30,4 +30,4 @@ const LayoutNavigate = ({ gap = 0, style, children }: LayoutNavigateProps) => {
   )
 }
 
-export default LayoutNavigate
+export default SentreLayout

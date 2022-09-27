@@ -11,9 +11,9 @@ import Marketplace from 'view/marketplace'
 import Watcher from 'view/watcher'
 import Installer from 'view/installer'
 import SideBar from './sidebar'
-import LayoutNavigate from 'components/LayoutNavigate'
-import NavigateBody from 'components/LayoutNavigate/navigateBody'
-import NavigateSidebar from 'components/LayoutNavigate/navigateSidebar'
+import SentreLayout from 'components/sentreLayout'
+import LayoutBody from 'components/sentreLayout/layoutBody'
+import LayoutSideBar from 'components/sentreLayout/layoutSidebar'
 
 import {
   useRootSelector,
@@ -77,11 +77,11 @@ const View = () => {
   return (
     <Layout>
       {/* Body */}
-      <LayoutNavigate>
-        <NavigateSidebar>
+      <SentreLayout>
+        <LayoutSideBar>
           <SideBar />
-        </NavigateSidebar>
-        <NavigateBody>
+        </LayoutSideBar>
+        <LayoutBody>
           <Switch>
             <Route exact path="/welcome" component={Welcome} />
             {/* DApp Store */}
@@ -97,8 +97,8 @@ const View = () => {
             <PrivateRoute exact path="/sync" component={Sync} />
             <Redirect from="*" to="/welcome" />
           </Switch>
-        </NavigateBody>
-      </LayoutNavigate>
+        </LayoutBody>
+      </SentreLayout>
 
       {/* In-Background Run Jobs */}
       <Loading />

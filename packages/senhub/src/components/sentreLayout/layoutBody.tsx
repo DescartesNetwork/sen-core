@@ -1,54 +1,49 @@
 import { CSSProperties, ReactNode, useMemo } from 'react'
 
+import { Col, Row } from 'antd'
+
 import { useInfix } from 'hooks/useUI'
 import { RootState, useRootSelector } from 'store'
 import { Infix } from 'store/ui.reducer'
 import { SIDEBAR_MIN_WIDTH, SIDEBAR_MAX_WIDTH } from './index'
 
-const SIDEBAR_STYLE_DEFAULT: CSSProperties = {
+const CONTENT_STYLE_DEFAULT: CSSProperties = {
   width: SIDEBAR_MIN_WIDTH,
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  zIndex: 99,
+  padding: 12,
 }
 
-type NavigateSidebarProps = {
+type LayoutBodyProps = {
   children?: ReactNode
   style?: CSSProperties
   sidebarMaxWidth?: number
   sidebarMinWidth?: number
 }
-const NavigateSidebar = ({
+const LayoutBody = ({
   children,
   sidebarMaxWidth = SIDEBAR_MAX_WIDTH,
   sidebarMinWidth = SIDEBAR_MIN_WIDTH,
   style,
-}: NavigateSidebarProps) => {
+}: LayoutBodyProps) => {
   const visibleNavigation = useRootSelector(
     (state: RootState) => state.ui.visibleNavigation,
   )
   const infix = useInfix()
   const isMobile = infix < Infix.md
+  // Navigation content style
+  const contentStyle = useMemo(() => {
+    const nextStyle = { ...CONTENT_STYLE_DEFAULT, width: '100%' }
+    const offsetSidebar = visibleNavigation ? sidebarMaxWidth : sidebarMinWidth
 
-  // Navigation sidebar style
-  const barStyle = useMemo(() => {
-    const nextStyle = {
-      ...SIDEBAR_STYLE_DEFAULT,
-    }
-    const width = visibleNavigation ? sidebarMaxWidth : sidebarMinWidth
-    const left = visibleNavigation ? 0 : -sidebarMinWidth
-    const position: CSSProperties['position'] = 'sticky'
-
-    if (isMobile) return { ...nextStyle, left }
-    return { ...nextStyle, position, width }
+    if (!isMobile) nextStyle.width = `calc(100vw - ${offsetSidebar}px)`
+    return nextStyle
   }, [isMobile, sidebarMaxWidth, sidebarMinWidth, visibleNavigation])
-
   return (
-    <div className="sentre-sidebar" style={{ ...barStyle, ...style }}>
-      {children}
+    <div className="sentre-body" style={{ ...contentStyle, ...style }}>
+      <Row gutter={[24, 24]}>
+        <Col span={24}>{children}</Col>
+      </Row>
     </div>
   )
 }
 
-export default NavigateSidebar
+export default LayoutBody
