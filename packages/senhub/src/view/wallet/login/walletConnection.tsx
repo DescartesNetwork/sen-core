@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Row, Col, Tooltip, Switch, Typography, Divider, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -16,33 +16,38 @@ import Exodus from './exodus'
 import { env } from 'shared/runtime'
 import NetSwitch from 'view/actionCenter/settings/network/netSwitch'
 
+const LIST_WALLET = [
+  { key: 'coin98', component: Coin98, priority: 1 },
+  { key: 'phantom', component: Phantom, priority: 2 },
+  { key: 'exodus', component: Exodus, priority: 3 },
+  { key: 'clover_solana', component: CloverWallet, priority: 4 },
+  { key: 'solflare', component: SolflareExtension, priority: 5 },
+  { key: 'solflareWeb', component: SolflareWeb, priority: 6 },
+  { key: 'solletWeb', component: SolletWeb, priority: 7 },
+  { key: 'Slope', component: Slope, priority: 8 },
+]
+
 const SecureMethods = () => {
+  const sortedWallet = useMemo(
+    () =>
+      LIST_WALLET.sort((a: any, b: any) => {
+        if (window?.[a.key] && !window?.[b.key]) return -1
+        if (!window?.[a.key] && window?.[b.key]) return 1
+        return a.priority - b.priority
+      }),
+    [],
+  )
+
   return (
     <Row gutter={[12, 12]}>
-      <Col span={24}>
-        <Coin98 />
-      </Col>
-      <Col span={24}>
-        <Phantom />
-      </Col>
-      <Col span={24}>
-        <Exodus />
-      </Col>
-      <Col span={24}>
-        <CloverWallet />
-      </Col>
-      <Col span={24}>
-        <SolflareExtension />
-      </Col>
-      <Col span={24}>
-        <SolflareWeb />
-      </Col>
-      <Col span={24}>
-        <SolletWeb />
-      </Col>
-      <Col span={24}>
-        <Slope />
-      </Col>
+      {sortedWallet.map((wallet) => {
+        const WalletComponent = wallet.component
+        return (
+          <Col span={24} key={wallet.key}>
+            <WalletComponent />
+          </Col>
+        )
+      })}
     </Row>
   )
 }
