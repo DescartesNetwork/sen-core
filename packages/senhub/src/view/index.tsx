@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { Layout } from 'antd'
@@ -11,6 +11,7 @@ import Marketplace from 'view/marketplace'
 import Watcher from 'view/watcher'
 import Installer from 'view/installer'
 import SideBar from './sidebar'
+import LayoutNavigation from 'components/layoutNavigation'
 
 import {
   useRootSelector,
@@ -27,34 +28,19 @@ import {
 } from 'store/flags.reducer'
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
-import { useInfix, useTheme } from 'hooks/useUI'
+import { useTheme } from 'hooks/useUI'
 import { login } from 'store/user.reducer'
-import { Infix } from 'store/ui.reducer'
 
 import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
 import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
-import './index.os.less'
 
 const View = () => {
   const theme = useTheme()
   const background = useRootSelector((state: RootState) => state.ui.background)
-  const visibleNavigation = useRootSelector(
-    (state: RootState) => state.ui.visibleNavigation,
-  )
   const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
-  const infix = useInfix()
-
-  const isMobile = infix < Infix.md
-  const containerCln = !isMobile
-    ? 'sentre-container sticky-menu'
-    : 'sentre-container fixed-menu'
-  const colBodyCln = useMemo(() => {
-    if (isMobile) return 'sentre-body-mobile'
-    return visibleNavigation ? 'sentre-body navigation-actived' : 'sentre-body'
-  }, [isMobile, visibleNavigation])
 
   // Load DApp flags, registry, page
   useEffect(() => {
@@ -89,28 +75,24 @@ const View = () => {
   return (
     <Layout>
       {/* Body */}
-      {/* <Layout style={{ padding: '24px 12px 0px 12px' }}> */}
-      <Layout style={{ overflow: 'hidden' }}>
-        <div className={containerCln}>
-          <SideBar />
-          <div className={colBodyCln} style={{ padding: '0px 12px' }}>
-            <Switch>
-              <Route exact path="/welcome" component={Welcome} />
-              {/* DApp Store */}
-              <Route exact path="/app/store/:appId?" component={Marketplace} />
-              <Route
-                path="/store"
-                render={({ location: { pathname, search } }) => (
-                  <Redirect to={{ pathname: `/app${pathname}`, search }} />
-                )}
-              />
-              {/* End App Store */}
-              <PrivateRoute path="/app/:appId" component={Page} />
-              <PrivateRoute exact path="/sync" component={Sync} />
-              <Redirect from="*" to="/welcome" />
-            </Switch>
-          </div>
-        </div>
+      <Layout>
+        <LayoutNavigation sidebar={<SideBar />}>
+          <Switch>
+            <Route exact path="/welcome" component={Welcome} />
+            {/* DApp Store */}
+            <Route exact path="/app/store/:appId?" component={Marketplace} />
+            <Route
+              path="/store"
+              render={({ location: { pathname, search } }) => (
+                <Redirect to={{ pathname: `/app${pathname}`, search }} />
+              )}
+            />
+            {/* End App Store */}
+            <PrivateRoute path="/app/:appId" component={Page} />
+            <PrivateRoute exact path="/sync" component={Sync} />
+            <Redirect from="*" to="/welcome" />
+          </Switch>
+        </LayoutNavigation>
       </Layout>
 
       {/* In-Background Run Jobs */}

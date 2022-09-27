@@ -10,7 +10,12 @@ type MoreProps = { size?: number; style?: CSSProperties; visible?: boolean }
 const More = ({ size = 32, style, visible = false }: MoreProps) => {
   const onGoToStore = useGoToStore()
 
-  const btnStyle = { minWidth: size, height: size, overflow: 'hidden' }
+  const btnStyle = {
+    minWidth: size,
+    height: size,
+    overflow: 'hidden',
+    background: 'transparent',
+  }
   return (
     <Button
       style={{ ...btnStyle, ...style }}

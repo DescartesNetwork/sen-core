@@ -24,21 +24,23 @@ const SideBar = () => {
 
   const isMobile = infix < Infix.md
   const brandDirection = visible && !isMobile ? 'horizontal' : 'vertical'
-  const defaultSideBarCln = isMobile
-    ? 'card-sidebar sb-mobile'
-    : 'card-sidebar sb-desk'
-  const sidebarCln = visible ? `${defaultSideBarCln} active` : defaultSideBarCln
-  const rowAlign = visible && !isMobile ? 'start' : 'center'
+  const rowAlign = visible && !isMobile ? 'top' : 'middle'
 
   return (
-    <Card className={sidebarCln} bordered={false}>
+    <Card className="card-sidebar" bordered={false}>
       <Row className="wrapper-sidebar" gutter={[0, 24]}>
-        <Col>
-          <Row gutter={[24, 28]} justify={rowAlign}>
+        {/* flex="auto" <=> flex: 1 1 auto, don't need flex-basic: auto,
+        flex-shark: 1 & flex-grow: 1 enough to full height follow content */}
+        <Col style={{ flex: '1 1' }}>
+          <Row
+            gutter={[24, 28]}
+            style={{ flexFlow: 'column', height: '100%' }}
+            align={rowAlign}
+          >
             <Col>
               <Brand direction={brandDirection} />
             </Col>
-            <Col span={24}>
+            <Col>
               <Navigation isMobile={isMobile} />
             </Col>
           </Row>
