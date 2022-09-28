@@ -25,7 +25,7 @@ const System = ({ isMobile = false }: SystemProps) => {
   }, [isMobile, visible])
 
   return (
-    <Row gutter={[12, 12]} style={{ flexFlow: 'column' }} align={rowAlign}>
+    <Row style={{ flexFlow: 'column' }} align={rowAlign}>
       {isAddress(walletAddress) && (
         <Col>
           <AppSettings visible={nextVisible} />
@@ -35,7 +35,7 @@ const System = ({ isMobile = false }: SystemProps) => {
         <Nofitications visible={nextVisible} />
       </Col>
       <Col>
-        <Divider style={{ margin: 0 }} type="horizontal" />
+        <Divider style={{ margin: '8px 0', minWidth: 48 }} type="horizontal" />
       </Col>
       <Col>
         <SenMarket isMobile={isMobile} />

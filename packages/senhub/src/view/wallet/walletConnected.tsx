@@ -16,7 +16,11 @@ const WalletConnected = ({
   return (
     <Card
       bordered={false}
-      style={{ background: 'transparent', borderRadius: 12 }}
+      style={{
+        background: 'transparent',
+        borderRadius: 12,
+        boxShadow: 'unset',
+      }}
       bodyStyle={{ padding: 8 }}
     >
       <Row gutter={[12, 12]} align="middle" wrap={false}>
