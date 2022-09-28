@@ -30,6 +30,13 @@ export const useTheme = () => {
   return theme
 }
 
+export const useVisibleNavigation = () => {
+  const visibleNavigation = useRootSelector(
+    (state: RootState) => state.ui.visibleNavigation,
+  )
+  return visibleNavigation
+}
+
 export const useSetBackground = () => {
   const dispatch = useRootDispatch<RootDispatch>()
   const prevBackground = useRootSelector(
