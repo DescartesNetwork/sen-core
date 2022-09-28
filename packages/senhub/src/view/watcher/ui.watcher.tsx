@@ -33,7 +33,8 @@ const UIWatcher = () => {
 
   // Listen window events
   useEffect(() => {
-    window.onresize = () => dispatch(resize())
+    window.addEventListener('resize', () => dispatch(resize()))
+    return () => window.removeEventListener('resize', () => dispatch(resize()))
   }, [dispatch])
 
   return (
