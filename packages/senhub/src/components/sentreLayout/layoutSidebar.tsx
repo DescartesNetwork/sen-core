@@ -10,7 +10,7 @@ const SIDEBAR_STYLE_DEFAULT: CSSProperties = {
   position: 'fixed',
   top: 0,
   left: 0,
-  zIndex: 99,
+  zIndex: 999,
 }
 
 type LayoutSideBarProps = {
@@ -28,6 +28,9 @@ const LayoutSideBar = ({
   const visibleNavigation = useRootSelector(
     (state: RootState) => state.ui.visibleNavigation,
   )
+  const sidebarPosition = useRootSelector(
+    (state: RootState) => state.ui.sidebarPosition,
+  )
   const infix = useInfix()
   const isMobile = infix < Infix.md
 
@@ -37,12 +40,18 @@ const LayoutSideBar = ({
       ...SIDEBAR_STYLE_DEFAULT,
     }
     const width = visibleNavigation ? sidebarMaxWidth : sidebarMinWidth
-    const left = visibleNavigation ? 0 : -sidebarMinWidth
+    const translate = visibleNavigation ? 0 : -sidebarMinWidth
     const position: CSSProperties['position'] = 'sticky'
 
-    if (isMobile) return { ...nextStyle, left }
+    if (isMobile) return { ...nextStyle, [sidebarPosition]: translate }
     return { ...nextStyle, position, width }
-  }, [isMobile, sidebarMaxWidth, sidebarMinWidth, visibleNavigation])
+  }, [
+    isMobile,
+    sidebarMaxWidth,
+    sidebarMinWidth,
+    sidebarPosition,
+    visibleNavigation,
+  ])
 
   return (
     <div className="sentre-sidebar" style={{ ...barStyle, ...style }}>

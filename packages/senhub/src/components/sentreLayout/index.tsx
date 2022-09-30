@@ -2,6 +2,7 @@ import { CSSProperties, ReactNode } from 'react'
 
 import { useInfix } from 'hooks/useUI'
 import { Infix } from 'store/ui.reducer'
+import { RootState, useRootSelector } from 'store'
 
 import './index.os.less'
 
@@ -15,6 +16,9 @@ type SentreLayoutProps = {
   style?: CSSProperties
 }
 const SentreLayout = ({ gap = 0, style, children }: SentreLayoutProps) => {
+  const sidebarPosition = useRootSelector(
+    (state: RootState) => state.ui.sidebarPosition,
+  )
   const infix = useInfix()
   const isMobile = infix < Infix.md
 
@@ -22,9 +26,13 @@ const SentreLayout = ({ gap = 0, style, children }: SentreLayoutProps) => {
   const containerCln = !isMobile
     ? `${CONTAINER_CLN} sticky-menu`
     : CONTAINER_CLN
+  const positionCln = sidebarPosition === 'right' ? 'float-right' : undefined
 
   return (
-    <div className={containerCln} style={{ gap, ...style }}>
+    <div
+      className={[containerCln, positionCln].join(' ')}
+      style={{ gap, ...style }}
+    >
       {children}
     </div>
   )
