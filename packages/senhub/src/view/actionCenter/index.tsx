@@ -5,12 +5,7 @@ import IonIcon from '@sentre/antd-ionicon'
 import Applications from './applications'
 import Settings from './settings'
 
-import {
-  useRootDispatch,
-  useRootSelector,
-  RootDispatch,
-  RootState,
-} from 'store'
+import { useRootDispatch, RootDispatch } from 'store'
 import { setVisibleActionCenter } from 'store/ui.reducer'
 
 const items = [
@@ -38,9 +33,9 @@ const items = [
 
 const ActionCenter = () => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const visible = useRootSelector(
-    (state: RootState) => state.ui.visibleActionCenter,
-  )
+  // const visible = useRootSelector(
+  //   (state: RootState) => state.ui.visibleActionCenter,
+  // )
 
   const onActionCenter = useCallback(async () => {
     return dispatch(setVisibleActionCenter(true))
@@ -55,7 +50,7 @@ const ActionCenter = () => {
         id="button-action-center"
       />
       <Drawer
-        open={visible}
+        open={false}
         onClose={() => dispatch(setVisibleActionCenter(false))}
         closable={false}
         contentWrapperStyle={{ width: '95%', maxWidth: 400 }}
