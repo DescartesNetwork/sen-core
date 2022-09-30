@@ -1,8 +1,8 @@
 import { Fragment, useCallback } from 'react'
 
 import { Button, Card, Col, Drawer, Row, Typography } from 'antd'
-import WalletProfile from './components/walletProfile'
 import IonIcon from '@sentre/antd-ionicon'
+import WalletProfile from './components/walletProfile'
 import WalletInfo from './walletInfo'
 import Settings from './settings'
 
@@ -25,6 +25,9 @@ const ActionCenterV2 = ({ visibleNavigation }: ActionCenterV2Props) => {
   const visible = useRootSelector(
     (state: RootState) => state.ui.visibleActionCenter,
   )
+  const sidebarPosition = useRootSelector(
+    (state: RootState) => state.ui.sidebarPosition,
+  )
 
   const onActionCenter = useCallback(async () => {
     return dispatch(setVisibleActionCenter(true))
@@ -42,9 +45,9 @@ const ActionCenterV2 = ({ visibleNavigation }: ActionCenterV2Props) => {
         open={visible}
         onClose={() => dispatch(setVisibleActionCenter(false))}
         closable={false}
-        contentWrapperStyle={{ width: '95%', maxWidth: 352 }}
+        contentWrapperStyle={{ width: 378 }}
         destroyOnClose
-        placement="left"
+        placement={sidebarPosition}
       >
         <Row gutter={[24, 24]}>
           <Col span={24}>

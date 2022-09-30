@@ -4,6 +4,7 @@ import Network from './network'
 import Sync from './sync'
 import DeveloperMode from './developerMode'
 import Notification from './notification'
+import PositionSideBar from './positionSideBar'
 import Sandbox from './sandbox'
 
 import './index.os.less'
@@ -24,6 +25,9 @@ const Settings = () => {
           </Col>
           <Col span={24}>
             <Notification />
+          </Col>
+          <Col span={24}>
+            <PositionSideBar />
           </Col>
         </Row>
       </Col>

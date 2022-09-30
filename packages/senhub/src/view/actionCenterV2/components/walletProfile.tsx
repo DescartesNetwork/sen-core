@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
-import { Avatar, Button, Card, Col, Row, Space, Typography } from 'antd'
-import IonIcon from '@sentre/antd-ionicon'
+import { Avatar, Card, Col, Row, Space, Typography } from 'antd'
+import WalletAction from './walletAction'
 
 import { isAddress, shortenAddress } from 'shared/util'
 import storage from 'shared/storage'
@@ -27,7 +27,6 @@ const LOGO_WALLET: Record<string, string> = {
   Clover: CLOVER,
   Exodus: EXODUS,
 }
-const walletBtnStyle = { padding: 0, width: 'auto', height: 'auto' }
 
 type WalletProfileProps = {
   onOpenActionCenter?: () => void
@@ -72,22 +71,16 @@ const WalletProfile = ({
           <Col flex="auto">
             <Space direction="vertical" size={0}>
               <Space size={12}>
+                {/* wallet address info */}
                 <Space className={sideBar ? '' : 'wallet-address'}>
                   {!sideBar && <Avatar src={walletLogo} size={20} />}
                   <Typography.Text style={{ fontWeight: 600 }}>
                     {shortenAddress(walletAddress)}
                   </Typography.Text>
                 </Space>
-                <Button
-                  type="text"
-                  style={walletBtnStyle}
-                  icon={<IonIcon name="copy-outline" />}
-                />
-                <Button
-                  type="text"
-                  style={walletBtnStyle}
-                  icon={<IonIcon name="qr-code-outline" />}
-                />
+
+                {/* action */}
+                <WalletAction />
               </Space>
               <Typography.Text style={{ color: '#F9575E' }}>
                 Name

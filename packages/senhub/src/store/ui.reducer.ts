@@ -117,8 +117,8 @@ export const setVisibleNagivation = createAsyncThunk(
 
 export const setSidebarPosition = createAsyncThunk(
   `${NAME}/setSidebarPosition`,
-  async (positionSideBar: SidebarPosition) => {
-    return { positionSideBar }
+  async (sidebarPosition: SidebarPosition) => {
+    return { sidebarPosition }
   },
 )
 
