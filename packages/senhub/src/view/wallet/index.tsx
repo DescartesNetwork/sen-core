@@ -3,6 +3,7 @@ import { CSSProperties, Fragment, useCallback, useEffect } from 'react'
 import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Login from './login'
+import ActionCenterV2 from 'view/actionCenterV2'
 
 import {
   useRootDispatch,
@@ -13,12 +14,7 @@ import {
 import { useWalletAddress } from 'hooks/useWallet'
 import storage from 'shared/storage'
 import { isAddress } from 'shared/util'
-import {
-  connectWallet,
-  openWallet,
-  disconnectWallet,
-} from 'store/wallet.reducer'
-import { logout } from 'store/user.reducer'
+import { connectWallet, openWallet } from 'store/wallet.reducer'
 import {
   Coin98Wallet,
   PhantomWallet,
@@ -30,7 +26,6 @@ import {
   CloverWallet,
   ExodusWallet,
 } from './lib'
-import WalletConnected from './walletConnected'
 import { useInfix } from 'hooks/useUI'
 import { Infix } from 'store/ui.reducer'
 
@@ -77,11 +72,6 @@ const Wallet = ({
     }
   }, [])
 
-  const disconnect = useCallback(async () => {
-    await dispatch(logout())
-    await dispatch(disconnectWallet())
-  }, [dispatch])
-
   useEffect(() => {
     if (isAddress(walletAddress)) return
     try {
@@ -93,7 +83,7 @@ const Wallet = ({
   }, [dispatch, reconnect, walletAddress])
 
   if (isAddress(walletAddress))
-    return <WalletConnected onDisconnect={disconnect} visible={visible} />
+    return <ActionCenterV2 visibleNavigation={visible} />
   return (
     <Fragment>
       <Button
