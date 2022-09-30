@@ -62,7 +62,7 @@ const initialState: UIState = {
     light: '',
     dark: '',
   },
-  sidebarPosition: 'right',
+  sidebarPosition: 'left',
 }
 
 /**
