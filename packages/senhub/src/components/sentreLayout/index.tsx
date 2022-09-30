@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from 'react'
+import { CSSProperties, ReactNode, useMemo } from 'react'
 
 import { useInfix } from 'hooks/useUI'
 import { Infix } from 'store/ui.reducer'
@@ -26,13 +26,16 @@ const SentreLayout = ({ gap = 0, style, children }: SentreLayoutProps) => {
   const containerCln = !isMobile
     ? `${CONTAINER_CLN} sticky-menu`
     : CONTAINER_CLN
-  const positionCln = sidebarPosition === 'right' ? 'float-right' : undefined
+  const positionCln = sidebarPosition === 'right' && 'float-right'
+
+  const concatCln = useMemo(() => {
+    const nextContainerCln = [containerCln]
+    if (positionCln) nextContainerCln.push(positionCln)
+    return nextContainerCln.join(' ')
+  }, [containerCln, positionCln])
 
   return (
-    <div
-      className={[containerCln, positionCln].join(' ')}
-      style={{ gap, ...style }}
-    >
+    <div className={concatCln} style={{ gap, ...style }}>
       {children}
     </div>
   )
