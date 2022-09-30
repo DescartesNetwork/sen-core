@@ -9,7 +9,6 @@ const SIDEBAR_STYLE_DEFAULT: CSSProperties = {
   width: SIDEBAR_MIN_WIDTH,
   position: 'fixed',
   top: 0,
-  left: 0,
   zIndex: 999,
 }
 
@@ -38,6 +37,7 @@ const LayoutSideBar = ({
   const barStyle = useMemo(() => {
     const nextStyle = {
       ...SIDEBAR_STYLE_DEFAULT,
+      [sidebarPosition]: 0,
     }
     const width = visibleNavigation ? sidebarMaxWidth : sidebarMinWidth
     const translate = visibleNavigation ? 0 : -sidebarMinWidth
