@@ -51,7 +51,7 @@ const ActionCenter = ({ visibleNavigation }: ActionCenterProps) => {
       >
         <Row gutter={[24, 24]}>
           <Col span={24}>
-            <Card className="center-header" bordered={false}>
+            <Card className="action-center" bordered={false}>
               <Row align="middle" gutter={[24, 24]}>
                 <Col flex="auto">
                   <Typography.Title style={{ color: '#F4F4F5' }} level={4}>

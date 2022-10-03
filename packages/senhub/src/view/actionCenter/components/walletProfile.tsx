@@ -14,6 +14,7 @@ import SLOPE from 'static/images/wallet/slope.svg'
 import COIN98 from 'static/images/wallet/coin98.png'
 import CLOVER from 'static/images/wallet/clover.png'
 import EXODUS from 'static/images/wallet/exodus.svg'
+import SENTRE from 'static/images/actionCenter/logo-sentre.svg'
 
 import './index.os.less'
 
@@ -46,7 +47,7 @@ const WalletProfile = ({
 
   const walletLogo = useMemo(() => {
     const walletType = storage.get('WalletType')
-    return LOGO_WALLET[walletType]
+    return LOGO_WALLET[walletType] || SENTRE
   }, [])
 
   return (
