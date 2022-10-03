@@ -3,9 +3,9 @@ import { useMemo } from 'react'
 import { Avatar, Card, Col, Row, Space, Typography } from 'antd'
 import WalletAction from './walletAction'
 
+import { useWalletAddress } from 'hooks/useWallet'
 import { isAddress, shortenAddress } from 'shared/util'
 import storage from 'shared/storage'
-import { useWalletAddress } from 'hooks/useWallet'
 
 import PHANTOM from 'static/images/wallet/phantom.png'
 import SOLFLARE from 'static/images/wallet/solflare.png'

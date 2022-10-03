@@ -3,7 +3,7 @@ import { CSSProperties, Fragment, useCallback, useEffect } from 'react'
 import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Login from './login'
-import ActionCenterV2 from 'view/actionCenterV2'
+import ActionCenter from 'view/actionCenter'
 
 import {
   useRootDispatch,
@@ -83,7 +83,7 @@ const Wallet = ({
   }, [dispatch, reconnect, walletAddress])
 
   if (isAddress(walletAddress))
-    return <ActionCenterV2 visibleNavigation={visible} />
+    return <ActionCenter visibleNavigation={visible} />
   return (
     <Fragment>
       <Button

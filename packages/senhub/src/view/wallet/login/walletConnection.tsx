@@ -12,9 +12,9 @@ import KeyStore from './keystore'
 import SecretKey from './secretKey'
 import CloverWallet from './clover'
 import Exodus from './exodus'
+import NetSwitch from 'view/actionCenter/settings/network/netSwitch'
 
 import { env } from 'shared/runtime'
-import NetSwitch from 'view/actionCenter/settings/network/netSwitch'
 
 const LIST_WALLET = [
   { key: 'coin98', component: Coin98, priority: 1 },

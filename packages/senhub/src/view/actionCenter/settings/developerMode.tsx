@@ -18,35 +18,25 @@ const DeveloperMode = () => {
   const onSwitch = (checked: boolean) => dispatch(updateDeveloperMode(checked))
 
   return (
-    <Card bodyStyle={{ padding: 16 }} hoverable bordered={false}>
-      <Row gutter={[18, 18]}>
-        <Col span={24}>
-          <Row gutter={[8, 8]} wrap={false} align="middle">
-            <Col flex="auto">
-              <IonIcon name="bug-outline" />
-            </Col>
-            <Col>
-              <Switch
-                size="small"
-                checked={developerMode}
-                onChange={onSwitch}
-              />
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24}>
-          <Space direction="vertical" size={0}>
-            <Typography.Text style={{ textTransform: 'capitalize' }}>
-              Developer Mode
-            </Typography.Text>
-            <Typography.Paragraph
-              type="secondary"
-              style={{ fontSize: 12, margin: 0 }}
-            >
-              Unverified DApps may harm your device. If you ain't a dev, disable
-              it.
-            </Typography.Paragraph>
+    <Card className="card-setting" hoverable bordered={false}>
+      <Row align="middle">
+        <Col flex="auto">
+          <Space size={12}>
+            <IonIcon
+              style={{ color: '#F9575E', background: 'rgba(249, 87, 94, 0.1)' }}
+              className="theme-icon"
+              name="bug-outline"
+            />
+            <Space size={0} direction="vertical">
+              <Typography.Text>Developer mode</Typography.Text>
+              <Typography.Text type="secondary" className="caption">
+                Show unverified apps.
+              </Typography.Text>
+            </Space>
           </Space>
+        </Col>
+        <Col>
+          <Switch size="default" checked={developerMode} onChange={onSwitch} />
         </Col>
       </Row>
     </Card>

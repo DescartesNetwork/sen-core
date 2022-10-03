@@ -1,41 +1,33 @@
 import { Fragment, useCallback } from 'react'
 
-import { Row, Col, Drawer, Button, Tabs } from 'antd'
+import { Button, Card, Col, Drawer, Row, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import Applications from './applications'
+import WalletProfile from './components/walletProfile'
+import WalletInfo from './walletInfo'
 import Settings from './settings'
 
-import { useRootDispatch, RootDispatch } from 'store'
+import {
+  RootDispatch,
+  RootState,
+  useRootDispatch,
+  useRootSelector,
+} from 'store'
 import { setVisibleActionCenter } from 'store/ui.reducer'
 
-const items = [
-  {
-    label: (
-      <span>
-        <IonIcon name="grid-outline" />
-        Apps
-      </span>
-    ),
-    key: 'applications',
-    children: <Applications />,
-  },
-  {
-    label: (
-      <span>
-        <IonIcon name="settings-outline" />
-        Settings
-      </span>
-    ),
-    key: 'system-settings',
-    children: <Settings />,
-  },
-]
+import './index.os.less'
 
-const ActionCenter = () => {
+type ActionCenterProps = {
+  visibleNavigation: boolean
+}
+
+const ActionCenter = ({ visibleNavigation }: ActionCenterProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
-  // const visible = useRootSelector(
-  //   (state: RootState) => state.ui.visibleActionCenter,
-  // )
+  const visible = useRootSelector(
+    (state: RootState) => state.ui.visibleActionCenter,
+  )
+  const sidebarPosition = useRootSelector(
+    (state: RootState) => state.ui.sidebarPosition,
+  )
 
   const onActionCenter = useCallback(async () => {
     return dispatch(setVisibleActionCenter(true))
@@ -43,38 +35,50 @@ const ActionCenter = () => {
 
   return (
     <Fragment>
-      <Button
-        type="text"
-        icon={<IonIcon name="menu" style={{ fontSize: 20 }} />}
-        onClick={onActionCenter}
-        id="button-action-center"
+      <WalletProfile
+        padding={8}
+        visible={visibleNavigation}
+        onOpenActionCenter={onActionCenter}
       />
+
       <Drawer
-        open={false}
+        open={visible}
         onClose={() => dispatch(setVisibleActionCenter(false))}
         closable={false}
-        contentWrapperStyle={{ width: '95%', maxWidth: 400 }}
+        contentWrapperStyle={{ width: 378 }}
         destroyOnClose
+        placement={sidebarPosition}
       >
-        <Row gutter={[16, 16]} style={{ marginTop: -16 }}>
+        <Row gutter={[24, 24]}>
           <Col span={24}>
-            <Tabs
-              style={{ overflow: 'visible' }}
-              tabBarExtraContent={
-                <Button
-                  type="text"
-                  icon={<IonIcon name="close" />}
-                  onClick={() => dispatch(setVisibleActionCenter(false))}
-                />
-              }
-              items={items}
-              destroyInactiveTabPane
-            />
+            <Card className="center-header" bordered={false}>
+              <Row align="middle" gutter={[24, 24]}>
+                <Col flex="auto">
+                  <Typography.Title style={{ color: '#F4F4F5' }} level={4}>
+                    Account
+                  </Typography.Title>
+                </Col>
+                <Col>
+                  <Button
+                    type="text"
+                    size="large"
+                    icon={<IonIcon name="close" />}
+                    style={{ color: '#F4F4F5' }}
+                    onClick={() => dispatch(setVisibleActionCenter(false))}
+                  />
+                </Col>
+                <Col span={24}>
+                  <WalletInfo />
+                </Col>
+                <Col span={24}>
+                  <Settings />
+                </Col>
+              </Row>
+            </Card>
           </Col>
         </Row>
       </Drawer>
     </Fragment>
   )
 }
-
 export default ActionCenter
