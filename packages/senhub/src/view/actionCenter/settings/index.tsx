@@ -1,27 +1,49 @@
-import { Row, Col } from 'antd'
+import { Col, Row, Typography } from 'antd'
 import Theme from './theme'
 import Network from './network'
 import Sync from './sync'
-import DeveloperMode from './developerMode'
 import Sandbox from './sandbox'
+import DeveloperMode from './developerMode'
+import Notification from './notification'
+import PositionSideBar from './positionSideBar'
+
+import './index.os.less'
 
 const Settings = () => {
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={12}>
-        <Theme />
-      </Col>
-      <Col span={12}>
-        <DeveloperMode />
+    <Row gutter={[12, 12]}>
+      <Col span={24}>
+        <Typography.Title level={5}>Settings</Typography.Title>
       </Col>
       <Col span={24}>
-        <Network />
+        <Row gutter={[8, 8]}>
+          <Col span={24}>
+            <Theme />
+          </Col>
+          <Col span={24}>
+            <DeveloperMode />
+          </Col>
+          <Col span={24}>
+            <Notification />
+          </Col>
+          <Col span={24}>
+            <PositionSideBar />
+          </Col>
+        </Row>
       </Col>
-      <Col span={12}>
-        <Sandbox />
-      </Col>
-      <Col span={12}>
-        <Sync />
+      <Col span={24} /> {/** Safe place */}
+      <Col span={24}>
+        <Row gutter={[8, 8]}>
+          <Col span={24}>
+            <Network />
+          </Col>
+          <Col span={24}>
+            <Sync />
+          </Col>
+          <Col span={24}>
+            <Sandbox />
+          </Col>
+        </Row>
       </Col>
     </Row>
   )

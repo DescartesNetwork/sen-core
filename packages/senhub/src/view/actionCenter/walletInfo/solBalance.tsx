@@ -1,18 +1,10 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { utils } from '@senswap/sen-js'
 
-import { Skeleton } from 'antd'
-
 import { useRootSelector, RootState } from 'store'
 import { numeric, fetchCGK } from 'shared/util'
 
-const Balance = ({
-  hidden = false,
-  inUSD = false,
-}: {
-  hidden?: boolean
-  inUSD?: boolean
-}) => {
+const SolBalance = ({ inUSD = false }: { inUSD?: boolean }) => {
   const [cgkData, setCGKData] = useState<CgkData>()
   const lamports = useRootSelector((state: RootState) => state.wallet.lamports)
 
@@ -30,15 +22,7 @@ const Balance = ({
     getCGKData()
   }, [getCGKData])
 
-  return hidden ? (
-    <Skeleton.Input
-      style={{ width: inUSD ? 128 : 56, borderRadius: 4 }}
-      size="small"
-      active
-    />
-  ) : (
-    <span>{inUSD ? `$${usd}` : balance}</span>
-  )
+  return <span>{inUSD ? `$${usd}` : balance}</span>
 }
 
-export default Balance
+export default SolBalance

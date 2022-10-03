@@ -33,11 +33,11 @@ const SideBar = () => {
         flex-shark: 1 & flex-grow: 1 enough to full height follow content */}
         <Col style={{ flex: '1 1' }}>
           <Row
-            gutter={[24, 28]}
+            gutter={[8, 8]}
             style={{ flexFlow: 'column', height: '100%' }}
             align={rowAlign}
           >
-            <Col>
+            <Col style={{ paddingTop: 20, paddingBottom: 20 }}>
               <Brand direction={brandDirection} />
             </Col>
             <Col>
