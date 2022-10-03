@@ -56,10 +56,10 @@ const WalletProfile = ({
         background: 'transparent',
         borderRadius: 12,
         boxShadow: 'unset',
-        cursor: 'pointer',
       }}
       bodyStyle={{ padding }}
       onClick={onOpenActionCenter}
+      className={sideBar ? 'hoverable' : ''}
     >
       <Row gutter={[12, 12]} align="middle" wrap={false}>
         <Col>
