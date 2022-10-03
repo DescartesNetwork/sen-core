@@ -2,8 +2,8 @@ import IonIcon from '@sentre/antd-ionicon'
 import { MenuSystemItem } from '../index'
 import MenuItem from '../components/menuItem'
 
-type NofiticationsProps = { visible?: boolean }
-const Nofitications = ({ visible }: NofiticationsProps) => {
+type NotificationsProps = { visible?: boolean }
+const Notifications = ({ visible }: NotificationsProps) => {
   return (
     <MenuItem
       icon={<IonIcon name="notifications-outline" />}
@@ -16,4 +16,4 @@ const Nofitications = ({ visible }: NofiticationsProps) => {
   )
 }
 
-export default Nofitications
+export default Notifications

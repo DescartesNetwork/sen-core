@@ -1,6 +1,6 @@
 import { Fragment, useMemo } from 'react'
 
-import { Row, Col } from 'antd'
+import { Row, Col, Card } from 'antd'
 import AppList from './appList'
 import More from './more'
 
@@ -25,15 +25,15 @@ const Navigation = ({ isMobile = false }: NavigationProps) => {
 
   return (
     <Row gutter={[16, 16]} style={{ height: '100%' }} justify="center">
-      <Col
-        span={24}
-        style={{ maxHeight: 'calc(100% - 48px' }}
-        className="scrollbar"
-      >
+      <Col span={moreSpan} style={{ maxHeight: '100%' }} className="scrollbar">
         <AppList visible={nextVisible} />
-      </Col>
-      <Col span={moreSpan}>
-        <More visible={nextVisible} />
+        <Card
+          bordered={false}
+          style={{ boxShadow: 'unset', background: 'transparent' }}
+          bodyStyle={{ padding: 8 }}
+        >
+          <More visible={nextVisible} />
+        </Card>
       </Col>
     </Row>
   )

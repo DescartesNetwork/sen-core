@@ -1,4 +1,4 @@
-import { Row, Col, Switch, Typography, Card, Space } from 'antd'
+import { Row, Col, Switch, Card, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import {
@@ -17,38 +17,29 @@ const Theme = () => {
     dispatch(setTheme(checked ? 'dark' : 'light'))
 
   return (
-    <Card bodyStyle={{ padding: 16 }} hoverable bordered={false}>
-      <Row gutter={[18, 18]}>
-        <Col span={24}>
-          <Row gutter={[8, 8]} wrap={false} align="middle">
-            <Col flex="auto">
-              <IonIcon
-                name={theme === 'dark' ? 'moon-outline' : 'sunny-outline'}
-              />
-            </Col>
-            <Col>
-              <Switch
-                size="small"
-                checked={theme === 'dark'}
-                onChange={onSwitch}
-              />
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24}>
-          <Space direction="vertical" size={0}>
-            <Typography.Text style={{ textTransform: 'capitalize' }}>
-              {theme} Mode
-            </Typography.Text>
-            <Typography.Paragraph
-              type="secondary"
-              style={{ fontSize: 12, margin: 0 }}
-            >
-              {theme === 'dark'
-                ? "Prolong your device's battery life, and reduce eye strain."
-                : "Make graphics smoother, but may decrease your device's battery life."}
-            </Typography.Paragraph>
+    <Card className="card-setting" hoverable bordered={false}>
+      <Row align="middle">
+        <Col flex="auto">
+          <Space size={12}>
+            <IonIcon
+              style={{ color: '#7398f0' }}
+              className="theme-icon"
+              name="moon-outline"
+            />
+            <Space size={0} direction="vertical">
+              <Typography.Text>Dark mode</Typography.Text>
+              <Typography.Text type="secondary" className="caption">
+                Reduce eye strain.
+              </Typography.Text>
+            </Space>
           </Space>
+        </Col>
+        <Col>
+          <Switch
+            size="default"
+            checked={theme === 'dark'}
+            onChange={onSwitch}
+          />
         </Col>
       </Row>
     </Card>

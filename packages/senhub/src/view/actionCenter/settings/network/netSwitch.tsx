@@ -4,7 +4,12 @@ import { net, onSwitchNetwork } from 'shared/runtime'
 
 const NetSwitch = () => {
   return (
-    <Select defaultValue={net} onChange={onSwitchNetwork} size="small">
+    <Select
+      defaultValue={net}
+      onChange={onSwitchNetwork}
+      size="small"
+      className="network"
+    >
       <Select.Option value="devnet">Devnet</Select.Option>
       <Select.Option value="testnet" disabled>
         Testnet

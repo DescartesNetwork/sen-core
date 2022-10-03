@@ -1,4 +1,4 @@
-import { Row, Col, Card, Typography, Upload } from 'antd'
+import { Row, Col, Card, Typography, Upload, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { useRootDispatch, RootDispatch } from 'store'
@@ -36,13 +36,20 @@ const Sandbox = () => {
   }
 
   return (
-    <Card bodyStyle={{ padding: 16 }} hoverable bordered={false}>
-      <Row gutter={[16, 16]}>
-        <Col flex="auto">
-          <Typography.Text>Sandbox</Typography.Text>
-        </Col>
-        <Col>
-          <IonIcon name="flask-outline" />
+    <Card className="card-setting" hoverable bordered={false}>
+      <Row gutter={[12, 12]}>
+        <Col span={24}>
+          <Space size={12}>
+            <IonIcon
+              style={{
+                color: '#56CC08',
+                background: 'rgba(86, 204, 8, 0.1)',
+              }}
+              className="theme-icon"
+              name="flask-outline"
+            />
+            <Typography.Text>Sandbox</Typography.Text>
+          </Space>
         </Col>
         <Col span={24}>
           <Upload.Dragger
@@ -50,10 +57,11 @@ const Sandbox = () => {
             beforeUpload={upload}
             maxCount={1}
             itemRender={() => null}
+            className="sandbox"
           >
             <Row gutter={[16, 16]}>
               <Col span="24">
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                <Typography.Text type="secondary" className="caption">
                   Drop the DApp's manifest here
                 </Typography.Text>
               </Col>
