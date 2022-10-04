@@ -15,6 +15,7 @@ import {
 } from 'store'
 import { AccountData } from 'store/accounts.reducer'
 import { upsetUser } from 'store/user.reducer'
+import { net } from 'shared/runtime'
 
 type WalletAvatarProps = {
   avatarSize?: number
@@ -32,14 +33,12 @@ const WalletAvatar = ({ avatarSize = 32 }: WalletAvatarProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
 
   const fetchAvatar = useCallback(async () => {
-    if (nftAddress === '') return
+    if (nftAddress === '' || net === 'devnet') return
     try {
       setLoading(true)
       const metaplex = new MetaplexProvider()
-      if (nftAddress) {
-        const tokenInfo = await metaplex.findByAddress(nftAddress)
-        return setAvatar(tokenInfo?.logoURI || '')
-      }
+      const tokenInfo = await metaplex.findByAddress(nftAddress)
+      if (tokenInfo && tokenInfo.logoURI) return setAvatar(tokenInfo.logoURI)
 
       const filteredAccount: AccountData[] = []
       for (const address in accounts) {
