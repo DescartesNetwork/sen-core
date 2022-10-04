@@ -2,7 +2,7 @@ import { Fragment, useCallback } from 'react'
 
 import { Button, Card, Col, Drawer, Row, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import WalletProfile from './components/walletProfile'
+import WalletProfile from './walletProfile'
 import WalletInfo from './walletInfo'
 import Settings from './settings'
 

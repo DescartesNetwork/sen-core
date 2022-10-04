@@ -2,9 +2,11 @@ import { useMemo } from 'react'
 
 import { Avatar, Card, Col, Row, Space, Typography } from 'antd'
 import WalletAction from './walletAction'
+import WalletName from './walletName'
+import WalletAvatar from './walletAvatar'
 
 import { useWalletAddress } from 'hooks/useWallet'
-import { isAddress, shortenAddress } from 'shared/util'
+import { shortenAddress } from 'shared/util'
 import storage from 'shared/storage'
 
 import PHANTOM from 'static/images/wallet/phantom.png'
@@ -63,10 +65,8 @@ const WalletProfile = ({
       className={sideBar ? 'hoverable' : ''}
     >
       <Row gutter={[12, 12]} align="middle" wrap={false}>
-        <Col>
-          <Avatar size={avatarSize}>
-            {isAddress(walletAddress) && walletAddress.substring(0, 2)}
-          </Avatar>
+        <Col className="avatar">
+          <WalletAvatar avatarSize={avatarSize} />
         </Col>
         {visible && (
           <Col flex="auto">
@@ -83,9 +83,7 @@ const WalletProfile = ({
                 {/* action */}
                 <WalletAction />
               </Space>
-              <Typography.Text style={{ color: '#F9575E' }}>
-                Name
-              </Typography.Text>
+              <WalletName />
             </Space>
           </Col>
         )}
