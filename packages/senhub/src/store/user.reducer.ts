@@ -126,11 +126,12 @@ export const upsetUser = createAsyncThunk<
   { state: any }
 >(`${NAME}/upsetUser`, async (user, { getState }) => {
   const { user: prevUser } = getState()
-  const data = { user: { ...prevUser, ...user } }
+  const data = { ...prevUser, ...user }
   const { data: newUser } = await axios.post(api.user.index, data, {
     withCredentials: true,
   })
-  return newUser
+
+  return { ...newUser }
 })
 
 export const deleteUser = createAsyncThunk(`${NAME}/deleteUser`, async () => {

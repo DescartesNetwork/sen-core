@@ -3,6 +3,12 @@ import { Net, rpc } from 'shared/runtime'
 const SOLVARS = {
   spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
   splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+
+  // SNS
+  snsProgramId: 'namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX',
+  hashPrefix: 'SPL Name Service',
+  reverseLookupClass: '33m47vH6Eav6jr5Ry86XjhRft2jRBLDnDgPSHoquXi2Z',
+  rootDomainAccount: '58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx',
 }
 
 /**

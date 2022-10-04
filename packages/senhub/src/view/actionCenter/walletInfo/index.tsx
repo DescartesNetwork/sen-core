@@ -11,7 +11,7 @@ import {
   Skeleton,
 } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import WalletProfile from '../components/walletProfile'
+import WalletProfile from '../walletProfile'
 import SolBalance from './solBalance'
 
 import { RootDispatch, useRootDispatch } from 'store'

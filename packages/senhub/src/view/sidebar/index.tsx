@@ -45,7 +45,7 @@ const SideBar = () => {
             </Col>
           </Row>
         </Col>
-        <Col>
+        <Col style={{ marginBottom: 24 }}>
           <System isMobile={isMobile} />
         </Col>
       </Row>

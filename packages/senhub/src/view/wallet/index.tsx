@@ -91,6 +91,7 @@ const Wallet = ({
         type="primary"
         icon={<IonIcon name="wallet-outline" />}
         onClick={() => dispatch(openWallet())}
+        block={!isMobile && visibleNavigation}
       >
         {!isMobile && visibleNavigation && 'Connect Wallet'}
       </Button>

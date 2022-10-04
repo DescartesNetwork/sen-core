@@ -103,7 +103,7 @@ const Network = () => {
             />
             <Space size={0} direction="vertical">
               <Typography.Text>Solana Network</Typography.Text>
-              <Space size={0}>
+              <Space size={4}>
                 <Badge status={parseType(networkStatus)} dot />
                 <Typography.Text className="caption" type="secondary">
                   {`${parseMessage(networkStatus)} connection`}
