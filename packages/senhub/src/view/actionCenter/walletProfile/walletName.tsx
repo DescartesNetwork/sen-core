@@ -11,8 +11,12 @@ import {
   useRootSelector,
 } from 'store'
 import { upsetUser } from 'store/user.reducer'
-import { NAME_PROGRAM_ID, ROOT_DOMAIN_ACCOUNT } from '../lib/sns/constants'
 import { performReverseLookup } from 'view/actionCenter/lib/sns/utils'
+import configs from 'configs'
+
+const {
+  sol: { rootDomainAccount, snsProgramId },
+} = configs
 
 const WalletName = () => {
   const [solName, setSolName] = useState('')
@@ -23,6 +27,7 @@ const WalletName = () => {
   const dispatch = useRootDispatch<RootDispatch>()
 
   const fetchDomainName = useCallback(async () => {
+    if (snsAddress === '') return
     if (snsAddress) {
       const name = await performReverseLookup(new web3.PublicKey(snsAddress))
       return setSolName(name)
@@ -38,12 +43,12 @@ const WalletName = () => {
       {
         memcmp: {
           offset: 0,
-          bytes: ROOT_DOMAIN_ACCOUNT,
+          bytes: rootDomainAccount,
         },
       },
     ]
     const accountKeys = await window.sentre.splt.connection.getProgramAccounts(
-      NAME_PROGRAM_ID,
+      new web3.PublicKey(snsProgramId),
       {
         commitment: 'confirmed',
         filters,

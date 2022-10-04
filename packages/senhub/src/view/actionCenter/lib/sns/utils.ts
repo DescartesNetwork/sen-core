@@ -1,11 +1,15 @@
 import { sha256 } from '@ethersproject/sha2'
 import { BN, web3 } from '@project-serum/anchor'
+import configs from 'configs'
 
 import { NameService } from './nameService'
-import { HASH_PREFIX, NAME_PROGRAM_ID, REVERSE_LOOKUP_CLASS } from './constants'
+
+const {
+  sol: { snsProgramId, hashPrefix, reverseLookupClass },
+} = configs
 
 export const getHashedName = async (name: string): Promise<Buffer> => {
-  const input = HASH_PREFIX + name
+  const input = hashPrefix + name
   const str = sha256(Buffer.from(input, 'utf8')).slice(2)
   return Buffer.from(str, 'hex')
 }
@@ -28,7 +32,7 @@ export const getNameAccountKey = async (
   }
   const [nameAccountKey] = await web3.PublicKey.findProgramAddress(
     seeds,
-    NAME_PROGRAM_ID,
+    new web3.PublicKey(snsProgramId),
   )
   return nameAccountKey
 }
@@ -39,7 +43,7 @@ export const performReverseLookup = async (
   const hashedReverseLookup = await getHashedName(nameAccount.toBase58())
   const reverseLookupAccount = await getNameAccountKey(
     hashedReverseLookup,
-    REVERSE_LOOKUP_CLASS,
+    new web3.PublicKey(reverseLookupClass),
   )
 
   const registry = await NameService.retrieve(reverseLookupAccount)
