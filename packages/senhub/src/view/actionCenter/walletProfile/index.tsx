@@ -72,15 +72,12 @@ const WalletProfile = ({
           <Col flex="auto">
             <Space direction="vertical" size={0}>
               <Space size={12}>
-                {/* wallet address info */}
                 <Space className={sideBar ? '' : 'wallet-address'}>
                   {!sideBar && <Avatar src={walletLogo} size={20} />}
                   <Typography.Text style={{ fontWeight: 600 }}>
-                    {shortenAddress(walletAddress)}
+                    {shortenAddress(walletAddress, 3)}
                   </Typography.Text>
                 </Space>
-
-                {/* action */}
                 <WalletAction />
               </Space>
               <WalletName />

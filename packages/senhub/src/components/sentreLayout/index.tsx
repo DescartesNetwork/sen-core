@@ -6,8 +6,8 @@ import { RootState, useRootSelector } from 'store'
 
 import './index.os.less'
 
-export const SIDEBAR_MAX_WIDTH = 230
-export const SIDEBAR_MIN_WIDTH = 80
+export const SIDEBAR_MAX_WIDTH = 214
+export const SIDEBAR_MIN_WIDTH = 64
 const CONTAINER_CLN = 'sentre-container'
 
 type SentreLayoutProps = {

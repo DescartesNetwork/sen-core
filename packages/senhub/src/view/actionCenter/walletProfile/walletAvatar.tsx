@@ -17,7 +17,7 @@ import { AccountData } from 'store/accounts.reducer'
 import { upsetUser } from 'store/user.reducer'
 import { net } from 'shared/runtime'
 
-type WalletAvatarProps = {
+export type WalletAvatarProps = {
   avatarSize?: number
 }
 
