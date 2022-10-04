@@ -13,6 +13,7 @@ import {
 import { upsetUser } from 'store/user.reducer'
 import { performReverseLookup } from 'view/actionCenter/lib/sns/utils'
 import configs from 'configs'
+import { net } from 'shared/runtime'
 
 const {
   sol: { rootDomainAccount, snsProgramId },
@@ -27,7 +28,7 @@ const WalletName = () => {
   const dispatch = useRootDispatch<RootDispatch>()
 
   const fetchDomainName = useCallback(async () => {
-    if (snsAddress === '') return
+    if (snsAddress === '' || net === 'devnet') return
     if (snsAddress) {
       const name = await performReverseLookup(new web3.PublicKey(snsAddress))
       return setSolName(name)
