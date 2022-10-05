@@ -11,7 +11,7 @@ import {
   useRootSelector,
 } from 'store'
 import { upsetUser } from 'store/user.reducer'
-import { performReverseLookup } from 'view/actionCenter/lib/sns/utils'
+import { performReverseLookup } from 'helper/sns/utils'
 import { net } from 'shared/runtime'
 import configs from 'configs'
 
