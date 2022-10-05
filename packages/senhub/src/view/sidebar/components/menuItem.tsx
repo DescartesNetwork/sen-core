@@ -29,11 +29,13 @@ const MenuItem = ({
         ...style,
         cursor: 'pointer',
       }}
-      onClick={() => onClick(value)}
+      // onClick={() => onClick(value)}
     >
-      <Typography.Text style={{ fontSize: 18 }}>{icon}</Typography.Text>
+      <Typography.Text type="secondary" style={{ fontSize: 18 }}>
+        {icon}
+      </Typography.Text>
       {name && (
-        <Typography.Text style={{ fontWeight: 600 }}>
+        <Typography.Text type="secondary" style={{ fontWeight: 600 }}>
           {children || value}
         </Typography.Text>
       )}
