@@ -5,7 +5,6 @@ import { Layout } from 'antd'
 import PrivateRoute from 'components/privateRoute'
 import Welcome from 'view/welcome'
 import Page from 'view/page'
-import Sync from 'view/sync'
 import Loading from 'view/loading'
 import Marketplace from 'view/marketplace'
 import Watcher from 'view/watcher'
@@ -94,7 +93,6 @@ const View = () => {
             />
             {/* End App Store */}
             <PrivateRoute path="/app/:appId" component={Page} />
-            <PrivateRoute exact path="/sync" component={Sync} />
             <Redirect from="*" to="/welcome" />
           </Switch>
         </LayoutBody>

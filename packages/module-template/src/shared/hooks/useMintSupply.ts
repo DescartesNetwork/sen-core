@@ -2,8 +2,7 @@ import { useMintData } from '@sentre/senhub'
 import BN from 'bn.js'
 
 /**
- * Get token's total supply. This hook needs MintProvider for working.
- * MintProvider Ref: https://docs.sentre.io/senhub/development/providers/mint-provider
+ * Get token's total supply.
  * @param mintAddress Mint address
  * @returns Decimals
  */

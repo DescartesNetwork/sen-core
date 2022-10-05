@@ -9,7 +9,8 @@ import { RootState, useRootSelector } from 'store'
 
 const STORE_ID = 'store'
 
-type SenMarketProps = { isMobile?: boolean }
+export type SenMarketProps = { isMobile?: boolean }
+
 const SenMarket = ({ isMobile }: SenMarketProps) => {
   const visible = useRootSelector(
     (state: RootState) => state.ui.visibleNavigation,

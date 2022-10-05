@@ -29,13 +29,12 @@ import {
 import { useInfix } from 'hooks/useUI'
 import { Infix } from 'store/ui.reducer'
 
-const Wallet = ({
-  style = {},
-  visible = false,
-}: {
+export type WalletProps = {
   style?: CSSProperties
   visible?: boolean
-}) => {
+}
+
+const Wallet = ({ style = {}, visible = false }: WalletProps) => {
   const infix = useInfix()
   const isMobile = infix < Infix.md
   const dispatch = useRootDispatch<RootDispatch>()

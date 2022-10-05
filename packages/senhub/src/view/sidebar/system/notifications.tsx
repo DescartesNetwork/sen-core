@@ -2,7 +2,8 @@ import IonIcon from '@sentre/antd-ionicon'
 import { MenuSystemItem } from '../index'
 import MenuItem from '../components/menuItem'
 
-type NotificationsProps = { visible?: boolean }
+export type NotificationsProps = { visible?: boolean }
+
 const Notifications = ({ visible }: NotificationsProps) => {
   return (
     <MenuItem

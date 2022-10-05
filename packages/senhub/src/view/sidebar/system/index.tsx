@@ -10,7 +10,8 @@ import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 import { RootState, useRootSelector } from 'store'
 
-type SystemProps = { isMobile?: boolean }
+export type SystemProps = { isMobile?: boolean }
+
 const System = ({ isMobile = false }: SystemProps) => {
   const visible = useRootSelector(
     (state: RootState) => state.ui.visibleNavigation,

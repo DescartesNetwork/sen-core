@@ -1,7 +1,8 @@
 import { MenuSystemItem } from '../index'
 import MenuItem from '../components/menuItem'
 
-type AppSettingsProps = { visible?: boolean }
+export type AppSettingsProps = { visible?: boolean }
+
 const AppSettings = ({ visible }: AppSettingsProps) => {
   return (
     <MenuItem

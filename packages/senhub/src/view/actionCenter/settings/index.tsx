@@ -1,7 +1,6 @@
 import { Col, Row, Typography } from 'antd'
 import Theme from './theme'
 import Network from './network'
-import Sync from './sync'
 import Sandbox from './sandbox'
 import DeveloperMode from './developerMode'
 import Notification from './notification'
@@ -36,9 +35,6 @@ const Settings = () => {
         <Row gutter={[8, 8]}>
           <Col span={24}>
             <Network />
-          </Col>
-          <Col span={24}>
-            <Sync />
           </Col>
           <Col span={24}>
             <Sandbox />
