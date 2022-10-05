@@ -12,8 +12,8 @@ import {
 } from 'store'
 import { upsetUser } from 'store/user.reducer'
 import { performReverseLookup } from 'view/actionCenter/lib/sns/utils'
-import configs from 'configs'
 import { net } from 'shared/runtime'
+import configs from 'configs'
 
 const {
   sol: { rootDomainAccount, snsProgramId },
