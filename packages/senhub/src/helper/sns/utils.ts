@@ -1,8 +1,8 @@
-import { sha256 } from '@ethersproject/sha2'
+import { sha256 } from 'js-sha256'
 import { BN, web3 } from '@project-serum/anchor'
-import configs from 'configs'
 
 import { NameService } from './nameService'
+import configs from 'configs'
 
 const {
   sol: { snsProgramId, hashPrefix, reverseLookupClass },
@@ -10,7 +10,7 @@ const {
 
 export const getHashedName = async (name: string): Promise<Buffer> => {
   const input = hashPrefix + name
-  const str = sha256(Buffer.from(input, 'utf8')).slice(2)
+  const str = sha256(Buffer.from(input, 'utf8'))
   return Buffer.from(str, 'hex')
 }
 
