@@ -3,6 +3,7 @@ import { CSSProperties, Fragment, useCallback, useEffect } from 'react'
 import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Login from './login'
+import ActionCenter from 'view/actionCenter'
 
 import {
   useRootDispatch,
@@ -13,12 +14,7 @@ import {
 import { useWalletAddress } from 'hooks/useWallet'
 import storage from 'shared/storage'
 import { isAddress } from 'shared/util'
-import {
-  connectWallet,
-  openWallet,
-  disconnectWallet,
-} from 'store/wallet.reducer'
-import { logout } from 'store/user.reducer'
+import { connectWallet, openWallet } from 'store/wallet.reducer'
 import {
   Coin98Wallet,
   PhantomWallet,
@@ -30,17 +26,15 @@ import {
   CloverWallet,
   ExodusWallet,
 } from './lib'
-import WalletConnected from './walletConnected'
 import { useInfix } from 'hooks/useUI'
 import { Infix } from 'store/ui.reducer'
 
-const Wallet = ({
-  style = {},
-  visible = false,
-}: {
+export type WalletProps = {
   style?: CSSProperties
   visible?: boolean
-}) => {
+}
+
+const Wallet = ({ style = {}, visible = false }: WalletProps) => {
   const infix = useInfix()
   const isMobile = infix < Infix.md
   const dispatch = useRootDispatch<RootDispatch>()
@@ -77,11 +71,6 @@ const Wallet = ({
     }
   }, [])
 
-  const disconnect = useCallback(async () => {
-    await dispatch(logout())
-    await dispatch(disconnectWallet())
-  }, [dispatch])
-
   useEffect(() => {
     if (isAddress(walletAddress)) return
     try {
@@ -93,7 +82,7 @@ const Wallet = ({
   }, [dispatch, reconnect, walletAddress])
 
   if (isAddress(walletAddress))
-    return <WalletConnected onDisconnect={disconnect} visible={visible} />
+    return <ActionCenter visibleNavigation={visible} />
   return (
     <Fragment>
       <Button
@@ -101,6 +90,7 @@ const Wallet = ({
         type="primary"
         icon={<IonIcon name="wallet-outline" />}
         onClick={() => dispatch(openWallet())}
+        block={!isMobile && visibleNavigation}
       >
         {!isMobile && visibleNavigation && 'Connect Wallet'}
       </Button>

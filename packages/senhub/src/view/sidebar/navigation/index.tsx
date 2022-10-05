@@ -1,6 +1,6 @@
 import { Fragment, useMemo } from 'react'
 
-import { Row, Col } from 'antd'
+import { Row, Col, Card } from 'antd'
 import AppList from './appList'
 import More from './more'
 
@@ -8,7 +8,8 @@ import { useWalletAddress } from 'hooks/useWallet'
 import { isAddress } from 'shared/util'
 import { RootState, useRootSelector } from 'store'
 
-type NavigationProps = { isMobile?: boolean }
+export type NavigationProps = { isMobile?: boolean }
+
 const Navigation = ({ isMobile = false }: NavigationProps) => {
   const walletAddress = useWalletAddress()
   const visible = useRootSelector(
@@ -22,18 +23,17 @@ const Navigation = ({ isMobile = false }: NavigationProps) => {
   }, [isMobile, visible])
 
   if (!isAddress(walletAddress)) return <Fragment />
-
   return (
     <Row gutter={[16, 16]} style={{ height: '100%' }} justify="center">
-      <Col
-        span={24}
-        style={{ maxHeight: 'calc(100% - 48px' }}
-        className="scrollbar"
-      >
+      <Col span={moreSpan} style={{ maxHeight: '100%' }} className="scrollbar">
         <AppList visible={nextVisible} />
-      </Col>
-      <Col span={moreSpan}>
-        <More visible={nextVisible} />
+        <Card
+          bordered={false}
+          style={{ boxShadow: 'unset', background: 'transparent' }}
+          bodyStyle={{ padding: 8 }}
+        >
+          <More visible={nextVisible} />
+        </Card>
       </Col>
     </Row>
   )

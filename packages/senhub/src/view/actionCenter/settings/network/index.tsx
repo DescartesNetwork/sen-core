@@ -89,28 +89,31 @@ const Network = () => {
   }, [ping])
 
   return (
-    <Card bodyStyle={{ padding: 16 }} hoverable bordered={false}>
-      <Row gutter={[8, 8]}>
-        <Col span={24}>
-          <Row gutter={[8, 8]} wrap={false} align="middle">
-            <Col flex="auto">
-              <Space>
-                <IonIcon name="wifi-outline" />
-                <Typography.Text>Solana Network</Typography.Text>
+    <Card className="card-setting" hoverable bordered={false}>
+      <Row align="middle">
+        <Col flex="auto">
+          <Space size={12}>
+            <IonIcon
+              style={{
+                color: '#10CCC3',
+                background: 'rgba(16, 204, 195, 0.1)',
+              }}
+              className="theme-icon"
+              name="wifi-outline"
+            />
+            <Space size={0} direction="vertical">
+              <Typography.Text>Solana Network</Typography.Text>
+              <Space size={4}>
+                <Badge status={parseType(networkStatus)} dot />
+                <Typography.Text className="caption" type="secondary">
+                  {`${parseMessage(networkStatus)} connection`}
+                </Typography.Text>
               </Space>
-            </Col>
-            <Col>
-              <NetSwitch />
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24}>
-          <Space size={0}>
-            <Badge status={parseType(networkStatus)} dot />
-            <Typography.Text type="secondary">
-              {`${parseMessage(networkStatus)} connection`}
-            </Typography.Text>
+            </Space>
           </Space>
+        </Col>
+        <Col>
+          <NetSwitch />
         </Col>
       </Row>
     </Card>

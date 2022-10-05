@@ -12,6 +12,7 @@ export enum Infix {
   xl = 1200,
   xxl = 1400,
 }
+export type SidebarPosition = 'left' | 'right'
 export type Theme = 'light' | 'dark'
 export type Background = Record<Theme, string | undefined>
 
@@ -24,6 +25,7 @@ export type UIState = {
   visibleInstaller: boolean
   background: Background
   visibleNavigation: boolean
+  sidebarPosition: SidebarPosition
 }
 
 const getInfix = (): Infix => {
@@ -60,6 +62,7 @@ const initialState: UIState = {
     light: '',
     dark: '',
   },
+  sidebarPosition: 'left',
 }
 
 /**
@@ -112,6 +115,13 @@ export const setVisibleNagivation = createAsyncThunk(
   },
 )
 
+export const setSidebarPosition = createAsyncThunk(
+  `${NAME}/setSidebarPosition`,
+  async (sidebarPosition: SidebarPosition) => {
+    return { sidebarPosition }
+  },
+)
+
 /**
  * Usual procedure
  */
@@ -144,6 +154,10 @@ const slice = createSlice({
       )
       .addCase(
         setVisibleNagivation.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        setSidebarPosition.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

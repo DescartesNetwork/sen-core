@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { Col, Divider, Row } from 'antd'
 import SenMarket from './market'
-import Nofitications from './nofitications'
+import Notifications from './notifications'
 import AppSettings from './appSettings'
 import Wallet from 'view/wallet'
 
@@ -10,7 +10,8 @@ import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 import { RootState, useRootSelector } from 'store'
 
-type SystemProps = { isMobile?: boolean }
+export type SystemProps = { isMobile?: boolean }
+
 const System = ({ isMobile = false }: SystemProps) => {
   const visible = useRootSelector(
     (state: RootState) => state.ui.visibleNavigation,
@@ -32,7 +33,7 @@ const System = ({ isMobile = false }: SystemProps) => {
         </Col>
       )}
       <Col>
-        <Nofitications visible={nextVisible} />
+        <Notifications visible={nextVisible} />
       </Col>
       <Col>
         <Divider style={{ margin: '8px 0', minWidth: 48 }} type="horizontal" />

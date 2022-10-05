@@ -28,16 +28,21 @@ const SideBar = () => {
 
   return (
     <Card className="card-sidebar" bordered={false}>
-      <Row className="wrapper-sidebar" gutter={[0, 24]}>
-        {/* flex="auto" <=> flex: 1 1 auto, don't need flex-basic: auto,
-        flex-shark: 1 & flex-grow: 1 enough to full height follow content */}
+      <Row className="wrapper-sidebar" gutter={[0, 12]}>
         <Col style={{ flex: '1 1' }}>
           <Row
-            gutter={[24, 28]}
+            gutter={[8, 8]}
             style={{ flexFlow: 'column', height: '100%' }}
             align={rowAlign}
           >
-            <Col>
+            <Col
+              style={{
+                paddingTop: 20,
+                paddingBottom: 20,
+                paddingLeft: 12,
+                paddingRight: 12,
+              }}
+            >
               <Brand direction={brandDirection} />
             </Col>
             <Col>
@@ -45,7 +50,7 @@ const SideBar = () => {
             </Col>
           </Row>
         </Col>
-        <Col>
+        <Col style={{ marginBottom: 8 }}>
           <System isMobile={isMobile} />
         </Col>
       </Row>

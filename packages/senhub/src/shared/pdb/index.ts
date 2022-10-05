@@ -1,5 +1,4 @@
 import localForage from 'localforage'
-import IPFS from './ipfs'
 import { isAddress } from 'shared/util'
 
 /**
@@ -8,13 +7,11 @@ import { isAddress } from 'shared/util'
 class PDB {
   readonly dbName: string
   private driver: any
-  private ipfs: IPFS
 
   constructor(walletAddress: string) {
     if (!isAddress(walletAddress)) throw new Error('Invalid address')
     this.dbName = walletAddress
     this.driver = [localForage.WEBSQL, localForage.LOCALSTORAGE]
-    this.ipfs = new IPFS()
   }
 
   /**
@@ -52,33 +49,6 @@ class PDB {
       await instance.iterate((value: string, key: string) => {
         data[appId][key] = value
       })
-    }
-    return data
-  }
-
-  /**
-   * Cloud
-   */
-
-  fetch = async (cid: string) => {
-    return await this.ipfs.get(cid)
-  }
-
-  backup = async () => {
-    const data = await this.all()
-    return await this.ipfs.set(data)
-  }
-
-  restore = async (cid: string) => {
-    // Download data
-    const data = await this.fetch(cid)
-    // Apply to storage
-    for (const appId in data) {
-      const instance = await this.createInstance(appId)
-      for (const key in data[appId]) {
-        const value = data[appId][key]
-        await instance.setItem(key, value)
-      }
     }
     return data
   }

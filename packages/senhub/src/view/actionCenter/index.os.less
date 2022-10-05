@@ -1,0 +1,60 @@
+.action-center {
+  background-image: url('../../static/images/actionCenter/card-bg-v2.png') !important;
+  background-position: center !important;
+  background-size: cover !important;
+  border-radius: 0px 0px 16px 16px !important;
+  box-shadow: none !important;
+  position: relative !important;
+  top: -24px;
+  left: -24px;
+  width: calc(100% + 48px) !important;
+  height: 171px !important;
+}
+
+.wallet-info {
+  background: #ffff !important;
+  box-shadow: none !important;
+  position: relative;
+  &::after {
+    content: ' ';
+    position: absolute !important;
+    height: 16px;
+    width: calc(100% - 32px);
+    top: -16px;
+    left: 50%;
+    background: #ffffff;
+    opacity: 0.2;
+    transform: translateX(-50%);
+    border-radius: 16px 16px 0 0;
+  }
+  &::before {
+    content: ' ';
+    position: absolute !important;
+    height: 16px;
+    width: calc(100% - 16px);
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    opacity: 0.5;
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+.space-middle-icon {
+  .sentre-space-item {
+    display: flex !important;
+  }
+}
+
+#dark {
+  .wallet-info {
+    background: #2c2e3d !important;
+    &::after {
+      background: #2c2e3d !important;
+    }
+    &::before {
+      background: #2c2e3d !important;
+    }
+  }
+}

@@ -30,7 +30,7 @@ export default Senhub
  */
 
 // Senhub providers
-export * from 'providers'
+// export * from 'providers'
 export { default as TokenProvider } from 'shared/tokenProvider'
 export * from 'shared/tokenProvider'
 export * from 'providers/antd.provider'

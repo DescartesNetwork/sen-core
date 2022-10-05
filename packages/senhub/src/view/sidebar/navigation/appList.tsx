@@ -9,7 +9,8 @@ import { useAppIds } from 'hooks/useAppIds'
 
 import './index.os.less'
 
-type AppListProps = { visible?: boolean }
+export type AppListProps = { visible?: boolean }
+
 const AppList = ({ visible = false }: AppListProps) => {
   const appIds = useAppIds()
 

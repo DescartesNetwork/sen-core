@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react'
+import { CSSProperties, useMemo } from 'react'
 
 import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -6,16 +6,25 @@ import IonIcon from '@sentre/antd-ionicon'
 import { useGoToStore } from 'hooks/useGotoStore'
 import { MenuSystemItem } from '../index'
 
-type MoreProps = { size?: number; style?: CSSProperties; visible?: boolean }
+export type MoreProps = {
+  size?: number
+  style?: CSSProperties
+  visible?: boolean
+}
+
 const More = ({ size = 32, style, visible = false }: MoreProps) => {
   const onGoToStore = useGoToStore()
 
-  const btnStyle = {
-    minWidth: size,
-    height: size,
-    overflow: 'hidden',
-    background: 'transparent',
-  }
+  const btnStyle = useMemo(
+    () => ({
+      minWidth: size,
+      height: size,
+      overflow: 'hidden',
+      background: 'transparent',
+    }),
+    [size],
+  )
+
   return (
     <Button
       style={{ ...btnStyle, ...style }}
