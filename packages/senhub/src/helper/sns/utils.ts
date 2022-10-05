@@ -1,5 +1,4 @@
-import { sha256 } from 'js-sha256'
-import { BN, web3 } from '@project-serum/anchor'
+import { BN, web3, utils } from '@project-serum/anchor'
 
 import { NameService } from './nameService'
 import configs from 'configs'
@@ -10,7 +9,7 @@ const {
 
 export const getHashedName = async (name: string): Promise<Buffer> => {
   const input = hashPrefix + name
-  const str = sha256(Buffer.from(input, 'utf8'))
+  const str = utils.sha256.hash(input)
   return Buffer.from(str, 'hex')
 }
 
