@@ -13,14 +13,17 @@ const {
  * Interface & Utility
  */
 
-export type PageState = AppIds
+export type PageState = {
+  appIds: AppIds
+  hiddenAppIds: AppIds
+}
 
-const troubleshoot = (register: SenReg, page?: AppIds): AppIds => {
-  if (!page || !Array.isArray(page)) return []
-  const appIds = [...page]
-  if (env === 'development' && !appIds.includes(devAppId))
-    appIds.unshift(devAppId)
-  return appIds.filter((appId) => register[appId])
+const troubleshoot = (register: SenReg, appIds?: AppIds): AppIds => {
+  if (!appIds || !Array.isArray(appIds)) return []
+  const nextAppIds = [...appIds]
+  if (env === 'development' && !nextAppIds.includes(devAppId))
+    nextAppIds.unshift(devAppId)
+  return nextAppIds.filter((appId) => register[appId]) || []
 }
 
 /**
@@ -28,7 +31,10 @@ const troubleshoot = (register: SenReg, page?: AppIds): AppIds => {
  */
 
 const NAME = 'page'
-const initialState: PageState = []
+const initialState: PageState = {
+  appIds: [],
+  hiddenAppIds: [],
+}
 
 /**
  * Actions
@@ -38,8 +44,8 @@ const initialState: PageState = []
  * App Actions
  */
 
-export const loadPage = createAsyncThunk<PageState, void, { state: any }>(
-  `${NAME}/loadPage`,
+export const loadAppIds = createAsyncThunk<PageState, void, { state: any }>(
+  `${NAME}/loadAppIds`,
   async (_, { getState }) => {
     const {
       wallet: { address: walletAddress },
@@ -49,43 +55,49 @@ export const loadPage = createAsyncThunk<PageState, void, { state: any }>(
       throw new Error('Wallet is not connected yet.')
     // Fetch user's apps
     const db = new PDB(walletAddress).createInstance('sentre')
-    const page = (await db.getItem<AppIds>('appIds')) || initialState
-    const appIds = troubleshoot(register, page)
-    return appIds
+    const nextAppIds =
+      (await db.getItem<AppIds>('appIds')) || initialState.appIds
+    const appIds = troubleshoot(register, nextAppIds)
+
+    // Fetch hidden appIds
+    const localHiddenAppIds = (await db.getItem<AppIds>('hiddenAppIds')) || []
+    const hiddenAppIds = troubleshoot(register, localHiddenAppIds)
+    return { appIds, hiddenAppIds }
   },
 )
 
-export const updatePage = createAsyncThunk<PageState, AppIds, { state: any }>(
-  `${NAME}/updatePage`,
-  async (appIds, { getState }) => {
-    const {
-      wallet: { address: walletAddress },
-      register,
-    } = getState()
-    if (!isAddress(walletAddress))
-      throw new Error('Wallet is not connected yet.')
-    const page = troubleshoot(register, appIds)
-    const db = new PDB(walletAddress).createInstance('sentre')
-    await db.setItem<AppIds>('appIds', page)
-    return page
-  },
-)
+export const updateAppIds = createAsyncThunk<
+  Partial<PageState>,
+  AppIds,
+  { state: any }
+>(`${NAME}/updateAppIds`, async (appIds, { getState }) => {
+  const {
+    wallet: { address: walletAddress },
+    register,
+  } = getState()
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet.')
+  const nexAppIds = troubleshoot(register, appIds)
+  const db = new PDB(walletAddress).createInstance('sentre')
+  await db.setItem<AppIds>('appIds', nexAppIds)
+  return { appIds: nexAppIds }
+})
 
 export const installApp = createAsyncThunk<PageState, string, { state: any }>(
   `${NAME}/installApp`,
   async (appId, { getState }) => {
     const {
       wallet: { address: walletAddress },
-      page,
+      page: { appIds },
     } = getState()
     if (!isAddress(walletAddress))
       throw new Error('Wallet is not connected yet.')
-    if (page.includes(appId)) return page
-    const appIds: PageState = [...page]
-    appIds.push(appId)
+    if (appIds.includes(appId)) return appIds
+    const nextAppIds: AppIds = [...appIds]
+    nextAppIds.push(appId)
+
     const db = new PDB(walletAddress).createInstance('sentre')
-    await db.setItem<AppIds>('appIds', appIds)
-    return appIds
+    await db.setItem<AppIds>('appIds', nextAppIds)
+    return { appIds: nextAppIds }
   },
 )
 
@@ -94,19 +106,40 @@ export const uninstallApp = createAsyncThunk<PageState, string, { state: any }>(
   async (appId, { getState }) => {
     const {
       wallet: { address: walletAddress },
-      page,
+      page: { appIds, hiddenAppIds },
     } = getState()
     if (!isAddress(walletAddress))
       throw new Error('Wallet is not connected yet.')
-    if (!page.includes(appId)) return page
-    const appIds = page.filter((id: string) => id !== appId)
+    if (!appIds.includes(appId)) return appIds
+    const nextAppIds = appIds.filter((id: string) => id !== appId)
+    const nextHiddenAppIds = hiddenAppIds.filter((id: string) => id !== appId)
     const pdb = new PDB(walletAddress)
     const db = pdb.createInstance('sentre')
-    await db.setItem<AppIds>('appIds', appIds)
+    await db.setItem<AppIds>('appIds', nextAppIds)
+    await db.setItem<AppIds>('hiddenAppIds', nextHiddenAppIds)
     await pdb.dropInstance(appId)
-    return appIds
+    return { appIds: nextAppIds, hiddenAppIds: nextHiddenAppIds }
   },
 )
+
+export const setHiddenAppIds = createAsyncThunk<
+  Partial<PageState>,
+  AppIds,
+  { state: any }
+>(`${NAME}/setHiddenAppIds`, async (hiddenAppIds, { getState }) => {
+  const {
+    wallet: { address: walletAddress },
+    register,
+  } = getState()
+
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet.')
+  const nexHiddenAppIds = troubleshoot(register, hiddenAppIds)
+
+  const db = new PDB(walletAddress).createInstance('sentre')
+  await db.setItem<AppIds>('hiddenAppIds', nexHiddenAppIds)
+
+  return { hiddenAppIds: nexHiddenAppIds }
+})
 
 /**
  * Usual procedure
@@ -118,10 +151,26 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) =>
     void builder
-      .addCase(loadPage.fulfilled, (state, { payload }) => payload)
-      .addCase(updatePage.fulfilled, (state, { payload }) => payload)
-      .addCase(installApp.fulfilled, (state, { payload }) => payload)
-      .addCase(uninstallApp.fulfilled, (state, { payload }) => payload),
+      .addCase(
+        loadAppIds.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        updateAppIds.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        installApp.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        uninstallApp.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        setHiddenAppIds.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      ),
 })
 
 export default slice.reducer
