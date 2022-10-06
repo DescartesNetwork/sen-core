@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { Col, Divider, Row } from 'antd'
 import SenMarket from './market'
 import Notifications from './notifications'
-import AppSettings from './appSettings'
+import AppSettings from './applications'
 import Wallet from 'view/wallet'
 
 import { isAddress } from 'shared/util'

@@ -4,9 +4,10 @@ import Navigation from './navigation'
 import System from './system'
 import ActionVisibleSideBar from './components/buttonVisibleSidebar'
 
-import { useInfix } from 'hooks/useUI'
+import { useInfix, useTheme } from 'hooks/useUI'
 import { RootState, useRootSelector } from 'store'
 import { Infix } from 'store/ui.reducer'
+import { net } from 'shared/runtime'
 
 import './index.os.less'
 
@@ -21,6 +22,7 @@ const SideBar = () => {
   const visible = useRootSelector(
     (state: RootState) => state.ui.visibleNavigation,
   )
+  const theme = useTheme()
 
   const isMobile = infix < Infix.md
   const brandDirection = visible && !isMobile ? 'horizontal' : 'vertical'
@@ -43,9 +45,9 @@ const SideBar = () => {
                 paddingRight: 12,
               }}
             >
-              <Brand direction={brandDirection} />
+              <Brand network={net} theme={theme} direction={brandDirection} />
             </Col>
-            <Col>
+            <Col style={{ width: '100%' }}>
               <Navigation isMobile={isMobile} />
             </Col>
           </Row>

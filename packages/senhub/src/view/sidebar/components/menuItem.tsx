@@ -1,6 +1,7 @@
+import { CSSProperties, ReactNode } from 'react'
+
 import IonIcon from '@sentre/antd-ionicon'
 import { Space, Typography } from 'antd'
-import { CSSProperties, ReactNode } from 'react'
 
 type MenuItemProps = {
   icon?: ReactNode
@@ -9,6 +10,7 @@ type MenuItemProps = {
   value?: string
   onClick?: (val: string) => void
   name?: boolean
+  disabled?: boolean
 }
 const MenuItem = ({
   icon = <IonIcon name="grid-outline" />,
@@ -17,7 +19,10 @@ const MenuItem = ({
   value = '',
   onClick = () => {},
   name = true,
+  disabled = false,
 }: MenuItemProps) => {
+  const textType = disabled ? 'secondary' : undefined
+
   return (
     <Space
       size={12}
@@ -29,13 +34,13 @@ const MenuItem = ({
         ...style,
         cursor: 'pointer',
       }}
-      // onClick={() => onClick(value)}
+      onClick={() => !disabled && onClick(value)}
     >
-      <Typography.Text type="secondary" style={{ fontSize: 18 }}>
+      <Typography.Text type={textType} style={{ fontSize: 18 }}>
         {icon}
       </Typography.Text>
       {name && (
-        <Typography.Text type="secondary" style={{ fontWeight: 600 }}>
+        <Typography.Text type={textType} style={{ fontWeight: 600 }}>
           {children || value}
         </Typography.Text>
       )}

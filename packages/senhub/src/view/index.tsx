@@ -20,7 +20,6 @@ import {
   useRootDispatch,
   RootDispatch,
 } from 'store'
-import { loadPage } from 'store/page.reducer'
 import { loadRegister } from 'store/register.reducer'
 import {
   loadDeveloperMode,
@@ -31,6 +30,7 @@ import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 import { useTheme } from 'hooks/useUI'
 import { login } from 'store/user.reducer'
+import { loadAppIds } from 'store/page.reducer'
 
 import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
@@ -53,7 +53,7 @@ const View = () => {
         await dispatch(loadDeveloperMode())
         const register = await dispatch(loadRegister()).unwrap()
         if (Object.keys(register).length) {
-          const appIds = await dispatch(loadPage()).unwrap()
+          const { appIds } = await dispatch(loadAppIds()).unwrap()
           await dispatch(login(appIds)).unwrap()
         }
       } catch (er: any) {

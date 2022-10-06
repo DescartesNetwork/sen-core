@@ -11,6 +11,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
       value={MenuSystemItem.Notify}
       onClick={() => {}}
       name={visible}
+      disabled
     >
       {MenuSystemItem.Notify}
     </MenuItem>
