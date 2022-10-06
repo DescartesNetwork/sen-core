@@ -32,11 +32,7 @@ const DroppablePage = ({
 
   return (
     <SortableContext items={items}>
-      <div
-        id={rowId}
-        ref={setNodeRef}
-        className={`droppable-page ${disabled ? 'passive' : 'active'}`}
-      >
+      <div id={rowId} ref={setNodeRef}>
         {children}
       </div>
     </SortableContext>

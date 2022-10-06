@@ -1,5 +1,5 @@
 import IonIcon from '@sentre/antd-ionicon'
-import { Button, Dropdown } from 'antd'
+import { Button, Dropdown, Space } from 'antd'
 import AppIcon from 'components/appIcon'
 import AppActions, { AppActionsProps } from '../appActions'
 
@@ -16,6 +16,7 @@ export type DraggableIconProps = {
   disabled?: boolean
   moveToSidebar?: AppActionsProps['moveToSidebar']
   removeFromSidebar?: AppActionsProps['removeFromSidebar']
+  hidden?: boolean
 }
 
 const DraggableIcon = ({
@@ -24,6 +25,7 @@ const DraggableIcon = ({
   disabled = false,
   moveToSidebar = () => {},
   removeFromSidebar = () => {},
+  hidden = false,
 }: DraggableIconProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -46,19 +48,28 @@ const DraggableIcon = ({
       ref={setNodeRef}
     >
       <AppIcon appId={appId} size={size} direction="horizontal" />
-      <Dropdown
-        trigger={['click']}
-        overlay={
-          <AppActions
-            appId={appId}
-            moveToSidebar={moveToSidebar}
-            removeFromSidebar={removeFromSidebar}
-          />
-        }
-        destroyPopupOnHide
-      >
-        <Button type="text" icon={<IonIcon name="menu-outline" />} />
-      </Dropdown>
+      <Space>
+        <Dropdown
+          className="draggable-dropdown"
+          trigger={['click']}
+          overlay={
+            <AppActions
+              appId={appId}
+              moveToSidebar={moveToSidebar}
+              removeFromSidebar={removeFromSidebar}
+              hidden={hidden}
+            />
+          }
+          destroyPopupOnHide
+        >
+          <Button type="text" icon={<IonIcon name="ellipsis-horizontal" />} />
+        </Dropdown>
+        <Button
+          type="text"
+          icon={<IonIcon name="menu-outline" />}
+          onClick={() => {}}
+        />
+      </Space>
     </div>
   )
 }

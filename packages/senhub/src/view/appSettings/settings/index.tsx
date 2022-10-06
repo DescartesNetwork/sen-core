@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useMemo } from 'react'
 import {
   DndContext,
   DragEndEvent,
@@ -14,18 +14,17 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 
-import { Row, Col, Empty, Typography, Divider } from 'antd'
+import { Row, Col, Divider } from 'antd'
 import AppIcon from 'components/appIcon'
-import DroppablePage from './droppablePage'
-import DraggableIcon from './draggableIcon'
+import ShowedApps from './showedApps'
+import HiddenApps from './hiddenApps'
 
 import { RootState, useRootDispatch, useRootSelector } from 'store'
 import { setHiddenAppIds, updateAppIds } from 'store/page.reducer'
 import { useAppIds } from 'hooks/useAppIds'
-import { useMemo } from 'react'
 
-const ELEMENT_HIDDEN_ID = 'action-hidden'
-const ELEMENT_INSIDE_ID = 'active-in-sidebar'
+export const ELEMENT_HIDDEN_ID = 'action-hidden'
+export const ELEMENT_INSIDE_ID = 'active-in-sidebar'
 
 // Mixed Strategy
 const mixedStrategy = (
@@ -35,15 +34,7 @@ const mixedStrategy = (
   return intersecting ? intersecting : closestCorners(...args)
 }
 
-export type WidgetLayoutProps = {
-  disabled?: boolean
-  onHiddenApp?: (appIds: AppIds) => void
-}
-
-const WidgetLayout = ({
-  disabled = false,
-  onHiddenApp = () => {},
-}: WidgetLayoutProps) => {
+const Settings = () => {
   const dispatch = useRootDispatch()
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 10 } }),
@@ -57,15 +48,6 @@ const WidgetLayout = ({
   const hiddenAppIds = useRootSelector(
     (state: RootState) => state.page.hiddenAppIds,
   )
-
-  const filteredInternalAppIds = useMemo(() => {
-    const nextInternalAppIds: AppIds = []
-    for (const appId of internalAppIds) {
-      if (hiddenAppIds.includes(appId)) continue
-      nextInternalAppIds.push(appId)
-    }
-    return nextInternalAppIds
-  }, [hiddenAppIds, internalAppIds])
 
   useEffect(() => {
     setInternalAppIds(appIds)
@@ -83,23 +65,27 @@ const WidgetLayout = ({
     [hiddenAppIds],
   )
 
-  const handleHiddenApps = useCallback(
-    ({ over, active }: DragEndEvent) => {
-      const nextHiddenAppIds: AppIds = [...hiddenAppIds]
-      const nextInternalAppIds: AppIds = [...appIds]
-      const activeId = active.id
+  const onMoveAppIds = useCallback(
+    (appId: string) => {
+      const nextHiddenAppIds = [...hiddenAppIds]
+      const idxHiddenAppId = nextHiddenAppIds.indexOf(appId)
+      if (idxHiddenAppId < 0) nextHiddenAppIds.push(appId)
+      else nextHiddenAppIds.splice(idxHiddenAppId, 1)
 
-      if (!over || detectAvailableDrag(activeId, over.id)) return false
-      const idxHiddenAppIds = nextHiddenAppIds.indexOf(activeId)
-
-      if (idxHiddenAppIds < 0) nextHiddenAppIds.push(activeId)
-      else nextHiddenAppIds.splice(idxHiddenAppIds, 1)
-
-      setInternalAppIds(nextInternalAppIds)
       dispatch(setHiddenAppIds(nextHiddenAppIds))
+    },
+    [dispatch, hiddenAppIds],
+  )
+
+  const dragHiddenApps = useCallback(
+    ({ over, active }: DragEndEvent) => {
+      const activeId = active.id
+      if (!over || detectAvailableDrag(activeId, over.id)) return false
+
+      onMoveAppIds(activeId)
       return true
     },
-    [appIds, detectAvailableDrag, dispatch, hiddenAppIds],
+    [detectAvailableDrag, onMoveAppIds],
   )
 
   const onDragStart = ({ active }: DragStartEvent) => setActiveId(active.id)
@@ -129,9 +115,18 @@ const WidgetLayout = ({
 
   const onDragEnd = async (event: DragEndEvent) => {
     if (activeId) setActiveId('') // Disable button action after drag
-    if (handleHiddenApps(event)) return
+    if (dragHiddenApps(event)) return
     return dispatch(updateAppIds(internalAppIds))
   }
+
+  const filteredInternalAppIds = useMemo(() => {
+    const nextInternalAppIds: AppIds = []
+    for (const appId of internalAppIds) {
+      if (hiddenAppIds.includes(appId)) continue
+      nextInternalAppIds.push(appId)
+    }
+    return nextInternalAppIds
+  }, [hiddenAppIds, internalAppIds])
 
   return (
     <DndContext
@@ -141,55 +136,23 @@ const WidgetLayout = ({
       onDragOver={onDragOver}
       onDragEnd={onDragEnd}
     >
-      <Row gutter={[24, 24]}>
+      <Row gutter={[0, 24]}>
         <Col span={24}>
-          <DroppablePage
-            id={ELEMENT_INSIDE_ID}
-            items={filteredInternalAppIds}
-            disabled={disabled}
-          >
-            <Row gutter={[0, 8]} justify="center">
-              <Col span={24}>
-                <Typography.Text type="secondary">IN SIDEBAR</Typography.Text>
-              </Col>
-              <Col span={24} /> {/* safe space */}
-              {!filteredInternalAppIds.length ? (
-                <Col>
-                  <Empty />
-                </Col>
-              ) : (
-                filteredInternalAppIds.map((appId) => (
-                  <Col span={24} key={appId}>
-                    <DraggableIcon
-                      key={appId}
-                      appId={appId}
-                      disabled={disabled}
-                      size={32}
-                    />
-                  </Col>
-                ))
-              )}
-            </Row>
-          </DroppablePage>
+          <ShowedApps
+            appIds={filteredInternalAppIds}
+            moveToSidebar={onMoveAppIds}
+            removeFromSidebar={onMoveAppIds}
+          />
         </Col>
         <Col span={24}>
           <Divider style={{ margin: 0 }} type="horizontal" dashed />
         </Col>
         <Col span={24}>
-          <DroppablePage id={ELEMENT_HIDDEN_ID} items={hiddenAppIds}>
-            <Row gutter={[16, 16]}>
-              {hiddenAppIds.map((appId) => (
-                <Col span={24} key={appId}>
-                  <DraggableIcon
-                    key={appId}
-                    appId={appId}
-                    disabled={disabled}
-                    size={32}
-                  />
-                </Col>
-              ))}
-            </Row>
-          </DroppablePage>
+          <HiddenApps
+            hiddenAppIds={hiddenAppIds}
+            moveToSidebar={onMoveAppIds}
+            removeFromSidebar={onMoveAppIds}
+          />
         </Col>
       </Row>
 
@@ -204,4 +167,4 @@ const WidgetLayout = ({
   )
 }
 
-export default WidgetLayout
+export default Settings

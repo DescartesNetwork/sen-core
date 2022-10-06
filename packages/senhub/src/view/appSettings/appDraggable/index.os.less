@@ -16,16 +16,37 @@
     }
   }
 }
+
 .card-draggable-item {
   display: flex;
   flex: 1 1 100%;
   justify-content: space-between;
+  cursor: pointer;
+  padding: 8px 24px;
+  .draggable-dropdown {
+    display: none !important;
+  }
+  &:hover {
+    .draggable-dropdown {
+      display: block !important;
+    }
+  }
 }
 
 #light {
   .build-droppable-page(@NEUTRAL10);
+  .card-draggable-item {
+    &:hover {
+      background: @NEUTRAL10;
+    }
+  }
 }
 
 #dark {
   .build-droppable-page(@NEUTRAL90);
+  .card-draggable-item {
+    &:hover {
+      background: @NEUTRAL90;
+    }
+  }
 }

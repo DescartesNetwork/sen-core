@@ -19,7 +19,7 @@ export const AppActions = ({
   moveToSidebar = () => {},
   removeFromSidebar = () => {},
 }: AppActionsProps) => {
-  const onOpenInNewTab = useGoToApp({ appId, blank: true })
+  const onOpenInNewTab = useGoToApp({ appId, blank: false })
   const onUninstall = useUninstallApp(appId)
 
   const configsMenu = useMemo(() => {
