@@ -9,12 +9,14 @@ export type HiddenAppProps = {
   disabled?: boolean
   moveToSidebar?: (appId: string) => void
   removeFromSidebar?: (appId: string) => void
+  activeId?: string
 }
 const HiddenApps = ({
   hiddenAppIds,
   disabled = false,
   moveToSidebar = () => {},
   removeFromSidebar = () => {},
+  activeId,
 }: HiddenAppProps) => {
   return (
     <DroppablePage id={ELEMENT_HIDDEN_ID} items={hiddenAppIds}>
@@ -40,6 +42,7 @@ const HiddenApps = ({
                 moveToSidebar={() => moveToSidebar(appId)}
                 removeFromSidebar={() => removeFromSidebar(appId)}
                 hidden
+                active={appId === activeId}
               />
             </Col>
           ))

@@ -5,19 +5,17 @@ import { Row, Col, Dropdown, Card } from 'antd'
 import AppIcon from 'components/appIcon'
 import ContextMenu from './contextMenu'
 
-import { RootState, useRootSelector } from 'store'
 import { useGoToAppCallback } from 'hooks/useGotoApp'
 import { useAppIds } from 'hooks/useAppIds'
 
 import './index.os.less'
+import { useHiddenAppIds } from 'hooks/useHiddenAppIds'
 
 export type AppListProps = { visible?: boolean }
 
 const AppList = ({ visible = false }: AppListProps) => {
   const appIds = useAppIds()
-  const hiddenAppIds = useRootSelector(
-    (state: RootState) => state.page.hiddenAppIds,
-  )
+  const hiddenAppIds = useHiddenAppIds()
 
   const { params } = useRouteMatch<{ appId: string }>('/app/:appId') || {}
   const onGoToApp = useGoToAppCallback()
@@ -27,8 +25,7 @@ const AppList = ({ visible = false }: AppListProps) => {
 
     const nextAppIds: AppIds = []
     for (const appId of appIds) {
-      if (hiddenAppIds.includes(appId)) continue
-      nextAppIds.push(appId)
+      if (!hiddenAppIds.includes(appId)) nextAppIds.push(appId)
     }
     return nextAppIds
   }, [appIds, hiddenAppIds])
