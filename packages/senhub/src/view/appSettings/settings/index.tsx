@@ -1,16 +1,5 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
-import {
-  DndContext,
-  DragEndEvent,
-  closestCorners,
-  rectIntersection,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  DragStartEvent,
-  DragOverEvent,
-} from '@dnd-kit/core'
+import { DragEndEvent, DragStartEvent, DragOverEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 
 import { Row, Col, Divider } from 'antd'
@@ -21,27 +10,15 @@ import { useRootDispatch } from 'store'
 import { setHiddenAppIds, updateAppIds } from 'store/page.reducer'
 import { useAppIds } from 'hooks/useAppIds'
 import { useHiddenAppIds } from 'hooks/useHiddenAppIds'
-import DraggableOverlay from '../appDraggable/draggableOverlay'
+import DraggableContext from 'components/dndkitContainer'
+import AppDragOverlayItem from '../appDraggable/appDragOverlayItem'
 
 export const ELEMENT_HIDDEN_ID = 'action-hidden'
 export const ELEMENT_INSIDE_ID = 'active-in-sidebar'
 
-// Mixed Strategy
-const mixedStrategy = (
-  ...args: Parameters<typeof rectIntersection | typeof closestCorners>
-) => {
-  const intersecting = rectIntersection(...args)
-  return intersecting ? intersecting : closestCorners(...args)
-}
-
 const Settings = () => {
   const dispatch = useRootDispatch()
-  const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 1 } }),
-    useSensor(TouchSensor, {
-      activationConstraint: { distance: 1, delay: 200, tolerance: 5 },
-    }),
-  )
+
   const [internalAppIds, setInternalAppIds] = useState<AppIds>([])
   const [activeId, setActiveId] = useState<string>('')
   const appIds = useAppIds()
@@ -131,12 +108,11 @@ const Settings = () => {
   }, [hiddenAppIds, internalAppIds])
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={mixedStrategy}
+    <DraggableContext
       onDragStart={onDragStart}
       onDragOver={onDragOver}
       onDragEnd={onDragEnd}
+      activationConstraint={{ tolerance: 5, delay: 100 }}
     >
       <Row gutter={[0, 24]}>
         <Col span={24}>
@@ -159,8 +135,8 @@ const Settings = () => {
           />
         </Col>
       </Row>
-      <DraggableOverlay activeId={activeId} />
-    </DndContext>
+      <AppDragOverlayItem activeId={activeId} />
+    </DraggableContext>
   )
 }
 

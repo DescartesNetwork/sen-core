@@ -1,6 +1,6 @@
 import { Col, Empty, Row, Typography } from 'antd'
-import DraggableIcon from '../appDraggable/draggableIcon'
-import DroppablePage from '../appDraggable/droppablePage'
+import AppDropPage from '../appDraggable/appDropPage'
+import AppSortItem from '../appDraggable/appSortItem'
 
 import { ELEMENT_INSIDE_ID } from './index'
 
@@ -19,7 +19,7 @@ const ShowedApps = ({
   activeId,
 }: ShowedAppsProps) => {
   return (
-    <DroppablePage id={ELEMENT_INSIDE_ID} items={appIds} disabled={disabled}>
+    <AppDropPage id={ELEMENT_INSIDE_ID} items={appIds} disabled={disabled}>
       <Row gutter={[0, 8]} justify="center">
         <Col span={24}>
           <Typography.Text className="padding-x" type="secondary">
@@ -34,7 +34,7 @@ const ShowedApps = ({
         ) : (
           appIds.map((appId) => (
             <Col span={24} key={appId}>
-              <DraggableIcon
+              <AppSortItem
                 key={appId}
                 appId={appId}
                 disabled={disabled}
@@ -47,7 +47,7 @@ const ShowedApps = ({
           ))
         )}
       </Row>
-    </DroppablePage>
+    </AppDropPage>
   )
 }
 

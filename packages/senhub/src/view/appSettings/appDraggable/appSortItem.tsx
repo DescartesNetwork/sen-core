@@ -2,15 +2,13 @@ import IonIcon from '@sentre/antd-ionicon'
 import { Button, Dropdown, Space } from 'antd'
 import AppIcon from 'components/appIcon'
 import AppActions, { AppActionsProps } from '../appActions'
-
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
+import SortbleItem from 'components/dndkitContainer/sortableItem'
 
 /**
- * DraggableIcon render as a Col
+ * AppSortItem render as a Col
  */
 
-export type DraggableIconProps = {
+export type AppSortItemProps = {
   appId: string
   size?: number
   disabled?: boolean
@@ -20,7 +18,7 @@ export type DraggableIconProps = {
   active?: boolean
 }
 
-const DraggableIcon = ({
+const AppSortItem = ({
   appId,
   size = 32,
   disabled = false,
@@ -28,28 +26,13 @@ const DraggableIcon = ({
   removeFromSidebar = () => {},
   hidden = false,
   active,
-}: DraggableIconProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: appId,
-      disabled,
-    })
-
+}: AppSortItemProps) => {
   const style = {
-    transform: CSS.Translate.toString(transform),
-    transition: transition,
     opacity: active ? 0.5 : 1,
   }
 
   return (
-    <div
-      className="card-draggable-item"
-      id={`draggale-${appId}`}
-      style={style}
-      {...listeners}
-      {...attributes}
-      ref={setNodeRef}
-    >
+    <SortbleItem id={appId} style={style} disabled={disabled}>
       <AppIcon appId={appId} size={size} direction="horizontal" />
       <Space>
         <Dropdown
@@ -73,8 +56,8 @@ const DraggableIcon = ({
           onClick={() => {}}
         />
       </Space>
-    </div>
+    </SortbleItem>
   )
 }
 
-export default DraggableIcon
+export default AppSortItem
