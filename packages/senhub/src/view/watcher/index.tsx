@@ -3,6 +3,7 @@ import UIWatcher from './ui.watcher'
 import WalletWatcher from './wallet.watcher'
 import AccountWatcher from './account.watcher'
 import PoolWatcher from './pool.watcher'
+import NotificationsWatcher from './notifications.watcher'
 
 const Watcher = () => {
   return (
@@ -11,6 +12,7 @@ const Watcher = () => {
       <WalletWatcher />
       <AccountWatcher />
       <PoolWatcher />
+      <NotificationsWatcher />
     </Fragment>
   )
 }
