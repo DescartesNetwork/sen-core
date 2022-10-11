@@ -11,7 +11,7 @@ const View = () => {
     <EmbededView
       appId={appId}
       src={'https://sentre.io/'}
-      wallet={window.sentre.wallet}
+      wallet={window.sentre.solana}
     />
   )
 }

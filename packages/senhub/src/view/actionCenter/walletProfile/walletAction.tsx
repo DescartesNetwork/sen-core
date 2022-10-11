@@ -2,7 +2,7 @@ import { MouseEvent, useCallback, useState } from 'react'
 import copy from 'copy-to-clipboard'
 
 import { Tooltip, Space, Popover, Button } from 'antd'
-import QRCodeCanvas from 'qrcode.react'
+import { QRCodeCanvas } from 'qrcode.react'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { asyncWait } from 'shared/util'

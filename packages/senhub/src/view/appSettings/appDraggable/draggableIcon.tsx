@@ -17,6 +17,7 @@ export type DraggableIconProps = {
   moveToSidebar?: AppActionsProps['moveToSidebar']
   removeFromSidebar?: AppActionsProps['removeFromSidebar']
   hidden?: boolean
+  active?: boolean
 }
 
 const DraggableIcon = ({
@@ -26,6 +27,7 @@ const DraggableIcon = ({
   moveToSidebar = () => {},
   removeFromSidebar = () => {},
   hidden = false,
+  active,
 }: DraggableIconProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -36,6 +38,7 @@ const DraggableIcon = ({
   const style = {
     transform: CSS.Translate.toString(transform),
     transition: transition,
+    opacity: active ? 0.5 : 1,
   }
 
   return (

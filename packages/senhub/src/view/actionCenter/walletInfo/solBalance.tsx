@@ -9,8 +9,10 @@ const SolBalance = ({ inUSD = false }: { inUSD?: boolean }) => {
 
   const balance = numeric(lamports / 10 ** 9).format('0.[000]')
   const usd = useMemo(() => {
-    return numeric(Number(balance) * (cgkData?.price || 0)).format('0,0.[000]')
-  }, [balance, cgkData])
+    return numeric((lamports / 10 ** 9) * (cgkData?.price || 0)).format(
+      '0,0.[000]',
+    )
+  }, [lamports, cgkData])
 
   const getCGKData = useCallback(async () => {
     const cgkData = await fetchCGK('solana')

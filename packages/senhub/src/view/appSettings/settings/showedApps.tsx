@@ -1,5 +1,4 @@
 import { Col, Empty, Row, Typography } from 'antd'
-import { useAppIds } from 'hooks/useAppIds'
 import DraggableIcon from '../appDraggable/draggableIcon'
 import DroppablePage from '../appDraggable/droppablePage'
 
@@ -10,16 +9,17 @@ export type ShowedAppsProps = {
   disabled?: boolean
   moveToSidebar?: (appId: string) => void
   removeFromSidebar?: (appId: string) => void
+  activeId?: string
 }
 const ShowedApps = ({
   appIds,
   disabled = false,
   moveToSidebar = () => {},
   removeFromSidebar = () => {},
+  activeId,
 }: ShowedAppsProps) => {
-  const allAppIds = useAppIds()
   return (
-    <DroppablePage id={ELEMENT_INSIDE_ID} items={allAppIds} disabled={disabled}>
+    <DroppablePage id={ELEMENT_INSIDE_ID} items={appIds} disabled={disabled}>
       <Row gutter={[0, 8]} justify="center">
         <Col span={24}>
           <Typography.Text className="padding-x" type="secondary">
@@ -41,6 +41,7 @@ const ShowedApps = ({
                 size={32}
                 moveToSidebar={() => moveToSidebar(appId)}
                 removeFromSidebar={() => removeFromSidebar(appId)}
+                active={appId === activeId}
               />
             </Col>
           ))
