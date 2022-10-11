@@ -58,7 +58,7 @@ export const connectWallet = createAsyncThunk(
     const address = await wallet.getAddress()
     wallet.publicKey = new web3.PublicKey(address)
     const lamports = await connection.getBalance(wallet.publicKey)
-    return { address, lamports: BigInt(lamports), visible: false }
+    return { address, lamports, visible: false }
   },
 )
 
