@@ -1,13 +1,13 @@
 {
   "name": "module-template",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.0",
     "@senswap/sen-js": "^1.4.0",
     "@sentre/antd-ionicon": "^1.0.46",
     "@sentre/react-lazyload": "^3.2.2",
-    "@sentre/senhub": "^4.0.2",
+    "@sentre/senhub": "^4.0.3",
     "antd": "^4.23.1",
     "bn.js": "^5.2.0",
     "react": "^17.0.2",
