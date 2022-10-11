@@ -1,5 +1,6 @@
-import { AnchorProvider, web3 } from '@project-serum/anchor'
+import { AnchorProvider, utils, web3 } from '@project-serum/anchor'
 import { Wallet } from '@project-serum/anchor/dist/cjs/provider'
+import { SPLT } from '@senswap/sen-js'
 
 import { rpc } from 'shared/runtime'
 
@@ -7,6 +8,15 @@ import { rpc } from 'shared/runtime'
  * Cluster connection
  */
 export const connection = new web3.Connection(rpc, { commitment: 'confirmed' })
+
+/**
+ * SPL Token Library - SenswapJS Legacy
+ */
+export const splt = new SPLT(
+  utils.token.TOKEN_PROGRAM_ID.toBase58(),
+  utils.token.ASSOCIATED_PROGRAM_ID.toBase58(),
+  rpc,
+)
 
 /**
  * Anchor's Wallet

@@ -5,7 +5,7 @@ import { chainId, Net, net, rpc } from 'shared/runtime'
 import { DataLoader } from 'shared/dataloader'
 import BaseTokenProvider from './baseProvider'
 import { splTokenProvider } from './splProvider'
-import { splt } from 'store/mints.reducer'
+import { splt } from 'providers/sol.provider'
 
 const LPT_DECIMALS = 9
 const PROGRAM_CONFIGS: Record<Net, string> = {

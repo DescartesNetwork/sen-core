@@ -4,7 +4,7 @@ import { isAddress } from 'shared/util'
 import { useRootDispatch, RootDispatch } from 'store'
 import { getAccounts, upsetAccount } from 'store/accounts.reducer'
 import { useWalletAddress, useWalletBalance } from 'hooks/useWallet'
-import { splt } from 'store/mints.reducer'
+import { splt } from 'providers/sol.provider'
 
 // Watch id
 let watchId = 0

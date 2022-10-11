@@ -1,13 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { SPLT } from '@senswap/sen-js'
 
-import configs from 'configs'
 import { isAddress } from 'shared/util'
-
-const {
-  sol: { node, spltAddress, splataAddress },
-} = configs
-export const splt = new SPLT(spltAddress, splataAddress, node)
+import { splt } from 'providers/sol.provider'
 
 /**
  * Interface & Utility

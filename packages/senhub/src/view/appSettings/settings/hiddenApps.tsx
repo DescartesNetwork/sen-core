@@ -23,7 +23,7 @@ const HiddenApps = ({
       <Row gutter={[0, 8]} justify="center">
         <Col span={24}>
           <Typography.Text className="padding-x" type="secondary">
-            NOT INCLUDES
+            NOT INCLUDED
           </Typography.Text>
         </Col>
         <Col span={24} /> {/* safe space */}

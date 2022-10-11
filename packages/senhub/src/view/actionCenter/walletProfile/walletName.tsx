@@ -14,7 +14,7 @@ import { upsetUser } from 'store/user.reducer'
 import { performReverseLookup } from 'helper/sns/utils'
 import { net } from 'shared/runtime'
 import configs from 'configs'
-import { connection } from 'store/wallet.reducer'
+import { connection } from 'providers/sol.provider'
 
 const {
   sol: { rootDomainAccount, snsProgramId },

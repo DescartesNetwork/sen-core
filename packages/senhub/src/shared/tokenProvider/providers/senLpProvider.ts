@@ -1,17 +1,18 @@
 import { web3, Address } from '@project-serum/anchor'
-import { MintData, utils } from '@senswap/sen-js'
+import { MintData, utils, Swap } from '@senswap/sen-js'
+import { connection, splt } from 'providers/sol.provider'
 
 import { DataLoader } from 'shared/dataloader'
 import { chainId } from 'shared/runtime'
 import BaseTokenProvider from './baseProvider'
 import { splTokenProvider } from './splProvider'
-// import configs from 'configs'
-import { splt } from 'store/mints.reducer'
+import configs from 'configs'
 
 const LPT_DECIMALS = 9
-// const {
-//   sol: { taxmanAddress },
-// } = configs
+const {
+  sol: { taxmanAddress, swapAddress, spltAddress, splataAddress, node },
+} = configs
+const swapProgram = new Swap(swapAddress, spltAddress, splataAddress, node)
 
 class SenLpTokenProvider extends BaseTokenProvider {
   constructor() {
@@ -20,28 +21,22 @@ class SenLpTokenProvider extends BaseTokenProvider {
   }
 
   private getPools = async (): Promise<any[]> => {
-    return []
-    // const swapProgram =  window.sentre?.swap
-    // if (!swapProgram) return []
-    // const key = 'SenLpTokenProvider:getPools'
-    // return DataLoader.load(key, async () => {
-    //   // Get all pools
-    //   const value: Array<{
-    //     pubkey: web3.PublicKey
-    //     account: web3.AccountInfo<Buffer>
-    //   }> = await swapProgram.connection.getProgramAccounts(
-    //     swapProgram.swapProgramId,
-    //     {
-    //       filters: [
-    //         { dataSize: 257 },
-    //         { memcmp: { bytes: taxmanAddress, offset: 65 } },
-    //       ],
-    //     },
-    //   )
-    //   return value.map(({ account: { data } }) => {
-    //     return { account: { ...swapProgram.parsePoolData(data) } }
-    //   })
-    // })
+    const key = 'SenLpTokenProvider:getPools'
+    return DataLoader.load(key, async () => {
+      // Get all pools
+      const value: Array<{
+        pubkey: web3.PublicKey
+        account: web3.AccountInfo<Buffer>
+      }> = await connection.getProgramAccounts(swapProgram.swapProgramId, {
+        filters: [
+          { dataSize: 257 },
+          { memcmp: { bytes: taxmanAddress, offset: 65 } },
+        ],
+      })
+      return value.map(({ account: { data } }) => {
+        return { account: { ...swapProgram.parsePoolData(data) } }
+      })
+    })
   }
 
   private getMintLptData = async (mintAddress: Address) => {

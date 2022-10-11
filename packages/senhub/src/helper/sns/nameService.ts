@@ -1,6 +1,6 @@
 import { web3 } from '@project-serum/anchor'
 import { deserializeUnchecked, Schema } from 'borsh'
-import { connection } from 'store/wallet.reducer'
+import { connection } from 'providers/sol.provider'
 
 export class NameService {
   static HEADER_LEN = 96

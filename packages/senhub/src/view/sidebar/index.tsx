@@ -11,12 +11,6 @@ import { net } from 'shared/runtime'
 
 import './index.os.less'
 
-export enum MenuSystemItem {
-  Notify = 'Notifications',
-  AppSettings = 'Application settings',
-  AddApp = 'Add more app',
-}
-
 const SideBar = () => {
   const infix = useInfix()
   const visible = useRootSelector(

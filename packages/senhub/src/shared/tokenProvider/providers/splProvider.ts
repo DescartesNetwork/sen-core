@@ -1,9 +1,9 @@
 import { Address } from '@project-serum/anchor'
 import { utils } from '@senswap/sen-js'
 import { TokenListProvider } from '@solana/spl-token-registry'
+import { splt } from 'providers/sol.provider'
 
 import { DataLoader } from 'shared/dataloader'
-import { splt } from 'store/mints.reducer'
 import supplementary, { sntr, sol } from '../supplementary'
 import BaseTokenProvider from './baseProvider'
 

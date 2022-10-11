@@ -1,8 +1,8 @@
 import { web3 } from '@project-serum/anchor'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { rpc } from 'shared/runtime'
 import { GuestWallet } from 'view/wallet/lib'
+import { connection } from 'providers/sol.provider'
 
 /**
  * Interface & Utility
@@ -13,8 +13,6 @@ export type WalletState = {
   address: string
   lamports: number
 }
-
-export const connection = new web3.Connection(rpc, { commitment: 'confirmed' })
 
 const initializeWindow = (wallet?: WalletInterface) => {
   window.sentre = {

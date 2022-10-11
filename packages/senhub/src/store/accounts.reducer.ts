@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { PublicKey } from '@solana/web3.js'
+import { splt } from 'providers/sol.provider'
 
 import { isAddress } from 'shared/util'
-import { splt } from './mints.reducer'
 
 /**
  * Interface & Utility

@@ -5,7 +5,7 @@ import { programs } from '@metaplex/js'
 import { chainId } from 'shared/runtime'
 import { isAddress } from 'shared/util'
 import BaseTokenProvider from './baseProvider'
-import { splt } from 'store/mints.reducer'
+import { splt } from 'providers/sol.provider'
 
 class MetaplexProvider extends BaseTokenProvider {
   constructor() {
