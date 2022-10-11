@@ -36,13 +36,16 @@ const System = ({ isMobile = false }: SystemProps) => {
         <Notifications visible={nextVisible} />
       </Col>
       <Col>
-        <Divider style={{ margin: '8px 0', minWidth: 48 }} type="horizontal" />
+        <Divider
+          style={{ margin: '8px 0px', minWidth: 48 }}
+          type="horizontal"
+        />
       </Col>
       <Col>
         <SenMarket isMobile={isMobile} />
       </Col>
       <Col>
-        <Wallet visible={nextVisible} />
+        <Wallet visible={nextVisible} style={{ marginTop: 8 }} />
       </Col>
     </Row>
   )
