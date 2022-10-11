@@ -1756,10 +1756,10 @@
     tweetnacl "^1.0.3"
     uuid "^8.3.2"
 
-"@sentre/craco-plugins@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@sentre/craco-plugins/-/craco-plugins-2.0.1.tgz#020e3c50b19ab20dcf7ef6a251654e334a15e1bb"
-  integrity sha512-h7KvtGpeW4lo0eeFmaArK2AZy5h+2jOMe+cQftNuQB1lawFIJC2+WrolLPsr9+EH4DoGnoR99YdEYbY6+93sfw==
+"@sentre/craco-plugins@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@sentre/craco-plugins/-/craco-plugins-2.0.2.tgz#9ab2a60578badce5c513d479d7b21ad07f970fea"
+  integrity sha512-s4c+0XOYY2VxIEnmRVvpzTDRRENjKV6Rra3MjsEx0rngzdWUmNCI6SzAbF23zVH1S48OVHI5bDJCzaEYCmOL6g==
   dependencies:
     "@babel/cli" "^7.17.10"
     "@babel/core" "^7.18.2"
@@ -1792,10 +1792,10 @@
     util "^0.12.4"
     webpack-bundle-analyzer "^4.5.0"
 
-"@sentre/embeded-view@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@sentre/embeded-view/-/embeded-view-2.0.1.tgz#40967241060a1d89823d5ba1e8094f48036dee62"
-  integrity sha512-F4HNdmIlqWrOjbpcT59vjNpoz7tbF6glQoVPxwkrUeQyolasYRXFHgoFnk/TSee+jZvfGC4P9q72aJ7urSPcAA==
+"@sentre/embeded-view@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@sentre/embeded-view/-/embeded-view-2.0.2.tgz#ada2d5718eb8789e08d81f10240d195b2efcf0e5"
+  integrity sha512-VHztVsbhrWJuM50Lmy6Re3Tq/vdurxA4QTcBiqS2DUo8CI0x6c9730r4yR5WxKmufHYiiGA83pPUzKDoQqzrrg==
   dependencies:
     "@sentre/connector" "^0.1.2"
 
