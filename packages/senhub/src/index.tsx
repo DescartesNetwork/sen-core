@@ -34,6 +34,7 @@ export default Senhub
 export { default as TokenProvider } from 'shared/tokenProvider'
 export * from 'shared/tokenProvider'
 export * from 'providers/antd.provider'
+export * from 'providers/sol.provider'
 // PDB
 export { default as PDB } from 'shared/pdb'
 export * from 'shared/pdb'
