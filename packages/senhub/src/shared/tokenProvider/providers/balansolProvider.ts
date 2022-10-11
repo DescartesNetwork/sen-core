@@ -5,6 +5,7 @@ import { chainId, Net, net, rpc } from 'shared/runtime'
 import { DataLoader } from 'shared/dataloader'
 import BaseTokenProvider from './baseProvider'
 import { splTokenProvider } from './splProvider'
+import { splt } from 'store/mints.reducer'
 
 const LPT_DECIMALS = 9
 const PROGRAM_CONFIGS: Record<Net, string> = {
@@ -39,9 +40,7 @@ class BalansolTokenProvider extends BaseTokenProvider {
       )
       mintLptDatas.forEach((mintLptData, index) => {
         if (!mintLptData?.data) return
-        const mintData = window.sentre.splt.parseMintData(
-          mintLptData.data as Buffer,
-        )
+        const mintData = splt.parseMintData(mintLptData.data as Buffer)
         result.set(mintLpts[index].toBase58(), mintData)
       })
       return result
@@ -99,9 +98,7 @@ class BalansolTokenProvider extends BaseTokenProvider {
             const tokenInfo = await splTokenProvider.findByAddress(mint)
             let decimals = tokenInfo?.decimals
             if (!decimals) {
-              const mintData = await window.sentre.splt.getMintData(
-                mint.toBase58(),
-              )
+              const mintData = await splt.getMintData(mint.toBase58())
               decimals = mintData.decimals
             }
             const mintAmount = Number(utils.undecimalize(amountBN, decimals))

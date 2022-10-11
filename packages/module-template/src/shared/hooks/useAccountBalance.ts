@@ -53,7 +53,7 @@ const useAccountBalance = (accountAddress: string) => {
   if (!util.isAddress(walletAddress) || !util.isAddress(accountAddress))
     return buildResult()
   if (accountAddress === walletAddress)
-    return buildResult(DEFAULT_EMPTY_ADDRESS, lamports, 9)
+    return buildResult(DEFAULT_EMPTY_ADDRESS, BigInt(lamports), 9)
 
   return buildResult(mintAddress, amount, decimals)
 }

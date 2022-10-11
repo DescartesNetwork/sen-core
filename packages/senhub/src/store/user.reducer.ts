@@ -68,11 +68,11 @@ export const login = createAsyncThunk<UserState, AppIds, { state: any }>(
       const jst = OAuth.issue('hub.sentre.io')
       const bearer = await OAuth.sign(jst, {
         getPublicKey: async () => {
-          const address = await window.sentre.wallet.getAddress()
+          const address = await window.sentre.solana.getAddress()
           return new PublicKey(address)
         },
         signMessage: async (msg: Buffer) => {
-          const { signature } = await window.sentre.wallet.signMessage(
+          const { signature } = await window.sentre.solana.signMessage(
             msg.toString('utf8'),
           )
           return Buffer.from(signature, 'hex')

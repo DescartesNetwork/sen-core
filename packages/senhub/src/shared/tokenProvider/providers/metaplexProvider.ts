@@ -5,6 +5,7 @@ import { programs } from '@metaplex/js'
 import { chainId } from 'shared/runtime'
 import { isAddress } from 'shared/util'
 import BaseTokenProvider from './baseProvider'
+import { splt } from 'store/mints.reducer'
 
 class MetaplexProvider extends BaseTokenProvider {
   constructor() {
@@ -26,11 +27,8 @@ class MetaplexProvider extends BaseTokenProvider {
       // Fetch new data
       const {
         data: { data: metadata },
-      } = await programs.metadata.Metadata.findByMint(
-        window.sentre.splt.connection,
-        addr,
-      )
-      const mintData = await window.sentre.splt.getMintData(addr.toString())
+      } = await programs.metadata.Metadata.findByMint(splt.connection, addr)
+      const mintData = await splt.getMintData(addr.toString())
       const uriData = await (await fetch(metadata.uri)).json()
       // Build Token info
       const tokenInfo: TokenInfo = {

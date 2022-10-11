@@ -1,6 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { SPLT } from '@senswap/sen-js'
 
+import configs from 'configs'
 import { isAddress } from 'shared/util'
+
+const {
+  sol: { node, spltAddress, splataAddress },
+} = configs
+export const splt = new SPLT(spltAddress, splataAddress, node)
 
 /**
  * Interface & Utility
@@ -40,7 +47,6 @@ export const getMint = createAsyncThunk<
     } = getState()
     if (data) return { [address]: data }
   }
-  const { splt } = window.sentre
   const raw = await splt.getMintData(address)
   return { [address]: raw }
 })

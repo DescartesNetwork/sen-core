@@ -3,6 +3,7 @@ import { utils } from '@senswap/sen-js'
 import { TokenListProvider } from '@solana/spl-token-registry'
 
 import { DataLoader } from 'shared/dataloader'
+import { splt } from 'store/mints.reducer'
 import supplementary, { sntr, sol } from '../supplementary'
 import BaseTokenProvider from './baseProvider'
 
@@ -62,7 +63,7 @@ class SplTokenProvider extends BaseTokenProvider {
       const token = await this.findByAddress(mintAddress)
       let decimals = token?.decimals
       if (!decimals) {
-        const mintData = await window.sentre.splt.getMintData(mintAddress)
+        const mintData = await splt.getMintData(mintAddress)
         decimals = mintData.decimals
       }
       const bestOutput = await utils.undecimalize(
