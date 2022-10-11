@@ -10,18 +10,18 @@ import {
   useSensors,
   DragStartEvent,
   DragOverEvent,
-  DragOverlay,
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 
 import { Row, Col, Divider } from 'antd'
-import AppIcon from 'components/appIcon'
 import ShowedApps from './showedApps'
 import HiddenApps from './hiddenApps'
 
-import { RootState, useRootDispatch, useRootSelector } from 'store'
+import { useRootDispatch } from 'store'
 import { setHiddenAppIds, updateAppIds } from 'store/page.reducer'
 import { useAppIds } from 'hooks/useAppIds'
+import { useHiddenAppIds } from 'hooks/useHiddenAppIds'
+import DraggableOverlay from '../appDraggable/draggableOverlay'
 
 export const ELEMENT_HIDDEN_ID = 'action-hidden'
 export const ELEMENT_INSIDE_ID = 'active-in-sidebar'
@@ -37,17 +37,15 @@ const mixedStrategy = (
 const Settings = () => {
   const dispatch = useRootDispatch()
   const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 10 } }),
+    useSensor(MouseSensor, { activationConstraint: { distance: 1 } }),
     useSensor(TouchSensor, {
-      activationConstraint: { distance: 10, delay: 200, tolerance: 5 },
+      activationConstraint: { distance: 1, delay: 200, tolerance: 5 },
     }),
   )
   const [internalAppIds, setInternalAppIds] = useState<AppIds>([])
   const [activeId, setActiveId] = useState<string>('')
   const appIds = useAppIds()
-  const hiddenAppIds = useRootSelector(
-    (state: RootState) => state.page.hiddenAppIds,
-  )
+  const hiddenAppIds = useHiddenAppIds()
 
   useEffect(() => {
     setInternalAppIds(appIds)
@@ -55,11 +53,15 @@ const Settings = () => {
 
   const detectAvailableDrag = useCallback(
     (activeId: string, overId: string) => {
+      const nextHiddenAppIds = [...hiddenAppIds]
+
       return (
-        (!hiddenAppIds.includes(activeId) &&
+        (!nextHiddenAppIds.includes(activeId) &&
+          (!nextHiddenAppIds.includes(overId) ||
+            overId !== ELEMENT_HIDDEN_ID) &&
           (overId === ELEMENT_INSIDE_ID || overId === activeId)) ||
-        (hiddenAppIds.includes(activeId) &&
-          (overId === ELEMENT_HIDDEN_ID || hiddenAppIds.includes(overId)))
+        (nextHiddenAppIds.includes(activeId) &&
+          (overId === ELEMENT_HIDDEN_ID || nextHiddenAppIds.includes(overId)))
       )
     },
     [hiddenAppIds],
@@ -69,9 +71,9 @@ const Settings = () => {
     (appId: string) => {
       const nextHiddenAppIds = [...hiddenAppIds]
       const idxHiddenAppId = nextHiddenAppIds.indexOf(appId)
+
       if (idxHiddenAppId < 0) nextHiddenAppIds.push(appId)
       else nextHiddenAppIds.splice(idxHiddenAppId, 1)
-
       dispatch(setHiddenAppIds(nextHiddenAppIds))
     },
     [dispatch, hiddenAppIds],
@@ -79,21 +81,23 @@ const Settings = () => {
 
   const dragHiddenApps = useCallback(
     ({ over, active }: DragEndEvent) => {
-      const activeId = active.id
-      if (!over || detectAvailableDrag(activeId, over.id)) return false
+      const activeId = active.id as string
 
+      if (!over || detectAvailableDrag(activeId, over.id as string))
+        return false
       onMoveAppIds(activeId)
       return true
     },
     [detectAvailableDrag, onMoveAppIds],
   )
 
-  const onDragStart = ({ active }: DragStartEvent) => setActiveId(active.id)
+  const onDragStart = ({ active }: DragStartEvent) =>
+    setActiveId(active.id as string)
   const onDragOver = useCallback(
     ({ over, active }: DragOverEvent) => {
       if (!over) return setInternalAppIds(internalAppIds)
-      const activeAppIndex = active.id
-      const overAppIndex = over.id || activeAppIndex
+      const activeAppIndex = active.id as string
+      const overAppIndex = (over.id as string) || activeAppIndex
 
       // Sort the AppIds sidebar
       const newAppIds = arrayMove(
@@ -101,11 +105,10 @@ const Settings = () => {
         internalAppIds.indexOf(activeAppIndex),
         internalAppIds.indexOf(overAppIndex),
       )
-      // detect undefinded value in sorted list
+      // detect undefined value in sorted list
       if (!newAppIds) return
       for (const appId of newAppIds) {
-        if (appId) continue
-        return
+        if (!appId) return
       }
       // Update new pages
       return setInternalAppIds(newAppIds)
@@ -122,8 +125,7 @@ const Settings = () => {
   const filteredInternalAppIds = useMemo(() => {
     const nextInternalAppIds: AppIds = []
     for (const appId of internalAppIds) {
-      if (hiddenAppIds.includes(appId)) continue
-      nextInternalAppIds.push(appId)
+      if (!hiddenAppIds.includes(appId)) nextInternalAppIds.push(appId)
     }
     return nextInternalAppIds
   }, [hiddenAppIds, internalAppIds])
@@ -142,6 +144,7 @@ const Settings = () => {
             appIds={filteredInternalAppIds}
             moveToSidebar={onMoveAppIds}
             removeFromSidebar={onMoveAppIds}
+            activeId={activeId}
           />
         </Col>
         <Col span={24}>
@@ -152,17 +155,11 @@ const Settings = () => {
             hiddenAppIds={hiddenAppIds}
             moveToSidebar={onMoveAppIds}
             removeFromSidebar={onMoveAppIds}
+            activeId={activeId}
           />
         </Col>
       </Row>
-
-      <DragOverlay>
-        {activeId ? (
-          <span style={{ opacity: 0.5 }}>
-            <AppIcon appId={activeId} direction="horizontal" size={40} />
-          </span>
-        ) : null}
-      </DragOverlay>
+      <DraggableOverlay activeId={activeId} />
     </DndContext>
   )
 }
