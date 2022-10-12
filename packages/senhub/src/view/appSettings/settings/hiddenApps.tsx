@@ -1,6 +1,6 @@
 import { Col, Empty, Row, Typography } from 'antd'
-import DroppablePage from '../appDraggable/droppablePage'
-import DraggableIcon from '../appDraggable/draggableIcon'
+import DroppablePage from 'components/dndkitContainer/droppablePage'
+import AppSortItem from '../appDraggable/appSortItem'
 
 import { ELEMENT_HIDDEN_ID } from './index'
 
@@ -11,6 +11,7 @@ export type HiddenAppProps = {
   removeFromSidebar?: (appId: string) => void
   activeId?: string
 }
+
 const HiddenApps = ({
   hiddenAppIds,
   disabled = false,
@@ -34,7 +35,7 @@ const HiddenApps = ({
         ) : (
           hiddenAppIds.map((appId) => (
             <Col span={24} key={appId}>
-              <DraggableIcon
+              <AppSortItem
                 key={appId}
                 appId={appId}
                 disabled={disabled}

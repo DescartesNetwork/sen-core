@@ -2,7 +2,7 @@ import { Card, Col, Row } from 'antd'
 import Brand from 'components/brand'
 import Navigation from './navigation'
 import System from './system'
-import ActionVisibleSideBar from './components/buttonVisibleSidebar'
+import ButtonVisibleSideBar from './components/buttonVisible'
 
 import { useInfix, useTheme } from 'hooks/useUI'
 import { RootState, useRootSelector } from 'store'
@@ -50,7 +50,7 @@ const SideBar = () => {
           <System isMobile={isMobile} />
         </Col>
       </Row>
-      <ActionVisibleSideBar />
+      <ButtonVisibleSideBar />
     </Card>
   )
 }
