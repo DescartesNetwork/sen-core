@@ -1,9 +1,5 @@
-import { Fragment } from 'react'
+import { ReactNode } from 'react'
 import { DragOverlay } from '@dnd-kit/core'
-
-import AppIcon from 'components/appIcon'
-import { Button } from 'antd'
-import IonIcon from '@sentre/antd-ionicon'
 
 import {
   DropAnimationSideEffectsParameters,
@@ -11,10 +7,8 @@ import {
 } from '@dnd-kit/core/dist/components/DragOverlay/hooks/useDropAnimation'
 import { CSS } from '@dnd-kit/utilities'
 
-export type DraggableOverlayProps = { activeId: string; size?: number }
-const DraggableOverlay = ({ activeId, size = 32 }: DraggableOverlayProps) => {
-  if (!activeId) return <Fragment />
-
+export type DraggableOverlayProps = { children?: ReactNode }
+const DraggableOverlay = ({ children }: DraggableOverlayProps) => {
   const keyframesConfigs = ({ transform }: KeyframeResolverParameters) => {
     return [
       { transform: CSS.Transform.toString(transform.initial) },
@@ -65,14 +59,7 @@ const DraggableOverlay = ({ activeId, size = 32 }: DraggableOverlayProps) => {
         keyframes: keyframesConfigs,
       }}
     >
-      <div className="card-draggable-item" id={`draggale-${activeId}`}>
-        <AppIcon appId={activeId} size={size} direction="horizontal" />
-        <Button
-          type="text"
-          icon={<IonIcon name="menu-outline" />}
-          onClick={() => {}}
-        />
-      </div>
+      {children}
     </DragOverlay>
   )
 }

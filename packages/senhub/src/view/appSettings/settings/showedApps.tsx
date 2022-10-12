@@ -1,6 +1,6 @@
 import { Col, Empty, Row, Typography } from 'antd'
-import DraggableIcon from '../appDraggable/draggableIcon'
-import DroppablePage from '../appDraggable/droppablePage'
+import DroppablePage from 'components/dndkitContainer/droppablePage'
+import AppSortItem from '../appDraggable/appSortItem'
 
 import { ELEMENT_INSIDE_ID } from './index'
 
@@ -34,7 +34,7 @@ const ShowedApps = ({
         ) : (
           appIds.map((appId) => (
             <Col span={24} key={appId}>
-              <DraggableIcon
+              <AppSortItem
                 key={appId}
                 appId={appId}
                 disabled={disabled}

@@ -2,8 +2,6 @@ import { ReactNode } from 'react'
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext } from '@dnd-kit/sortable'
 
-import './index.os.less'
-
 /**
  * DroppablePage render as a Row
  */
