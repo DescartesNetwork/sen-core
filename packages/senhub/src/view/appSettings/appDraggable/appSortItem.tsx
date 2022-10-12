@@ -1,8 +1,8 @@
 import IonIcon from '@sentre/antd-ionicon'
 import { Button, Dropdown, Space } from 'antd'
 import AppIcon from 'components/appIcon'
-import AppActions, { AppActionsProps } from '../appActions'
 import SortbleItem from 'components/dndkitContainer/sortableItem'
+import AppActions, { AppActionsProps } from '../appActions'
 
 /**
  * AppSortItem render as a Col

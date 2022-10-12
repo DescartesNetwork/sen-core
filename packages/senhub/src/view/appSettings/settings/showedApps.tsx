@@ -1,5 +1,5 @@
 import { Col, Empty, Row, Typography } from 'antd'
-import AppDropPage from '../appDraggable/appDropPage'
+import DroppablePage from 'components/dndkitContainer/droppablePage'
 import AppSortItem from '../appDraggable/appSortItem'
 
 import { ELEMENT_INSIDE_ID } from './index'
@@ -19,7 +19,7 @@ const ShowedApps = ({
   activeId,
 }: ShowedAppsProps) => {
   return (
-    <AppDropPage id={ELEMENT_INSIDE_ID} items={appIds} disabled={disabled}>
+    <DroppablePage id={ELEMENT_INSIDE_ID} items={appIds} disabled={disabled}>
       <Row gutter={[0, 8]} justify="center">
         <Col span={24}>
           <Typography.Text className="padding-x" type="secondary">
@@ -47,7 +47,7 @@ const ShowedApps = ({
           ))
         )}
       </Row>
-    </AppDropPage>
+    </DroppablePage>
   )
 }
 

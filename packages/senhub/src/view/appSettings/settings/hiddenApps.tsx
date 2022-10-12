@@ -1,5 +1,5 @@
 import { Col, Empty, Row, Typography } from 'antd'
-import AppDropPage from '../appDraggable/appDropPage'
+import DroppablePage from 'components/dndkitContainer/droppablePage'
 import AppSortItem from '../appDraggable/appSortItem'
 
 import { ELEMENT_HIDDEN_ID } from './index'
@@ -19,7 +19,7 @@ const HiddenApps = ({
   activeId,
 }: HiddenAppProps) => {
   return (
-    <AppDropPage id={ELEMENT_HIDDEN_ID} items={hiddenAppIds}>
+    <DroppablePage id={ELEMENT_HIDDEN_ID} items={hiddenAppIds}>
       <Row gutter={[0, 8]} justify="center">
         <Col span={24}>
           <Typography.Text className="padding-x" type="secondary">
@@ -48,7 +48,7 @@ const HiddenApps = ({
           ))
         )}
       </Row>
-    </AppDropPage>
+    </DroppablePage>
   )
 }
 
