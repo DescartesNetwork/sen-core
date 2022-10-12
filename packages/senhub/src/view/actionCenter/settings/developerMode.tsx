@@ -36,7 +36,7 @@ const DeveloperMode = () => {
           </Space>
         </Col>
         <Col>
-          <Switch size="default" checked={developerMode} onChange={onSwitch} />
+          <Switch size="small" checked={developerMode} onChange={onSwitch} />
         </Col>
       </Row>
     </Card>

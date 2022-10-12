@@ -41,7 +41,7 @@ const PositionSideBar = () => {
         </Col>
         <Col>
           <Switch
-            size="default"
+            size="small"
             onChange={onSwitch}
             checked={sidebarPosition === 'right'}
           />

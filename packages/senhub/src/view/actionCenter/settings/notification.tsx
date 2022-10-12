@@ -24,7 +24,7 @@ const Notification = () => {
           </Space>
         </Col>
         <Col>
-          <Switch size="default" />
+          <Switch size="small" />
         </Col>
       </Row>
     </Card>

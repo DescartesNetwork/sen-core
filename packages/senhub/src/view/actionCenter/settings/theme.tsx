@@ -35,11 +35,7 @@ const Theme = () => {
           </Space>
         </Col>
         <Col>
-          <Switch
-            size="default"
-            checked={theme === 'dark'}
-            onChange={onSwitch}
-          />
+          <Switch size="small" checked={theme === 'dark'} onChange={onSwitch} />
         </Col>
       </Row>
     </Card>

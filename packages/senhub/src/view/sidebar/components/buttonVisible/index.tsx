@@ -24,7 +24,9 @@ const ButtonVisibleSideBar = () => {
     <DndContext
       modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
       sensors={sensors}
-      onDragEnd={({ delta }) => setY((y) => y - delta.y)}
+      onDragEnd={({ delta }) =>
+        setY((y) => Math.min(Math.max(y - delta.y, 0), window.innerHeight))
+      }
     >
       <DraggableButton initialY={y} />
     </DndContext>
