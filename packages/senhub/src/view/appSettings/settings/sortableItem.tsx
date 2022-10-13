@@ -2,20 +2,20 @@ import { CSSProperties, ReactNode } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
+import { Col, Row } from 'antd'
+
+import './sortableItem.os.less'
+
 export type SortableItemProps = {
   id?: string
   children?: ReactNode
-  center?: boolean
-  active?: boolean
   style?: CSSProperties
   disabled?: boolean
 }
+
 const SortableItem = ({
   id = '',
   children,
-  center = false,
-  active = false,
-  style,
   disabled = false,
 }: SortableItemProps) => {
   const {
@@ -27,28 +27,22 @@ const SortableItem = ({
     isDragging,
   } = useSortable({ id, disabled })
 
-  const defaultStyle = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    zIndex: isDragging && active ? 999 : 1,
-    cursor: isDragging ? 'grabbing' : 'grab',
-  }
-
   return (
-    <div
+    <Row
+      gutter={[0, 8]}
       ref={setNodeRef}
-      style={{
-        position: 'relative',
-        justifyContent: center ? 'center' : 'space-between',
-        ...defaultStyle,
-        ...style,
-      }}
       className="card-draggable-item"
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        zIndex: isDragging ? 999 : undefined,
+        position: 'relative',
+      }}
       {...attributes}
       {...listeners}
     >
-      {children}
-    </div>
+      <Col span={24}>{children}</Col>
+    </Row>
   )
 }
 

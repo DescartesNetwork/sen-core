@@ -6,14 +6,27 @@ import NewWindow from 'components/newWindow'
 import { useWalletAddress } from 'hooks/useWallet'
 import { explorer } from 'shared/util'
 
-const WalletAction = () => {
+export type WalletActionType = 'copy' | 'qr' | 'explorer'
+
+export type WalletActionProps = {
+  actions?: WalletActionType[]
+}
+
+const WalletAction = ({
+  actions = ['copy', 'qr', 'explorer'],
+}: WalletActionProps) => {
   const walletAddress = useWalletAddress()
 
   return (
     <Space size={4}>
-      <Clipboard content={walletAddress} />
-      <QR address={walletAddress} />
-      <NewWindow url={explorer(walletAddress)} />
+      {actions.map((action) => {
+        if (action === 'copy')
+          return <Clipboard key={action} content={walletAddress} />
+        if (action === 'qr') return <QR key={action} address={walletAddress} />
+        if (action === 'explorer')
+          return <NewWindow key={action} url={explorer(walletAddress)} />
+        return null
+      })}
     </Space>
   )
 }
