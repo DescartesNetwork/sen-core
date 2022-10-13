@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import { Row, Col, Button, Typography, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
+import IconLoading from 'components/loadingSvg'
 
 import {
   RootDispatch,
@@ -12,7 +13,6 @@ import {
 import { updateLoading } from 'store/flags.reducer'
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
-import IconLoading from 'static/images/loadingSvg'
 
 import './index.os.less'
 
