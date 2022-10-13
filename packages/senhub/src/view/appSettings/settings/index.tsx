@@ -58,99 +58,108 @@ const Settings = () => {
     [internalAppIds],
   )
 
-  const handleDragStart = ({ active }: DragStartEvent) =>
-    setActiveId(active.id as string)
+  const handleDragStart = useCallback(
+    ({ active }: DragStartEvent) => setActiveId(active.id as string),
+    [],
+  )
 
-  const handleDragOver = ({ active, delta, over }: DragOverEvent) => {
-    if (!over) return
-    const id = active.id as string
-    const overId = over.id as string
-    // Find the containers
-    const activeContainer = findContainer(id)
-    const overContainer = findContainer(overId)
+  const handleDragOver = useCallback(
+    ({ active, delta, over }: DragOverEvent) => {
+      if (!over) return
+      const id = active.id as string
+      const overId = over.id as string
+      // Find the containers
+      const activeContainer = findContainer(id)
+      const overContainer = findContainer(overId)
 
-    if (
-      !activeContainer ||
-      !overContainer ||
-      activeContainer === overContainer
-    ) {
-      return
-    }
-
-    setInternalAppIds((prev) => {
-      const activeItems = prev[activeContainer]
-      const overItems = prev[overContainer]
-
-      // Find the indexes for the internalAppIds
-      const activeIndex = activeItems.indexOf(id)
-      const overIndex = overItems.indexOf(overId)
-
-      let newIndex
-      if (overId in prev) {
-        // We're at the root droppable of a container
-        newIndex = overItems.length + 1
-      } else {
-        const isBelowLastItem =
-          over &&
-          overIndex === overItems.length - 1 &&
-          delta.y > over.rect.top + over.rect.height
-
-        const modifier = isBelowLastItem ? 1 : 0
-
-        newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1
+      if (
+        !activeContainer ||
+        !overContainer ||
+        activeContainer === overContainer
+      ) {
+        return
       }
 
-      return {
-        ...prev,
-        [activeContainer]: [
-          ...prev[activeContainer].filter((item) => item !== active.id),
-        ],
-        [overContainer]: [
-          ...prev[overContainer].slice(0, newIndex),
-          internalAppIds[activeContainer][activeIndex],
-          ...prev[overContainer].slice(newIndex, prev[overContainer].length),
-        ],
+      setInternalAppIds((prev) => {
+        const activeItems = prev[activeContainer]
+        const overItems = prev[overContainer]
+
+        // Find the indexes for the internalAppIds
+        const activeIndex = activeItems.indexOf(id)
+        const overIndex = overItems.indexOf(overId)
+
+        let newIndex
+        if (overId in prev) {
+          // We're at the root droppable of a container
+          newIndex = overItems.length + 1
+        } else {
+          const isBelowLastItem =
+            over &&
+            overIndex === overItems.length - 1 &&
+            delta.y > over.rect.top + over.rect.height
+
+          const modifier = isBelowLastItem ? 1 : 0
+
+          newIndex =
+            overIndex >= 0 ? overIndex + modifier : overItems.length + 1
+        }
+
+        return {
+          ...prev,
+          [activeContainer]: [
+            ...prev[activeContainer].filter((item) => item !== active.id),
+          ],
+          [overContainer]: [
+            ...prev[overContainer].slice(0, newIndex),
+            internalAppIds[activeContainer][activeIndex],
+            ...prev[overContainer].slice(newIndex, prev[overContainer].length),
+          ],
+        }
+      })
+    },
+    [findContainer, internalAppIds],
+  )
+
+  const handleDragEnd = useCallback(
+    ({ active, over }: DragEndEvent) => {
+      if (!over) return
+      const id = active.id as string
+      const overId = over.id as string
+
+      const activeContainer = findContainer(id)
+      const overContainer = findContainer(overId)
+
+      if (
+        !activeContainer ||
+        !overContainer ||
+        activeContainer !== overContainer
+      ) {
+        return
       }
-    })
-  }
 
-  const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    if (!over) return
-    const id = active.id as string
-    const overId = over.id as string
+      const activeIndex = internalAppIds[activeContainer].indexOf(id)
+      const overIndex = internalAppIds[overContainer].indexOf(overId)
 
-    const activeContainer = findContainer(id)
-    const overContainer = findContainer(overId)
+      if (activeIndex !== overIndex) {
+        setInternalAppIds((internalAppIds) => ({
+          ...internalAppIds,
+          [overContainer]: arrayMove(
+            internalAppIds[overContainer],
+            activeIndex,
+            overIndex,
+          ),
+        }))
+      }
 
-    if (
-      !activeContainer ||
-      !overContainer ||
-      activeContainer !== overContainer
-    ) {
-      return
-    }
+      const appIds = internalAppIds.appIds
+      const hiddenAppIds = internalAppIds.hiddenAppIds
 
-    const activeIndex = internalAppIds[activeContainer].indexOf(id)
-    const overIndex = internalAppIds[overContainer].indexOf(overId)
-
-    if (activeIndex !== overIndex) {
-      setInternalAppIds((internalAppIds) => ({
-        ...internalAppIds,
-        [overContainer]: arrayMove(
-          internalAppIds[overContainer],
-          activeIndex,
-          overIndex,
-        ),
-      }))
-    }
-
-    const appIds = internalAppIds.appIds
-    const hiddenAppIds = internalAppIds.hiddenAppIds
-
-    setActiveId('')
-    dispatch(setHiddenAppIds(hiddenAppIds))
-    return dispatch(updateAppIds(appIds))
-  }
+      setActiveId('')
+      dispatch(setHiddenAppIds(hiddenAppIds))
+      return dispatch(updateAppIds([...appIds, ...hiddenAppIds]))
+    },
+    [dispatch, findContainer, internalAppIds],
+  )
 
   return (
     <DndContext
