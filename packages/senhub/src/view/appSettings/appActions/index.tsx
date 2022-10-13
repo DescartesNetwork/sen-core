@@ -22,22 +22,6 @@ export const AppActions = ({
   const onOpenInNewTab = useGoToApp({ appId, blank: false })
   const onUninstall = useUninstallApp(appId)
 
-  // const configsMenu = useMemo(() => {
-  //   if (hidden)
-  //     return {
-  //       key: 'move-to-sidebar',
-  //       label: 'Move to sidebar',
-  //       icon: <IonIcon name="eye-outline" />,
-  //       onClick: moveToSidebar,
-  //     }
-  //   return {
-  //     key: 'remove-from-sidebar',
-  //     label: 'Remove from sidebar',
-  //     icon: <IonIcon name="eye-outline" />,
-  //     onClick: removeFromSidebar,
-  //   }
-  // }, [hidden, moveToSidebar, removeFromSidebar])
-
   return (
     <Menu
       items={[
@@ -47,7 +31,6 @@ export const AppActions = ({
           icon: <IonIcon name="open-outline" />,
           onClick: onOpenInNewTab,
         },
-        // { ...configsMenu },
         {
           key: 'uninstall',
           label: 'Uninstall',
