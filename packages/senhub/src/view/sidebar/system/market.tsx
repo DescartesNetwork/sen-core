@@ -31,13 +31,12 @@ const SenMarket = ({ isMobile }: SenMarketProps) => {
     params?.appId === STORE_ID ? 'card-app-icon active' : 'card-app-icon'
 
   return (
-    <Card bordered={false} className={cardAppCln}>
+    <Card bordered={false} className={cardAppCln} onClick={onStore}>
       <AppIcon
         appId={STORE_ID}
         size={32}
         direction="horizontal"
         name={nextVisible}
-        onClick={onStore}
       />
     </Card>
   )

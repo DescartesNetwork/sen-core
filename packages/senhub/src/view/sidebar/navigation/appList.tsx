@@ -5,8 +5,6 @@ import ContextMenu from './contextMenu'
 import { useGoToAppCallback } from 'hooks/useGotoApp'
 import { useAppIds, useCurrentAppId } from 'hooks/useAppIds'
 
-import './index.os.less'
-
 export type AppListProps = { visible?: boolean }
 
 const AppList = ({ visible = false }: AppListProps) => {
@@ -30,13 +28,13 @@ const AppList = ({ visible = false }: AppListProps) => {
                   ? 'card-app-icon active'
                   : 'card-app-icon'
               }
+              onClick={() => onGoToApp({ appId })}
             >
               <AppIcon
                 appId={appId}
                 size={32}
                 direction="horizontal"
                 name={visible}
-                onClick={() => onGoToApp({ appId })}
               />
             </Card>
           </Dropdown>
