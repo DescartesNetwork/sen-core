@@ -5,6 +5,7 @@ import System from './system'
 import ButtonVisibleSideBar from './components/buttonVisible'
 
 import { useInfix, useTheme } from 'hooks/useUI'
+import { useGoToStore } from 'hooks/useGotoStore'
 import { RootState, useRootSelector } from 'store'
 import { Infix } from 'store/ui.reducer'
 import { net } from 'shared/runtime'
@@ -17,6 +18,7 @@ const SideBar = () => {
     (state: RootState) => state.ui.visibleNavigation,
   )
   const theme = useTheme()
+  const goToStore = useGoToStore()
 
   const isMobile = infix < Infix.md
   const brandDirection = visible && !isMobile ? 'horizontal' : 'vertical'
@@ -39,7 +41,13 @@ const SideBar = () => {
                 paddingRight: 12,
               }}
             >
-              <Brand network={net} theme={theme} direction={brandDirection} />
+              <Brand
+                style={{ cursor: 'pointer' }}
+                network={net}
+                theme={theme}
+                direction={brandDirection}
+                onClick={goToStore}
+              />
             </Col>
             <Col style={{ width: '100%' }}>
               <Navigation isMobile={isMobile} />
