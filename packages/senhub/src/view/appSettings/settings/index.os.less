@@ -1,0 +1,43 @@
+@import '../../../static/styles/common/vars.os.less';
+
+.build-droppable-page {
+  .droppable-page {
+    padding: 12px;
+    margin: 0;
+    min-height: 60px;
+  }
+  &.drag-empty {
+    height: 80px;
+  }
+}
+
+.card-draggable-item {
+  display: flex;
+  flex: 1 1 100%;
+  cursor: pointer;
+  padding: 8px 24px;
+  .draggable-dropdown {
+    display: none !important;
+  }
+  &:hover {
+    .draggable-dropdown {
+      display: block !important;
+    }
+  }
+}
+
+#light {
+  .card-draggable-item(@NEUTRAL10) {
+    &:hover {
+      background: @NEUTRAL10;
+    }
+  }
+}
+
+#dark {
+  .card-draggable-item(@NEUTRAL90) {
+    &:hover {
+      background: @NEUTRAL90;
+    }
+  }
+}

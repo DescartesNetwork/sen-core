@@ -4,18 +4,15 @@ import AppIcon from 'components/appIcon'
 import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import DraggableOverlay from 'components/dndkitContainer/draggableOverlay'
+import { DragOverlay } from '@dnd-kit/core'
 
-export type AppDragOverlayItemProps = { activeId: string; size?: number }
+export type DragOverlayItemProps = { activeId: string; size?: number }
 
-const AppDragOverlayItem = ({
-  activeId,
-  size = 32,
-}: AppDragOverlayItemProps) => {
+const DragOverlayItem = ({ activeId, size = 32 }: DragOverlayItemProps) => {
   if (!activeId) return <Fragment />
 
   return (
-    <DraggableOverlay>
+    <DragOverlay>
       <div className="card-draggable-item" id={`draggale-${activeId}`}>
         <AppIcon appId={activeId} size={size} direction="horizontal" />
         <Button
@@ -24,8 +21,8 @@ const AppDragOverlayItem = ({
           onClick={() => {}}
         />
       </div>
-    </DraggableOverlay>
+    </DragOverlay>
   )
 }
 
-export default AppDragOverlayItem
+export default DragOverlayItem

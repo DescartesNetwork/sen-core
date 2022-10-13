@@ -1,5 +1,5 @@
 import { Col, Drawer, Row, Typography } from 'antd'
-import Settings from './settings'
+import Settings from './settings/index'
 
 import { RootState, useRootSelector } from 'store'
 
