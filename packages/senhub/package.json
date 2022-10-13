@@ -17,7 +17,7 @@
     "@reduxjs/toolkit": "^1.8.0",
     "@senswap/sen-js": "^1.4.0",
     "@sentre/antd-ionicon": "^2.0.2",
-    "@sentre/connector": "^0.1.0",
+    "@sentre/connector": "^0.1.2",
     "@sentre/react-dynamic-remote-component": "^0.0.8",
     "@sentre/react-lazyload": "^3.2.2",
     "@solana/spl-token-registry": "^0.2.4574",
