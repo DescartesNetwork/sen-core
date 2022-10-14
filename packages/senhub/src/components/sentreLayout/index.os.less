@@ -5,12 +5,13 @@
   &.float-right {
     flex-flow: row-reverse nowrap;
   }
-  &.sticky-menu {
-    overflow: auto;
-    max-height: 100vh;
-  }
   .sentre-sidebar,
   .sentre-body {
     transition: all 0.05s linear;
+  }
+  &.sticky-menu {
+    .sentre-sidebar {
+      max-height: 100vh;
+    }
   }
 }
