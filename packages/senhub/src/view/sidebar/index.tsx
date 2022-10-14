@@ -35,8 +35,8 @@ const SideBar = () => {
           >
             <Col
               style={{
-                paddingTop: 20,
-                paddingBottom: 20,
+                paddingTop: 24,
+                paddingBottom: 36,
                 paddingLeft: 12,
                 paddingRight: 12,
               }}
