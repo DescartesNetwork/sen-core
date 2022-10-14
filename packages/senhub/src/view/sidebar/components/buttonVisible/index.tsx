@@ -11,7 +11,7 @@ import DraggableButton from './draggableButton'
 const activationConstraint = { distance: 1 }
 
 const ButtonVisibleSideBar = () => {
-  const [y, setY] = useState(16)
+  const [y, setY] = useState(128)
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint,
   })
