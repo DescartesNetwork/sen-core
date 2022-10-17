@@ -2,20 +2,15 @@ import { Card, Col, Row } from 'antd'
 import Brand from 'components/brand'
 import Navigation from './navigation'
 import System from './system'
-import ActionVisibleSideBar from './components/buttonVisibleSidebar'
+import ButtonVisibleSideBar from './components/buttonVisible'
 
 import { useInfix, useTheme } from 'hooks/useUI'
+import { useGoToStore } from 'hooks/useGotoStore'
 import { RootState, useRootSelector } from 'store'
 import { Infix } from 'store/ui.reducer'
 import { net } from 'shared/runtime'
 
 import './index.os.less'
-
-export enum MenuSystemItem {
-  Notify = 'Notifications',
-  AppSettings = 'Application settings',
-  AddApp = 'Add more app',
-}
 
 const SideBar = () => {
   const infix = useInfix()
@@ -23,6 +18,7 @@ const SideBar = () => {
     (state: RootState) => state.ui.visibleNavigation,
   )
   const theme = useTheme()
+  const goToStore = useGoToStore()
 
   const isMobile = infix < Infix.md
   const brandDirection = visible && !isMobile ? 'horizontal' : 'vertical'
@@ -45,7 +41,13 @@ const SideBar = () => {
                 paddingRight: 12,
               }}
             >
-              <Brand network={net} theme={theme} direction={brandDirection} />
+              <Brand
+                style={{ cursor: 'pointer' }}
+                network={net}
+                theme={theme}
+                direction={brandDirection}
+                onClick={goToStore}
+              />
             </Col>
             <Col style={{ width: '100%' }}>
               <Navigation isMobile={isMobile} />
@@ -56,7 +58,7 @@ const SideBar = () => {
           <System isMobile={isMobile} />
         </Col>
       </Row>
-      <ActionVisibleSideBar />
+      <ButtonVisibleSideBar />
     </Card>
   )
 }

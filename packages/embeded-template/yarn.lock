@@ -1745,10 +1745,10 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.4.tgz#0c8b74c50f29ee44f423f7416829c0bf8bb5eb27"
   integrity sha512-LwzQKA4vzIct1zNZzBmRKI9QuNpLgTQMEjsQLf3BXuGYb3QPTP4Yjf6mkdX+X1mYttZ808QpOwAzZjv28kq7DA==
 
-"@sentre/connector@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@sentre/connector/-/connector-0.1.0.tgz#57c013ad0ed179977ce6bcf58b1571abbc26c175"
-  integrity sha512-DsB9BT1awvWeX9eMelboE1aN0W9b/hy24OJZWS2p4aKgdjYcKD0DxwqUkOKEBsEPZhNDn2dcEokkVbPIze4SmQ==
+"@sentre/connector@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@sentre/connector/-/connector-0.1.2.tgz#ad13dedf3eda00ab0e2262fbbcb5ec539e400eb5"
+  integrity sha512-XbL/eivA91vdSVn+wzmhMIrdyga7h/f+2W3vzayEUtgy84LDfv8RaZcfnMKFdNFbVGZr3lGxgDPH+CTirnTWFw==
   dependencies:
     "@solana/wallet-adapter-base" "^0.9.16"
     "@solana/web3.js" "^1.54.0"
@@ -1756,10 +1756,10 @@
     tweetnacl "^1.0.3"
     uuid "^8.3.2"
 
-"@sentre/craco-plugins@^1.0.46":
-  version "1.0.46"
-  resolved "https://registry.yarnpkg.com/@sentre/craco-plugins/-/craco-plugins-1.0.46.tgz#cedea61f355b6ee056e88b58d0f1f6fe7f0efedf"
-  integrity sha512-Rs1nMepJvC4BcDfEpCLSPrlRzBaXKDCamRN4HjrnYmLDjm/m5gNrSrYOC0p9JrbiP2gqNx1tPdej1TtJ8Vy4pA==
+"@sentre/craco-plugins@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@sentre/craco-plugins/-/craco-plugins-2.0.2.tgz#9ab2a60578badce5c513d479d7b21ad07f970fea"
+  integrity sha512-s4c+0XOYY2VxIEnmRVvpzTDRRENjKV6Rra3MjsEx0rngzdWUmNCI6SzAbF23zVH1S48OVHI5bDJCzaEYCmOL6g==
   dependencies:
     "@babel/cli" "^7.17.10"
     "@babel/core" "^7.18.2"
@@ -1792,12 +1792,12 @@
     util "^0.12.4"
     webpack-bundle-analyzer "^4.5.0"
 
-"@sentre/embeded-view@^1.0.46":
-  version "1.0.46"
-  resolved "https://registry.yarnpkg.com/@sentre/embeded-view/-/embeded-view-1.0.46.tgz#fdfd4f47c6505f63368719ce92e44e209715cfec"
-  integrity sha512-i/1/Zkry+HNt/bZVQoR2nhkJuQGp9iM4HZFE1vC/iCNp+Ak6BA0poO+zr6i/4CqYuaKxtsqVm6r+NRAIDYkarg==
+"@sentre/embeded-view@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@sentre/embeded-view/-/embeded-view-2.0.2.tgz#ada2d5718eb8789e08d81f10240d195b2efcf0e5"
+  integrity sha512-VHztVsbhrWJuM50Lmy6Re3Tq/vdurxA4QTcBiqS2DUo8CI0x6c9730r4yR5WxKmufHYiiGA83pPUzKDoQqzrrg==
   dependencies:
-    "@sentre/connector" "^0.1.0"
+    "@sentre/connector" "^0.1.2"
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.41"

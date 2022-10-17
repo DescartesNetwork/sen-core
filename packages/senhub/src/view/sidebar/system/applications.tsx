@@ -2,7 +2,8 @@ import { Fragment, useState } from 'react'
 
 import MenuItem from '../components/menuItem'
 import AppSettings from 'view/appSettings'
-import { MenuSystemItem } from '../index'
+
+import { MenuSystemItem } from '../constants'
 
 export type ApplicationsProps = { visible?: boolean }
 

@@ -41,7 +41,7 @@ export const collectFees = (
   descriptor: PropertyDescriptor,
 ) => {
   const original = descriptor.value
-  descriptor.value = async (txs: Transaction[]) => {
+  descriptor.value = async function (txs: Transaction[]) {
     const chargedTxs = []
     for (const tx of txs) {
       const payer = tx.feePayer || (await target.getAddress())

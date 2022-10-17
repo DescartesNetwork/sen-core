@@ -57,7 +57,7 @@ const initialState: UIState = {
   touchable: isTouchable(),
   visibleActionCenter: false,
   visibleInstaller: false,
-  visibleNavigation: false,
+  visibleNavigation: getInfix() < Infix.md,
   background: {
     light: '',
     dark: '',

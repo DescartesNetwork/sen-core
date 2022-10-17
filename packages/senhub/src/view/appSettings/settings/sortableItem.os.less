@@ -1,0 +1,30 @@
+@import '../../../static/styles/common/vars.os.less';
+
+.card-draggable-item {
+  cursor: pointer;
+  padding: 8px 24px;
+  .draggable-dropdown {
+    display: none !important;
+  }
+  &:hover {
+    .draggable-dropdown {
+      display: block !important;
+    }
+  }
+}
+
+#light {
+  .card-draggable-item {
+    &:hover {
+      background: @NEUTRAL10;
+    }
+  }
+}
+
+#dark {
+  .card-draggable-item {
+    &:hover {
+      background: @NEUTRAL90;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { web3 } from '@project-serum/anchor'
 import { deserializeUnchecked, Schema } from 'borsh'
+import { connection } from 'providers/sol.provider'
 
 export class NameService {
   static HEADER_LEN = 96
@@ -35,7 +36,7 @@ export class NameService {
   public static async retrieve(
     nameAccountKey: web3.PublicKey,
   ): Promise<NameService> {
-    const nameAccount = await window.sentre.splt.connection.getAccountInfo(
+    const nameAccount = await connection.getAccountInfo(
       nameAccountKey,
       'processed',
     )

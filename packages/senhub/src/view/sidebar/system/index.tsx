@@ -20,10 +20,10 @@ const System = ({ isMobile = false }: SystemProps) => {
 
   const rowAlign = visible && !isMobile ? 'stretch' : 'middle'
 
-  const nextVisible = useMemo(() => {
-    if (!isMobile) return visible
-    return false
-  }, [isMobile, visible])
+  const nextVisible = useMemo(
+    () => (!isMobile ? visible : false),
+    [isMobile, visible],
+  )
 
   return (
     <Row style={{ flexFlow: 'column' }} align={rowAlign}>
@@ -36,13 +36,16 @@ const System = ({ isMobile = false }: SystemProps) => {
         <Notifications visible={nextVisible} />
       </Col>
       <Col>
-        <Divider style={{ margin: '8px 0', minWidth: 48 }} type="horizontal" />
+        <Divider
+          style={{ margin: '8px 0px', minWidth: 48 }}
+          type="horizontal"
+        />
       </Col>
       <Col>
         <SenMarket isMobile={isMobile} />
       </Col>
       <Col>
-        <Wallet visible={nextVisible} />
+        <Wallet visible={nextVisible} style={{ margin: '8px 0px' }} />
       </Col>
     </Row>
   )

@@ -1,0 +1,29 @@
+@import '../../../../static/styles/common/vars.os.less';
+
+.btn-visible-sidebar {
+  position: absolute !important;
+  border: none !important;
+  z-index: 9;
+  transition: none !important;
+  &::after,
+  &::before {
+    content: none !important;
+  }
+  .anticon {
+    &::after {
+      content: none !important;
+    }
+  }
+}
+
+#light {
+  .btn-visible-sidebar {
+    background: @WHITE !important;
+  }
+}
+
+#dark {
+  .btn-visible-sidebar {
+    background: @NEUTRAL100 !important;
+  }
+}

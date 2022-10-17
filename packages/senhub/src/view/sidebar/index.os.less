@@ -2,7 +2,6 @@
 
 .card-sidebar {
   width: 100%;
-  background: @WHITE !important;
   height: 100vh;
   border-radius: unset !important;
   box-shadow: none !important;
@@ -17,24 +16,24 @@
       justify-content: space-between;
     }
   }
-  .btn-visible-sidebar {
+  .card-app-icon {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 12px !important;
+    cursor: pointer;
+    .@{ant-prefix}-card-body {
+      padding: 8px !important;
+    }
+    &:hover,
+    &.active {
+      background: rgba(249, 87, 94, 0.1) !important;
+    }
+  }
+}
+
+#light {
+  .card-sidebar {
     background: @WHITE !important;
-    position: absolute !important;
-    border: none !important;
-    transition: none !important;
-    z-index: 9;
-    &::after,
-    &::before {
-      content: none !important;
-    }
-    @media (max-width: 768px) {
-      transition: all 0.1s linear;
-    }
-    .anticon {
-      &::after {
-        content: none !important;
-      }
-    }
   }
 }
 
@@ -48,14 +47,6 @@
 #dark {
   .card-sidebar {
     background: @NEUTRAL100 !important;
-    .card-app-icon {
-      &.active {
-        background: rgba(249, 87, 94, 0.1) !important;
-      }
-    }
-    .btn-visible-sidebar {
-      background: @NEUTRAL100 !important;
-    }
   }
   .notification-item {
     &:hover {

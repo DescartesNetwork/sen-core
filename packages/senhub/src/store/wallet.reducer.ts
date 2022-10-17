@@ -1,9 +1,8 @@
+import { web3 } from '@project-serum/anchor'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { Lamports, SPLT, Swap } from '@senswap/sen-js'
-import { PublicKey } from '@solana/web3.js'
 
-import configs from 'configs'
 import { GuestWallet } from 'view/wallet/lib'
+import { connection } from 'providers/sol.provider'
 
 /**
  * Interface & Utility
@@ -12,23 +11,17 @@ import { GuestWallet } from 'view/wallet/lib'
 export type WalletState = {
   visible: boolean
   address: string
-  lamports: bigint
+  lamports: number
 }
 
 const initializeWindow = (wallet?: WalletInterface) => {
-  const {
-    sol: { node, spltAddress, splataAddress, swapAddress },
-  } = configs
   window.sentre = {
-    wallet: wallet || new GuestWallet(),
-    lamports: new Lamports(node),
-    splt: new SPLT(spltAddress, splataAddress, node),
-    swap: new Swap(swapAddress, spltAddress, splataAddress, node),
+    solana: wallet || new GuestWallet(),
   }
 }
 
 const destroyWindow = async () => {
-  if (window.sentre?.wallet) window.sentre.wallet.disconnect()
+  if (window.sentre?.solana) window.sentre.solana.disconnect()
   initializeWindow()
 }
 
@@ -40,7 +33,7 @@ const NAME = 'wallet'
 const initialState: WalletState = {
   visible: false,
   address: '',
-  lamports: BigInt(0),
+  lamports: 0,
 }
 
 /**
@@ -61,9 +54,9 @@ export const connectWallet = createAsyncThunk(
     if (!wallet) throw new Error('Invalid wallet instance')
     await initializeWindow(wallet)
     const address = await wallet.getAddress()
-    wallet.publicKey = new PublicKey(address)
-    const lamports = await window.sentre.lamports.getLamports(address)
-    return { address, lamports: BigInt(lamports), visible: false }
+    wallet.publicKey = new web3.PublicKey(address)
+    const lamports = await connection.getBalance(wallet.publicKey)
+    return { address, lamports, visible: false }
   },
 )
 

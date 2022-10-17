@@ -1,5 +1,6 @@
 import { web3, Address } from '@project-serum/anchor'
-import { MintData, utils } from '@senswap/sen-js'
+import { MintData, utils, Swap } from '@senswap/sen-js'
+import { connection, splt } from 'providers/sol.provider'
 
 import { DataLoader } from 'shared/dataloader'
 import { chainId } from 'shared/runtime'
@@ -9,8 +10,9 @@ import configs from 'configs'
 
 const LPT_DECIMALS = 9
 const {
-  sol: { taxmanAddress },
+  sol: { taxmanAddress, swapAddress, spltAddress, splataAddress, node },
 } = configs
+const swapProgram = new Swap(swapAddress, spltAddress, splataAddress, node)
 
 class SenLpTokenProvider extends BaseTokenProvider {
   constructor() {
@@ -18,24 +20,19 @@ class SenLpTokenProvider extends BaseTokenProvider {
     this._init()
   }
 
-  private getPools = async () => {
-    const swapProgram = window.sentre?.swap
-    if (!swapProgram) return []
+  private getPools = async (): Promise<any[]> => {
     const key = 'SenLpTokenProvider:getPools'
     return DataLoader.load(key, async () => {
       // Get all pools
       const value: Array<{
         pubkey: web3.PublicKey
         account: web3.AccountInfo<Buffer>
-      }> = await swapProgram.connection.getProgramAccounts(
-        swapProgram.swapProgramId,
-        {
-          filters: [
-            { dataSize: 257 },
-            { memcmp: { bytes: taxmanAddress, offset: 65 } },
-          ],
-        },
-      )
+      }> = await connection.getProgramAccounts(swapProgram.swapProgramId, {
+        filters: [
+          { dataSize: 257 },
+          { memcmp: { bytes: taxmanAddress, offset: 65 } },
+        ],
+      })
       return value.map(({ account: { data } }) => {
         return { account: { ...swapProgram.parsePoolData(data) } }
       })
@@ -44,7 +41,6 @@ class SenLpTokenProvider extends BaseTokenProvider {
 
   private getMintLptData = async (mintAddress: Address) => {
     const key = 'SenLpTokenProvider:getMintLptData'
-    const connection = window.sentre.splt.connection
     const mapMintLpt = await DataLoader.load(key, async () => {
       const result = new Map<string, MintData>()
       const pools = await this.getPools()
@@ -52,14 +48,12 @@ class SenLpTokenProvider extends BaseTokenProvider {
         (pool) => new web3.PublicKey(pool.account.mint_lpt),
       )
       const mintLptDatas = await utils.wrappedGetMultipleAccountsInfo(
-        connection,
+        splt.connection,
         mintLpts,
       )
       mintLptDatas.forEach((mintLptData, index) => {
         if (!mintLptData?.data) return
-        const mintData = window.sentre.splt.parseMintData(
-          mintLptData.data as Buffer,
-        )
+        const mintData = splt.parseMintData(mintLptData.data as Buffer)
         result.set(mintLpts[index].toBase58(), mintData)
       })
       return result
@@ -121,7 +115,7 @@ class SenLpTokenProvider extends BaseTokenProvider {
             const tokenInfo = await splTokenProvider.findByAddress(mint)
             let decimals = tokenInfo?.decimals
             if (!decimals) {
-              const mintData = await window.sentre.splt.getMintData(mint)
+              const mintData = await splt.getMintData(mint)
               decimals = mintData.decimals
             }
             const mintAmount = Number(utils.undecimalize(amountBN, decimals))

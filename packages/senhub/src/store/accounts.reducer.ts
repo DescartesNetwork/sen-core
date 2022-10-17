@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { PublicKey } from '@solana/web3.js'
+import { splt } from 'providers/sol.provider'
 
 import { isAddress } from 'shared/util'
 
@@ -37,7 +38,6 @@ export const getAccounts = createAsyncThunk(
   `${NAME}/getAccounts`,
   async ({ owner }: { owner: string }) => {
     if (!isAddress(owner)) throw new Error('Invalid owner/wallet address')
-    const { splt } = window.sentre
     const ownerPublicKey = new PublicKey(owner)
     const { value } = await splt.connection.getTokenAccountsByOwner(
       ownerPublicKey,
@@ -63,7 +63,6 @@ export const getAccount = createAsyncThunk<
     accounts: { [address]: data },
   } = getState()
   if (data) return { [address]: data }
-  const { splt } = window.sentre
   const raw = await splt.getAccountData(address)
   return { [address]: raw }
 })

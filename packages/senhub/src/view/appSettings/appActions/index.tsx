@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { Menu } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
@@ -8,46 +6,21 @@ import { useGoToApp } from 'hooks/useGotoApp'
 
 export type AppActionsProps = {
   appId: string
-  hidden?: boolean
-  moveToSidebar?: () => void
-  removeFromSidebar?: () => void
 }
 
-export const AppActions = ({
-  appId,
-  hidden = false,
-  moveToSidebar = () => {},
-  removeFromSidebar = () => {},
-}: AppActionsProps) => {
+export const AppActions = ({ appId }: AppActionsProps) => {
   const onOpenInNewTab = useGoToApp({ appId, blank: false })
   const onUninstall = useUninstallApp(appId)
-
-  const configsMenu = useMemo(() => {
-    if (hidden)
-      return {
-        key: 'move-to-sidebar',
-        label: 'Move to sidebar',
-        icon: <IonIcon name="eye-outline" />,
-        onClick: moveToSidebar,
-      }
-    return {
-      key: 'remove-from-sidebar',
-      label: 'Remove from sidebar',
-      icon: <IonIcon name="eye-outline" />,
-      onClick: removeFromSidebar,
-    }
-  }, [hidden, moveToSidebar, removeFromSidebar])
 
   return (
     <Menu
       items={[
         {
           key: 'go-to-app',
-          label: 'Open app',
+          label: 'Open',
           icon: <IonIcon name="open-outline" />,
           onClick: onOpenInNewTab,
         },
-        { ...configsMenu },
         {
           key: 'uninstall',
           label: 'Uninstall',

@@ -1,5 +1,5 @@
 import { Col, Drawer, Row, Typography } from 'antd'
-import Settings from './settings'
+import Settings from './settings/index'
 
 import { RootState, useRootSelector } from 'store'
 
@@ -26,7 +26,7 @@ const AppSettings = ({
       <Row gutter={[0, 24]}>
         <Col span={24}>
           <Typography.Title className="padding-x" level={4}>
-            Application settings
+            Application Settings
           </Typography.Title>
         </Col>
         <Col span={24}>

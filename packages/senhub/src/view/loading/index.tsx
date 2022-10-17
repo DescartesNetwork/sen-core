@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
-import { Row, Col, Button, Spin, Typography, Space } from 'antd'
+import { Row, Col, Button, Typography, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
+import IconLoading from 'components/loadingSvg'
 
 import {
   RootDispatch,
@@ -47,7 +48,7 @@ const Loading = () => {
           <Row gutter={[24, 24]} justify="center">
             <Col>
               <Space direction="vertical" align="center" size={32}>
-                <Spin size="large" />
+                <IconLoading />
                 <Typography.Title level={5}>
                   Welcome to SenHub. The workspace is loading...
                 </Typography.Title>

@@ -1,10 +1,12 @@
 import { Fragment, useMemo, useState } from 'react'
 import axios from 'axios'
+
 import IonIcon from '@sentre/antd-ionicon'
-import { MenuSystemItem } from '../index'
 import MenuItem from '../components/menuItem'
 import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
 import NotificationDrawer from '../components/notificationDrawer'
+
+import { MenuSystemItem } from '../constants'
 
 import { useNotifications } from 'hooks/useNotifications'
 import { RootDispatch, useRootDispatch } from 'store'

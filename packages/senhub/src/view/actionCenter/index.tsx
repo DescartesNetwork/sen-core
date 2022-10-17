@@ -40,7 +40,6 @@ const ActionCenter = ({ visibleNavigation }: ActionCenterProps) => {
         visible={visibleNavigation}
         onOpenActionCenter={onActionCenter}
       />
-
       <Drawer
         open={visible}
         onClose={() => dispatch(setVisibleActionCenter(false))}

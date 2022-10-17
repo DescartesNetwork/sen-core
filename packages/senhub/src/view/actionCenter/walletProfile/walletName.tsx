@@ -14,6 +14,7 @@ import { upsetUser } from 'store/user.reducer'
 import { performReverseLookup } from 'helper/sns/utils'
 import { net } from 'shared/runtime'
 import configs from 'configs'
+import { connection } from 'providers/sol.provider'
 
 const {
   sol: { rootDomainAccount, snsProgramId },
@@ -48,7 +49,7 @@ const WalletName = () => {
         },
       },
     ]
-    const accountKeys = await window.sentre.splt.connection.getProgramAccounts(
+    const accountKeys = await connection.getProgramAccounts(
       new web3.PublicKey(snsProgramId),
       {
         commitment: 'confirmed',

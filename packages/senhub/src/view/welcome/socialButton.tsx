@@ -3,8 +3,8 @@ import IonIcon from '@sentre/antd-ionicon'
 
 const SOCIAL_MEDIA = [
   {
-    src: 'https://sentre.medium.com',
-    icon: 'logo-medium',
+    src: 'https://academy.sentre.io',
+    icon: 'school',
   },
   {
     src: 'https://t.me/Sentre',

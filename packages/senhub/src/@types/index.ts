@@ -91,10 +91,7 @@ type SentreMessage = {
 interface Window {
   // Sentre
   sentre: {
-    wallet: WalletInterface
-    lamports: import('@senswap/sen-js').Lamports
-    splt: import('@senswap/sen-js').SPLT
-    swap: import('@senswap/sen-js').Swap
+    solana: WalletInterface
   }
   // IPFS
   ipfs?: any

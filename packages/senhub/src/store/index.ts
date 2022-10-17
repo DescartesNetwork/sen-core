@@ -17,7 +17,6 @@ import wallet from './wallet.reducer'
 import user from './user.reducer'
 import accounts from './accounts.reducer'
 import mints from './mints.reducer'
-import pools from './pools.reducer'
 import search from './search.reducer'
 import notifications from './notifications.reducer'
 
@@ -52,7 +51,6 @@ const store = configureStore({
     user,
     accounts,
     mints,
-    pools,
     search,
     notifications,
   },

@@ -34,7 +34,8 @@ class PhantomWallet extends BaseWallet {
     const address = await this.getAddress()
     const publicKey = new PublicKey(address)
     if (!transaction.feePayer) transaction.feePayer = publicKey
-    return await provider.signTransaction(transaction)
+    const signedTx = await provider.signTransaction(transaction)
+    return signedTx
   }
 
   @collectFees
@@ -47,7 +48,8 @@ class PhantomWallet extends BaseWallet {
     transactions.forEach((transaction) => {
       if (!transaction.feePayer) transaction.feePayer = publicKey
     })
-    return await provider.signAllTransactions(transactions)
+    const signedTransactions = await provider.signAllTransactions(transactions)
+    return signedTransactions
   }
 
   async signMessage(message: string) {

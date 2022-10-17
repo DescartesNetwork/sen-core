@@ -4,7 +4,7 @@ import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { useGoToStore } from 'hooks/useGotoStore'
-import { MenuSystemItem } from '../index'
+import { MenuSystemItem } from '../constants'
 
 export type MoreProps = {
   size?: number

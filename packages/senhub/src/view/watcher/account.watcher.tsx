@@ -1,13 +1,14 @@
 import { Fragment, useCallback, useEffect } from 'react'
 
+import { isAddress } from 'shared/util'
 import { useRootDispatch, RootDispatch } from 'store'
 import { getAccounts, upsetAccount } from 'store/accounts.reducer'
-import { isAddress } from 'shared/util'
 import { useWalletAddress, useWalletBalance } from 'hooks/useWallet'
+import { splt } from 'providers/sol.provider'
 
 // Watch id
 let watchId = 0
-let prevLamports: bigint | undefined = undefined
+let prevLamports: number | undefined = undefined
 
 const AccountWatcher = () => {
   const dispatch = useRootDispatch<RootDispatch>()
@@ -31,9 +32,8 @@ const AccountWatcher = () => {
     if (!isAddress(walletAddress))
       return console.warn('Wallet is not connected')
     if (watchId) return console.warn('Already watched')
-    const { splt } = window.sentre || {}
     const filters = [{ memcmp: { bytes: walletAddress, offset: 32 } }]
-    watchId = splt?.watch((er: string | null, re: any) => {
+    watchId = splt.watch((er: string | null, re: any) => {
       if (er) return console.error(er)
       const { address, data } = re
       return dispatch(upsetAccount({ address, data }))
@@ -57,7 +57,7 @@ const AccountWatcher = () => {
     return () => {
       ;(async () => {
         try {
-          await window.sentre.splt.unwatch(watchId)
+          await splt.unwatch(watchId)
         } catch (er) {
           // Do nothing
         }

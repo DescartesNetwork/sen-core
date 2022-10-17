@@ -31,13 +31,14 @@ const LOGO_WALLET: Record<string, string> = {
   Exodus: EXODUS,
 }
 
-type WalletProfileProps = {
+export type WalletProfileProps = {
   onOpenActionCenter?: () => void
   visible?: boolean
   avatarSize?: number
   padding?: number
   sideBar?: boolean
 }
+
 const WalletProfile = ({
   onOpenActionCenter,
   visible = false,
@@ -78,7 +79,11 @@ const WalletProfile = ({
                     {shortenAddress(walletAddress, 3)}
                   </Typography.Text>
                 </Space>
-                <WalletAction />
+                <WalletAction
+                  actions={
+                    sideBar ? ['copy', 'qr'] : ['copy', 'qr', 'explorer']
+                  }
+                />
               </Space>
               <WalletName />
             </Space>
