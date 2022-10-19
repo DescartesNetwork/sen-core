@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 
 import { useRootDispatch, RootDispatch } from 'store'
-import { installApp } from 'store/page.reducer'
 import { openWallet } from 'store/wallet.reducer'
 import { updateVisited } from 'store/flags.reducer'
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from './useWallet'
+import { installApp } from 'store/user.reducer'
 
 export const useInstallAppCallback = () => {
   const dispatch = useRootDispatch<RootDispatch>()

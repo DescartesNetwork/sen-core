@@ -19,7 +19,7 @@ import ListApp from './listApp'
 
 import { useAppIds } from 'hooks/useAppIds'
 import { useRootDispatch } from 'store'
-import { updateAppIds } from 'store/page.reducer'
+import { updateAppIds } from 'store/user.reducer'
 
 const Settings = () => {
   const dispatch = useRootDispatch()
