@@ -34,7 +34,7 @@ import 'static/styles/light.os.less'
 
 const View = () => {
   const theme = useTheme()
-  const background = useRootSelector((state: RootState) => state.ui.background)
+  const background = useRootSelector(({ ui }: RootState) => ui.background)
   const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
 
