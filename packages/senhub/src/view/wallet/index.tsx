@@ -1,4 +1,4 @@
-import { CSSProperties, Fragment, useCallback, useEffect } from 'react'
+import { CSSProperties, Fragment, useCallback, useEffect, useMemo } from 'react'
 
 import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -25,6 +25,7 @@ import {
   SolflareExtensionWallet,
   CloverWallet,
   ExodusWallet,
+  GuestWallet,
 } from './lib'
 import { useInfix } from 'hooks/useUI'
 import { Infix } from 'store/ui.reducer'
@@ -35,13 +36,14 @@ export type WalletProps = {
 }
 
 const Wallet = ({ style = {}, visible = false }: WalletProps) => {
-  const infix = useInfix()
-  const isMobile = infix < Infix.md
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useWalletAddress()
   const visibleNavigation = useRootSelector(
-    (state: RootState) => state.ui.visibleNavigation,
+    ({ ui }: RootState) => ui.visibleNavigation,
   )
+  const walletAddress = useWalletAddress()
+  const infix = useInfix()
+
+  const isMobile = useMemo(() => infix < Infix.md, [infix])
 
   const reconnect = useCallback(() => {
     const walletType = storage.get('WalletType')
@@ -67,17 +69,17 @@ const Wallet = ({ style = {}, visible = false }: WalletProps) => {
       case 'Exodus':
         return new ExodusWallet()
       default:
-        return undefined
+        return new GuestWallet(() => dispatch(openWallet()))
     }
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (isAddress(walletAddress)) return
     try {
       const wallet = reconnect()
-      if (wallet) dispatch(connectWallet(wallet)).unwrap()
+      dispatch(connectWallet(wallet)).unwrap()
     } catch (er: any) {
-      return window.notify({ type: 'error', description: er.message })
+      window.notify({ type: 'error', description: er.message })
     }
   }, [dispatch, reconnect, walletAddress])
 
