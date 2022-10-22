@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import {
   Avatar,
@@ -16,12 +16,18 @@ import SolBalance from './solBalance'
 
 import { RootDispatch, useRootDispatch } from 'store'
 import { disconnectWallet } from 'store/wallet.reducer'
+import { logout } from 'store/user.reducer'
 
 import LOGO_SOL from 'static/images/actionCenter/logo-solana.svg'
 
 const WalletInfo = () => {
   const dispatch = useRootDispatch<RootDispatch>()
   const [hidden, setHidden] = useState(false)
+
+  const onDisconnect = useCallback(async () => {
+    await dispatch(logout())
+    await dispatch(disconnectWallet())
+  }, [dispatch])
 
   return (
     <Card bodyStyle={{ padding: 16 }} bordered={false} className="wallet-info">
@@ -66,7 +72,7 @@ const WalletInfo = () => {
             <Col>
               <Button
                 type="text"
-                onClick={() => dispatch(disconnectWallet())}
+                onClick={onDisconnect}
                 icon={
                   <IonIcon style={{ fontSize: 24 }} name="log-out-outline" />
                 }

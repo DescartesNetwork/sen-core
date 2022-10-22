@@ -12,7 +12,6 @@ import { devTools, bigintSerializationMiddleware } from 'store/devTools'
 import ui from './ui.reducer'
 import flags from './flags.reducer'
 import register from './register.reducer'
-import page from './page.reducer'
 import wallet from './wallet.reducer'
 import user from './user.reducer'
 import accounts from './accounts.reducer'
@@ -47,7 +46,6 @@ const store = configureStore({
     ui,
     flags,
     register,
-    page,
     wallet,
     user,
     accounts,

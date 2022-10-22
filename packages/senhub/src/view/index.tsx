@@ -21,16 +21,11 @@ import {
   RootDispatch,
 } from 'store'
 import { loadRegister } from 'store/register.reducer'
-import {
-  loadDeveloperMode,
-  loadVisited,
-  updateLoading,
-} from 'store/flags.reducer'
+import { loadVisited, updateLoading } from 'store/flags.reducer'
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 import { useTheme } from 'hooks/useUI'
 import { login } from 'store/user.reducer'
-import { loadAppIds } from 'store/page.reducer'
 
 import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
@@ -40,7 +35,7 @@ import { getUserNotification } from 'store/notifications/userNotification.reduce
 
 const View = () => {
   const theme = useTheme()
-  const background = useRootSelector((state: RootState) => state.ui.background)
+  const background = useRootSelector(({ ui }: RootState) => ui.background)
   const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
 
@@ -51,11 +46,9 @@ const View = () => {
       try {
         await dispatch(updateLoading(true))
         await dispatch(loadVisited())
-        await dispatch(loadDeveloperMode())
         const register = await dispatch(loadRegister()).unwrap()
         if (Object.keys(register).length) {
-          const { appIds } = await dispatch(loadAppIds()).unwrap()
-          await dispatch(login(appIds)).unwrap()
+          await dispatch(login()).unwrap()
           await dispatch(getUserNotification()).unwrap()
         }
       } catch (er: any) {

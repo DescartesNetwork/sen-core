@@ -54,10 +54,10 @@ export const installManifest = createAsyncThunk<
   const {
     wallet: { address: walletAddress },
     register,
-    page,
+    user,
   } = getState()
   if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet.')
-  if (page.includes(manifest.appId))
+  if (user.appIds.includes(manifest.appId))
     throw new Error('Cannot run sandbox for an installed application.')
   const newRegister: RegisterState = { ...register }
   newRegister[manifest.appId] = manifest

@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { Row, Col, Switch, Typography, Card, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
@@ -7,15 +9,18 @@ import {
   RootDispatch,
   RootState,
 } from 'store'
-import { updateDeveloperMode } from 'store/flags.reducer'
+import { updateDeveloperMode } from 'store/user.reducer'
 
 const DeveloperMode = () => {
   const dispatch = useRootDispatch<RootDispatch>()
   const developerMode = useRootSelector(
-    (state: RootState) => state.flags.developerMode,
+    ({ user }: RootState) => user.developerMode,
   )
 
-  const onSwitch = (checked: boolean) => dispatch(updateDeveloperMode(checked))
+  const onSwitch = useCallback(
+    (checked: boolean) => dispatch(updateDeveloperMode(checked)),
+    [dispatch],
+  )
 
   return (
     <Card className="card-setting" hoverable bordered={false}>

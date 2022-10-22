@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import { RootDispatch, useRootDispatch } from 'store'
-import { uninstallApp } from 'store/page.reducer'
+import { uninstallApp } from 'store/user.reducer'
 
 export const useUninstallAppCallback = () => {
   const history = useHistory()

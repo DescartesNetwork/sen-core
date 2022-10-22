@@ -13,7 +13,7 @@ const AppList = ({ visible = false }: AppListProps) => {
   const onGoToApp = useGoToAppCallback()
 
   return (
-    <Row>
+    <Row gutter={[4, 4]}>
       {appIds.map((appId) => (
         <Col span={24} key={appId}>
           <Dropdown

@@ -5,7 +5,7 @@ import {
   useRemoteModule,
 } from '@sentre/react-dynamic-remote-component'
 
-import { Row, Col, Typography, Button } from 'antd'
+import { Layout, Row, Col, Typography, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import ErrorBoundary from 'components/errorBoundary'
 import PageLoading from './loading'
@@ -117,9 +117,9 @@ const PageLoader = forwardRef<HTMLElement, ComponentManifest>(
     return (
       <ErrorBoundary defaultChildren={<PageError url={url} />}>
         <Suspense fallback={<PageLoading />}>
-          <section id={appId} style={{ backgroundColor: 'transparent' }}>
+          <Layout id={appId} style={{ backgroundColor: 'transparent' }}>
             <Component manifest={manifest} {...props} ref={ref} />
-          </section>
+          </Layout>
         </Suspense>
       </ErrorBoundary>
     )

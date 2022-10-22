@@ -3,7 +3,7 @@ import IonIcon from '@sentre/antd-ionicon'
 
 import { useRootDispatch, RootDispatch } from 'store'
 import { installManifest } from 'store/register.reducer'
-import { installApp } from 'store/page.reducer'
+import { installApp } from 'store/user.reducer'
 import { useWalletAddress } from 'hooks/useWallet'
 
 const Sandbox = () => {

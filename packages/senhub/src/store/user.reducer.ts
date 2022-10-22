@@ -3,38 +3,22 @@ import { PublicKey } from '@solana/web3.js'
 import { OAuth } from '@sentre/connector'
 import axios from 'axios'
 
+import PDB from 'shared/pdb'
+import { env } from 'shared/runtime'
 import { isAddress } from 'shared/util'
 import configs from 'configs'
 
-const { api } = configs
+const {
+  api,
+  register: { devAppId },
+} = configs
 
-/**
- * Interface & Utility
- */
-
-export type UserState = {
-  _id: string
-  walletAddress: string
-  nftAddress: string
-  snsAddress: string
-  appIds: string[]
-  createdAt: number
-  updatedAt: number
-}
-
-/**
- * Store constructor
- */
-
-const NAME = 'user'
-const initialState: UserState = {
-  _id: '',
-  walletAddress: '',
-  nftAddress: '',
-  snsAddress: '',
-  appIds: [],
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
+const troubleshoot = (register: SenReg, appIds?: AppIds): AppIds => {
+  if (!appIds || !Array.isArray(appIds)) return []
+  const nextAppIds = [...appIds]
+  if (env === 'development' && !nextAppIds.includes(devAppId))
+    nextAppIds.unshift(devAppId)
+  return nextAppIds.filter((appId) => register[appId]) || []
 }
 
 const validateSession = async (walletAddress: string) => {
@@ -51,17 +35,68 @@ const validateSession = async (walletAddress: string) => {
   }
 }
 
+const getUser = async (register: SenReg) => {
+  const { data: user } = await axios.get<UserState>(api.user.index, {
+    withCredentials: true,
+  })
+  return { ...user, appIds: troubleshoot(register, user.appIds) }
+}
+
+const updateUser = async (
+  prevUser: Partial<UserState>,
+  nextUser: Partial<UserState>,
+) => {
+  const user = { ...prevUser, ...nextUser }
+  const { data } = await axios.post(api.user.index, user, {
+    withCredentials: true,
+  })
+  return data
+}
+
+/**
+ * Interface & Utility
+ */
+
+export type UserState = {
+  _id: string
+  walletAddress: string
+  nftAddress: string
+  snsAddress: string
+  appIds: string[]
+  developerMode: boolean
+  createdAt: number
+  updatedAt: number
+}
+
+/**
+ * Store constructor
+ */
+
+const NAME = 'user'
+const initialState: UserState = {
+  _id: '',
+  walletAddress: '',
+  nftAddress: '',
+  snsAddress: '',
+  appIds: [],
+  developerMode: false,
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+}
+
 /**
  * Actions
  */
 
-export const login = createAsyncThunk<UserState, AppIds, { state: any }>(
+export const login = createAsyncThunk<UserState, void, { state: any }>(
   `${NAME}/login`,
-  async (appIds, { getState }) => {
+  async (_, { getState }) => {
     const {
+      register,
       wallet: { address: walletAddress },
     } = getState()
-    if (!isAddress(walletAddress)) throw new Error('Invalid wallet address')
+    if (!isAddress(walletAddress))
+      throw new Error('Wallet is not connected yet')
 
     // Check the current session
     const auth = await validateSession(walletAddress)
@@ -87,16 +122,8 @@ export const login = createAsyncThunk<UserState, AppIds, { state: any }>(
         withCredentials: true,
       })
     }
-    // Sync user's data
-    const { data: user } = await axios.post(
-      api.user.index,
-      {
-        appIds,
-      },
-      {
-        withCredentials: true,
-      },
-    )
+    // Get user
+    const user = await getUser(register)
     return user
   },
 )
@@ -107,38 +134,92 @@ export const logout = createAsyncThunk(`${NAME}/logout`, async () => {
   return { ...initialState }
 })
 
-export const getUser = createAsyncThunk<UserState, void, { state: any }>(
-  `${NAME}/getUser`,
-  async (_, { getState }) => {
-    const {
-      user: prevUser,
-      wallet: { address },
-    } = getState()
-    if (!isAddress(address)) throw new Error('Invalid wallet address')
-    const { data: user } = !isAddress(prevUser.walletAddress)
-      ? await axios.get(api.user.index, { withCredentials: true })
-      : { data: prevUser }
-    return user
-  },
-)
-
 export const upsetUser = createAsyncThunk<
   UserState,
   Partial<UserState>,
   { state: any }
 >(`${NAME}/upsetUser`, async (user, { getState }) => {
   const { user: prevUser } = getState()
-  const data = { ...prevUser, ...user }
-  const { data: newUser } = await axios.post(api.user.index, data, {
-    withCredentials: true,
-  })
-
-  return { ...newUser }
+  const newUser = await updateUser(prevUser, user)
+  return newUser
 })
 
 export const deleteUser = createAsyncThunk(`${NAME}/deleteUser`, async () => {
   await axios.delete(api.user.index, { withCredentials: true })
   return { ...initialState }
+})
+
+/**
+ * Convenient AppIds Actions
+ */
+
+export const updateAppIds = createAsyncThunk<
+  Partial<UserState>,
+  AppIds,
+  { state: any }
+>(`${NAME}/updateAppIds`, async (appIds, { getState }) => {
+  const {
+    user: prevUser,
+    wallet: { address: walletAddress },
+    register,
+  } = getState()
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet')
+  const nextAppIds = troubleshoot(register, appIds)
+  updateUser(prevUser, { appIds: nextAppIds }) // Async call for better ux
+  return { appIds: nextAppIds }
+})
+
+export const installApp = createAsyncThunk<
+  Partial<UserState>,
+  string,
+  { state: any }
+>(`${NAME}/installApp`, async (appId, { getState }) => {
+  const {
+    user: { appIds, ...prevUser },
+    wallet: { address: walletAddress },
+  } = getState()
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet')
+  if (appIds.includes(appId)) return { appIds }
+  const nextAppIds: AppIds = [...appIds]
+  nextAppIds.push(appId)
+  updateUser(prevUser, { appIds: nextAppIds }) // Async call for better ux
+  return { appIds: nextAppIds }
+})
+
+export const uninstallApp = createAsyncThunk<
+  Partial<UserState>,
+  string,
+  { state: any }
+>(`${NAME}/uninstallApp`, async (appId, { getState }) => {
+  const {
+    user: { appIds, ...prevUser },
+    wallet: { address: walletAddress },
+  } = getState()
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet')
+  if (!appIds.includes(appId)) return { appIds }
+  const nextAppIds = appIds.filter((id: string) => id !== appId)
+  updateUser(prevUser, { appIds: nextAppIds }) // Async call for better ux
+  const pdb = new PDB(walletAddress)
+  await pdb.dropInstance(appId)
+  return { appIds: nextAppIds }
+})
+
+/**
+ * Convenient Developer Mode Actions
+ */
+
+export const updateDeveloperMode = createAsyncThunk<
+  Partial<UserState>,
+  boolean,
+  { state: any }
+>(`${NAME}/updateDeveloperMode`, async (developerMode, { getState }) => {
+  const {
+    user: prevUser,
+    wallet: { address: walletAddress },
+  } = getState()
+  if (!isAddress(walletAddress)) throw new Error('Wallet is not connected yet')
+  updateUser(prevUser, { developerMode }) // Async call for better ux
+  return { developerMode }
 })
 
 /**
@@ -160,15 +241,27 @@ const slice = createSlice({
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        getUser.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
         upsetUser.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
         deleteUser.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        updateAppIds.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        installApp.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        uninstallApp.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        updateDeveloperMode.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })
