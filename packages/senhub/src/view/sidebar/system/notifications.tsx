@@ -3,14 +3,24 @@ import axios from 'axios'
 
 import IonIcon from '@sentre/antd-ionicon'
 import MenuItem from '../components/menuItem'
-import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
+import {
+  Button,
+  Col,
+  Drawer,
+  Row,
+  Space,
+  Switch,
+  Typography,
+  Badge,
+} from 'antd'
 import NotificationDrawer from '../components/notificationDrawer'
 
-import { MenuSystemItem } from '../constants'
-
+import { useWalletAddress } from 'hooks/useWallet'
 import { useNotifications } from 'hooks/useNotifications'
 import { RootDispatch, useRootDispatch } from 'store'
-import { upsetAllNotifications } from 'store/notifications.reducer'
+import { MenuSystemItem } from '../constants'
+import { useUserNotification } from 'hooks/useUserNotification'
+import { upsetUserNotifications } from 'store/notifications/userNotification.reducer'
 import configs from 'configs'
 
 const { api } = configs
@@ -20,52 +30,102 @@ const Notifications = ({ visible }: NotificationsProps) => {
   const [open, setOpen] = useState(false)
   const [unreadOnly, setUnreadOnly] = useState(false)
   const notifications = useNotifications()
+  const userNotification = useUserNotification()
+  const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
 
-  const filteredNotifications = useMemo(() => {
-    const notificationArray = Object.keys(notifications).map((key) => ({
-      ...notifications[key],
-      id: key,
-    }))
-    if (unreadOnly)
-      return notificationArray.filter(
-        (notification) => notification.seen === false,
-      )
-    return notificationArray
-  }, [notifications, unreadOnly])
-
-  const markAllAsRead = async () => {
-    console.log('marl all as read')
-    dispatch(
-      upsetAllNotifications({
-        seen: true,
-      }),
+  const newNotificationAmount = useMemo(() => {
+    const notificationArray = Object.keys(notifications)
+    const markIndex = notificationArray.findIndex(
+      (val) => val === userNotification.notificationMark,
     )
-    await axios.patch(api.notifications.index, {
-      seen: true,
+    return notificationArray
+      .slice(0, markIndex)
+      .filter(
+        (notificationId) =>
+          !userNotification.notificationMark.includes(notificationId),
+      ).length
+  }, [notifications, userNotification.notificationMark])
+
+  const filteredNotifications = useMemo(() => {
+    const notificationArray = Object.keys(notifications)
+      .map((key) => ({
+        ...notifications[key],
+      }))
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
+    if (unreadOnly) {
+      const markIndex = notificationArray.findIndex(
+        (val) => val._id === userNotification.notificationMark,
+      )
+      return notificationArray
+        .slice(0, markIndex)
+        .filter(
+          (notification) =>
+            !userNotification.notificationMark.includes(notification._id),
+        )
+    }
+
+    return notificationArray
+  }, [notifications, unreadOnly, userNotification.notificationMark])
+
+  const onMarkAllAsRead = async () => {
+    dispatch(upsetUserNotifications({ userNotificationId: walletAddress }))
+    await axios.patch(api.userNotification.updateReadNotification, {
+      user: walletAddress,
     })
   }
 
   const markAllAsReadVisible = useMemo(() => {
-    for (const id in notifications) {
-      if (!notifications[id].seen) {
-        return true
-      }
-    }
-    return false
-  }, [notifications])
+    const notificationKeys = Object.keys(notifications)
+    if (
+      notificationKeys[notificationKeys.length - 1] ===
+      userNotification.notificationMark
+    )
+      return false
+    return true
+  }, [notifications, userNotification.notificationMark])
 
   return (
     <Fragment>
       <MenuItem
-        icon={<IonIcon name="notifications-outline" />}
+        icon={
+          !visible ? (
+            <Badge count={newNotificationAmount}>
+              <IonIcon name="notifications-outline" />
+            </Badge>
+          ) : (
+            <IonIcon name="notifications-outline" />
+          )
+        }
         value={MenuSystemItem.Notify}
         onClick={() => {
           setOpen(true)
         }}
         name={visible}
+        postfix={
+          <div
+            style={{
+              color: '#F9575E',
+              background: 'rgba(249, 87, 94, 0.1)',
+              width: 22,
+              height: 22,
+              borderRadius: 4,
+              fontSize: 12,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {newNotificationAmount}
+          </div>
+        }
       >
-        {MenuSystemItem.Notify}
+        <Row>
+          <Col>{MenuSystemItem.Notify}</Col>
+        </Row>
       </MenuItem>
       <Drawer
         title={
@@ -93,7 +153,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
             <Col span={24}>
               <Row justify="space-between" wrap={false} align="middle">
                 <Col flex="auto">
-                  <Typography.Text style={{ fontSize: 12 }}>
+                  <Typography.Text style={{ fontSize: 12 }} type="secondary">
                     NEAREST
                   </Typography.Text>
                 </Col>
@@ -107,7 +167,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
                         background: 'none',
                       }}
                       type="text"
-                      onClick={markAllAsRead}
+                      onClick={onMarkAllAsRead}
                     >
                       Mark all as read
                     </Button>

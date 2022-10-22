@@ -1,62 +1,93 @@
 import moment from 'moment'
-import axios from 'axios'
+import { useMemo } from 'react'
 
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
-import { DappData, upsetNotification } from 'store/notifications.reducer'
+import { NotificationData } from 'store/notifications/notifications.reducer'
 import { RootDispatch, useRootDispatch } from 'store'
-import configs from 'configs'
-
-const { api } = configs
+import { useUserNotification } from 'hooks/useUserNotification'
+import { useNotifications } from 'hooks/useNotifications'
+import { upsetUserNotification } from 'store/notifications/userNotification.reducer'
 
 type NotificationItemProps = {
-  notification: {
-    id: string
-    dappId: DappData
-    content: string
-    name: string
-    seen: boolean
-    time: string
-  }
+  notification: NotificationData
 }
 const NotificationItem = ({ notification }: NotificationItemProps) => {
-  const { dappId, seen, content, time, id } = notification
+  const { _id, content, broadcastedAt, thumbnail, title } = notification
+  const userNotification = useUserNotification()
+  const notifications = useNotifications()
   const dispatch = useRootDispatch<RootDispatch>()
 
+  const seen = useMemo(() => {
+    const notificationMarkIndex = Object.keys(notifications).findIndex(
+      (val) => val === userNotification.notificationMark,
+    )
+    const notificationIndex = Object.keys(notifications).findIndex(
+      (val) => val === _id,
+    )
+    if (notificationIndex <= notificationMarkIndex) return true
+
+    if (userNotification.readIds.includes(_id)) return true
+    return false
+  }, [
+    _id,
+    notifications,
+    userNotification.notificationMark,
+    userNotification.readIds,
+  ])
+
   const onReadOrUnread = async () => {
-    console.log('run function!')
-    dispatch(
-      upsetNotification({
-        id,
-        data: { ...notification, seen: !seen },
+    if (seen) return
+    return await dispatch(
+      upsetUserNotification({
+        _id,
+        userNotificationId: userNotification._id,
       }),
     )
-    await axios.patch(api.notifications.index + `/${id}`, {
-      seen: !seen,
-    })
   }
 
   return (
-    <Row wrap={false} gutter={[12, 12]} style={{ margin: '0px 24px' }}>
-      <Col span={3}>
-        <Image src={dappId.logo} alt="alt" />
-      </Col>
-      <Col flex="auto">
-        <Row gutter={[4, 4]}>
-          <Col span={24}>{content}</Col>
-          <Col>{moment(time).fromNow()}</Col>
+    <Row gutter={[8, 8]}>
+      <Col span={24}>
+        <Row gutter={[4, 4]} wrap={false}>
+          <Col flex="auto">
+            <Typography.Title ellipsis style={{ marginBottom: 0 }} level={5}>
+              {title}
+            </Typography.Title>
+            <Typography.Text
+              ellipsis
+              style={{ marginBottom: 0 }}
+              type="secondary"
+            >
+              {content}
+            </Typography.Text>
+          </Col>
+          <Col onClick={onReadOrUnread}>
+            <Tooltip
+              title={
+                <Typography.Text style={{ color: '#E9E9EB' }}>
+                  {!seen && 'Mark as read'}
+                </Typography.Text>
+              }
+            >
+              <Radio checked={!seen} />
+            </Tooltip>
+          </Col>
         </Row>
       </Col>
-      <Col onClick={onReadOrUnread}>
-        <Tooltip
-          title={
-            <Typography.Text>
-              {seen ? 'Mark as unread' : 'Mark as read'}
-            </Typography.Text>
-          }
-        >
-          <Radio checked={seen} />
-        </Tooltip>
+
+      <Col span={12}>
+        <Image
+          src={thumbnail}
+          alt="alt"
+          style={{ borderRadius: 12 }}
+          preview={false}
+        />
+      </Col>
+      <Col span={24}>
+        <Typography.Text type="secondary">
+          {moment(broadcastedAt).fromNow()}
+        </Typography.Text>
       </Col>
     </Row>
   )

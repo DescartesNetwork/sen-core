@@ -1,34 +1,30 @@
 import { Fragment, useCallback, useEffect } from 'react'
 import axios from 'axios'
-import io from 'socket.io-client'
 
 import { useRootDispatch, RootDispatch } from 'store'
-import { useWalletAddress } from 'hooks/useWallet'
 import configs from 'configs'
 import {
   addNotification,
   getNotifications,
-  NotificationsData,
-} from 'store/notifications.reducer'
+  NotificationData,
+} from 'store/notifications/notifications.reducer'
 
-const socket = io('https://powerful-tundra-13192.herokuapp.com/')
 const { api } = configs
+const eventSource = new EventSource(api.notification.SSE)
 
 const NotificationsWatcher = () => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useWalletAddress()
-  console.log('NotificationsWatcher')
 
   // First-time fetching
   const fetchData = useCallback(async () => {
     try {
-      const { data: notifications } = await axios.get(api.notifications.all)
-      const formatedData: Record<string, NotificationsData> = {}
+      const { data: notifications } = await axios.get(api.notification.all, {
+        withCredentials: true,
+      })
+      const formatedData: Record<string, NotificationData> = {}
       for (const notification of notifications) {
         formatedData[notification._id] = notification
       }
-
-      console.log('notification: ', formatedData)
 
       await dispatch(getNotifications(formatedData))
     } catch (er) {
@@ -40,10 +36,10 @@ const NotificationsWatcher = () => {
   }, [dispatch])
   // Watch account changes
   const watchData = useCallback(async () => {
-    socket.on('notification', (data) => {
-      console.log('thong tin events: ', data)
-      // dispatch(addNotification())
-    })
+    eventSource.onmessage = async ({ data }) => {
+      const notification = JSON.parse(data).emitting
+      await dispatch(addNotification({ id: notification._id, notification }))
+    }
   }, [dispatch])
 
   useEffect(() => {

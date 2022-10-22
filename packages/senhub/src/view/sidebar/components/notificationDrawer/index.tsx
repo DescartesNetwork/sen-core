@@ -1,22 +1,15 @@
 import { Col, Empty, Row, Typography } from 'antd'
 import NotificationItem from './notificationItem'
 
-import { DappData } from 'store/notifications.reducer'
+import { NotificationData } from 'store/notifications/notifications.reducer'
 
 export type NotificationDrawerProps = {
-  notifications: {
-    id: string
-    dappId: DappData
-    content: string
-    name: string
-    seen: boolean
-    time: string
-  }[]
+  notifications: NotificationData[]
 }
 
 const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
   return (
-    <Row gutter={[12, 12]}>
+    <Row>
       {!notifications.length ? (
         <Col span={24}>
           <Empty

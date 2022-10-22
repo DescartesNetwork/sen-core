@@ -10,7 +10,8 @@ type Conf = {
   health: BasicEndpoint
   user: BasicEndpoint
   dapp: BasicEndpoint
-  notifications: BasicEndpoint
+  notification: BasicEndpoint
+  userNotification: BasicEndpoint
 }
 
 const generator = (origin: string): Conf => ({
@@ -33,11 +34,22 @@ const generator = (origin: string): Conf => ({
   dapp: {
     index: origin + '/dapp',
   },
-  // For testing purpose
-  notifications: {
-    index: 'https://powerful-tundra-13192.herokuapp.com/notification',
+  notification: {
+    index: origin + '/notification',
     get all() {
       return this.index + '/all'
+    },
+    get SSE() {
+      return this.index + '/sse'
+    },
+  },
+  userNotification: {
+    index: origin + '/user-notification',
+    get updateReadNotification() {
+      return this.index + '/update-read-notification'
+    },
+    get updateReadNotifications() {
+      return this.index + '/update-read-notifications'
     },
   },
 })

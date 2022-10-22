@@ -1,5 +1,5 @@
 import { RootState, useRootSelector } from 'store'
-import { NotificationsState } from 'store/notifications.reducer'
+import { NotificationsState } from 'store/notifications/notifications.reducer'
 
 export const useNotifications = () => {
   const notifications = useRootSelector(

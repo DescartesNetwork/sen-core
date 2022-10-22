@@ -1,27 +1,29 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { isAddress } from 'shared/util'
 
 /**
  * Interface & Utility
  */
 
-export type DappData = {
-  name: string
-  logo: string
-}
+export type NotificationType = 'sentre'
 
 export type AllowUpdateField = {
-  seen: boolean
+  seenUser: string[]
 }
 
-export type NotificationsData = {
-  dappId: DappData
+export type NotificationData = {
+  _id: string
+  type: NotificationType
+  sender: string
+  thumbnail: string
+  title: string[]
   content: string
-  name: string
-  seen: boolean
-  time: string
+  action: string
+  broadcastedAt: Date
+  createdAt: string
+  updatedAt: string
 }
-export type NotificationsState = Record<string, NotificationsData>
+
+export type NotificationsState = Record<string, NotificationData>
 
 /**
  * Store constructor
@@ -41,21 +43,13 @@ export const getNotifications = createAsyncThunk(
   },
 )
 
-// export const getNotification = createAsyncThunk<
-//   NotificationsState,
-//   { address: string },
-//   { state: any }
-// >(`${NAME}/getNotification`, async ({ address }, { getState }) => {
-//   return {}
-// })
-
 export const addNotification = createAsyncThunk<
   NotificationsState,
-  { id: string; notification: NotificationsData },
+  { id: string; notification: NotificationData },
   { state: any }
->(`${NAME}/addNotification`, async ({ notification }, { getState }) => {
-  if (!notification) throw new Error('Notification is invalid!')
-  return { id: notification }
+>(`${NAME}/addNotification`, async ({ id, notification }, { getState }) => {
+  if (!notification || !id) throw new Error('Notification is invalid!')
+  return { [id]: notification }
 })
 
 export const upsetAllNotifications = createAsyncThunk<
@@ -73,7 +67,7 @@ export const upsetAllNotifications = createAsyncThunk<
 
 export const upsetNotification = createAsyncThunk<
   NotificationsState,
-  { id: string; data: NotificationsData },
+  { id: string; data: NotificationData },
   { state: any }
 >(`${NAME}/upsetNotification`, async ({ id, data }) => {
   if (!data) throw new Error('Data is empty')
