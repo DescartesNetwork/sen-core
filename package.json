@@ -16,8 +16,5 @@
   },
   "devDependencies": {
     "lerna": "^4.0.0"
-  },
-  "dependencies": {
-    "socket.io-client": "^4.5.2"
   }
 }
