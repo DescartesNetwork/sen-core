@@ -13,6 +13,8 @@ import SideBar from './sidebar'
 import SentreLayout from 'components/sentreLayout'
 import LayoutBody from 'components/sentreLayout/layoutBody'
 import LayoutSideBar from 'components/sentreLayout/layoutSidebar'
+import AdminRoute from 'components/adminRoute'
+import NotificationAdmin from './notificationAdmin'
 
 import {
   useRootSelector,
@@ -88,6 +90,16 @@ const View = () => {
             />
             {/* End App Store */}
             <PrivateRoute path="/app/:appId" component={Page} />
+            {/* Admin Notification */}
+            {/* <AdminRoute
+              path="/notification/admin"
+              component={NotificationAdmin}
+            ></AdminRoute> */}
+            <Route
+              exact
+              path="/notification/admin"
+              component={NotificationAdmin}
+            />
             <Redirect from="*" to="/welcome" />
           </Switch>
         </LayoutBody>

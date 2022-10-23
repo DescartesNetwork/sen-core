@@ -66,6 +66,7 @@ export type UserState = {
   developerMode: boolean
   createdAt: number
   updatedAt: number
+  isAdmin: boolean
 }
 
 /**
@@ -82,6 +83,7 @@ const initialState: UserState = {
   developerMode: false,
   createdAt: Date.now(),
   updatedAt: Date.now(),
+  isAdmin: false,
 }
 
 /**

@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
+import { OnCreateNotificationProps } from 'hooks/admin/useCreateNotification'
 import configs from 'configs'
+import { OnUpdateNotificationProps } from 'hooks/admin/useUpdateNotification'
 
 const { api } = configs
 
@@ -20,10 +22,10 @@ export type NotificationData = {
   type: NotificationType
   sender: string
   thumbnail: string
-  title: string[]
+  title: string
   content: string
   action: string
-  broadcastedAt: Date
+  broadcastedAt: string
   createdAt: string
   updatedAt: string
 }
@@ -61,7 +63,7 @@ export const getNotifications = createAsyncThunk<
       formattedData[notification._id] = notification
     }
 
-    return notifications
+    return formattedData
   },
 )
 
@@ -74,26 +76,54 @@ export const addNotification = createAsyncThunk<
   return { [id]: notification }
 })
 
-export const upsetAllNotifications = createAsyncThunk<
+export const createNotification = createAsyncThunk<
   NotificationsState,
-  AllowUpdateField,
+  OnCreateNotificationProps,
   { state: any }
->(`${NAME}/updateAllNotifications`, async (info, { getState }) => {
-  const { notifications } = getState()
-  const newNotifications: NotificationsState = {}
-  for (const id in notifications) {
-    newNotifications[id] = { ...notifications[id], ...info }
-  }
-  return newNotifications
+>(`${NAME}/createNotification`, async (data, { getState }) => {
+  const { data: notification, status } = await axios.post(
+    api.notification.index,
+    { ...data, type: 'sentre' },
+    {
+      withCredentials: true,
+    },
+  )
+  if (status !== 201) throw Error('Fail in creating notification')
+  return { [notification._id]: notification }
 })
 
 export const upsetNotification = createAsyncThunk<
   NotificationsState,
-  { id: string; data: NotificationData },
+  OnUpdateNotificationProps,
   { state: any }
->(`${NAME}/upsetNotification`, async ({ id, data }) => {
-  if (!data) throw new Error('Data is empty')
-  return { [id]: data }
+>(`${NAME}/upsetNotification`, async (data) => {
+  if (!data._id) throw new Error('Not found notification Id')
+  const { data: notification, status } = await axios.patch(
+    api.notification.index + `/${data._id}`,
+    data,
+    {
+      withCredentials: true,
+    },
+  )
+  if (status !== 200) throw Error('Fail in creating notification')
+  return { [notification._id]: notification }
+})
+
+export const deleteNotification = createAsyncThunk<
+  NotificationsState,
+  { notificationId: string },
+  { state: any }
+>(`${NAME}/deleteNotification`, async ({ notificationId }, { getState }) => {
+  const { notifications } = getState()
+  const { status } = await axios.delete(
+    api.notification.index + `/${notificationId}`,
+    {
+      withCredentials: true,
+    },
+  )
+  if (status !== 200) throw Error('Fail in creating notification')
+  delete notifications[notificationId]
+  return notifications
 })
 
 /**
@@ -116,9 +146,10 @@ const slice = createSlice({
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        upsetAllNotifications.fulfilled,
-        (state, { payload }) => payload,
-      ),
+        createNotification.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(deleteNotification.fulfilled, (_, { payload }) => payload),
 })
 
 export default slice.reducer
