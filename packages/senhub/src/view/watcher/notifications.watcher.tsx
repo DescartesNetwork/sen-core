@@ -1,13 +1,12 @@
 import { Fragment, useCallback, useEffect } from 'react'
-import axios from 'axios'
 
 import { useRootDispatch, RootDispatch } from 'store'
-import configs from 'configs'
 import {
   addNotification,
   getNotifications,
-  NotificationData,
 } from 'store/notifications/notifications.reducer'
+import { LIMIT, upsetPagination } from 'store/notifications/pagination.reducer'
+import configs from 'configs'
 
 const { api } = configs
 const eventSource = new EventSource(api.notification.SSE)
@@ -18,15 +17,19 @@ const NotificationsWatcher = () => {
   // First-time fetching
   const fetchData = useCallback(async () => {
     try {
-      const { data: notifications } = await axios.get(api.notification.all, {
-        withCredentials: true,
-      })
-      const formatedData: Record<string, NotificationData> = {}
-      for (const notification of notifications) {
-        formatedData[notification._id] = notification
-      }
-
-      await dispatch(getNotifications(formatedData))
+      await dispatch(
+        getNotifications({
+          offset: 0,
+          limit: LIMIT,
+          broadcasted: true,
+        }),
+      )
+      await dispatch(
+        upsetPagination({
+          offset: LIMIT,
+          limit: LIMIT + LIMIT,
+        }),
+      )
     } catch (er) {
       return window.notify({
         type: 'error',

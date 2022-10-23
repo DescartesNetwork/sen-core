@@ -1,4 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+
+import configs from 'configs'
+
+const { api } = configs
 
 /**
  * Interface & Utility
@@ -36,9 +41,26 @@ const initialState: NotificationsState = {}
  * Actions
  */
 
-export const getNotifications = createAsyncThunk(
+export const getNotifications = createAsyncThunk<
+  NotificationsState,
+  { limit: number; offset: number; broadcasted?: boolean },
+  { state: any }
+>(
   `${NAME}/getNotifications`,
-  async (notifications: NotificationsState) => {
+  async ({ limit, offset, broadcasted = false }) => {
+    const { data: notifications } = await axios.get(api.notification.all, {
+      params: {
+        broadcasted,
+        limit,
+        offset,
+      },
+      withCredentials: true,
+    })
+    const formattedData: Record<string, NotificationData> = {}
+    for (const notification of notifications) {
+      formattedData[notification._id] = notification
+    }
+
     return notifications
   },
 )

@@ -72,10 +72,9 @@ const Notifications = ({ visible }: NotificationsProps) => {
   }, [notifications, unreadOnly, userNotification.notificationMark])
 
   const onMarkAllAsRead = async () => {
-    dispatch(upsetUserNotifications({ userNotificationId: walletAddress }))
-    await axios.patch(api.userNotification.updateReadNotification, {
-      user: walletAddress,
-    })
+    await dispatch(
+      upsetUserNotifications({ userNotificationId: walletAddress }),
+    )
   }
 
   const markAllAsReadVisible = useMemo(() => {
