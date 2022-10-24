@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { PublicKey } from '@solana/web3.js'
-import { OAuth } from '@sentre/connector'
 
-import { isAddress } from 'shared/util'
 import configs from 'configs'
 
 const { api } = configs
@@ -55,11 +52,8 @@ export const getUserNotification = createAsyncThunk<
     user: { _id },
   } = getState()
   const { data: notificationUser } = await axios.get(
-    api.userNotification.index,
+    api.userNotification.index + `/user=${_id}`,
     {
-      data: {
-        userId: _id,
-      },
       withCredentials: true,
     },
   )
@@ -120,6 +114,10 @@ const slice = createSlice({
       )
       .addCase(
         upsetUserNotification.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        upsetUserNotifications.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })
