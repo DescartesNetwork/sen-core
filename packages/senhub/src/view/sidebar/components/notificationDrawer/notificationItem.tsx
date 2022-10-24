@@ -63,15 +63,19 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
             </Typography.Text>
           </Col>
           <Col onClick={onReadOrUnread}>
-            <Tooltip
-              title={
-                <Typography.Text style={{ color: '#E9E9EB' }}>
-                  {!seen && 'Mark as read'}
-                </Typography.Text>
-              }
-            >
+            {!seen ? (
+              <Tooltip
+                title={
+                  <Typography.Text style={{ color: '#E9E9EB' }}>
+                    Mark as read
+                  </Typography.Text>
+                }
+              >
+                <Radio checked={!seen} />
+              </Tooltip>
+            ) : (
               <Radio checked={!seen} />
-            </Tooltip>
+            )}
           </Col>
         </Row>
       </Col>

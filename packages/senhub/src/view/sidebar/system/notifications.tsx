@@ -1,5 +1,4 @@
 import { Fragment, useMemo, useState } from 'react'
-import axios from 'axios'
 
 import IonIcon from '@sentre/antd-ionicon'
 import MenuItem from '../components/menuItem'
@@ -21,9 +20,6 @@ import { RootDispatch, useRootDispatch } from 'store'
 import { MenuSystemItem } from '../constants'
 import { useUserNotification } from 'hooks/useUserNotification'
 import { upsetUserNotifications } from 'store/notifications/userNotification.reducer'
-import configs from 'configs'
-
-const { api } = configs
 
 type NotificationsProps = { visible?: boolean }
 const Notifications = ({ visible }: NotificationsProps) => {
