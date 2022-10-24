@@ -58,7 +58,6 @@ const updateUser = async (
  */
 
 export type UserState = {
-  _id: string
   walletAddress: string
   nftAddress: string
   snsAddress: string
@@ -74,7 +73,6 @@ export type UserState = {
 
 const NAME = 'user'
 const initialState: UserState = {
-  _id: '',
   walletAddress: '',
   nftAddress: '',
   snsAddress: '',

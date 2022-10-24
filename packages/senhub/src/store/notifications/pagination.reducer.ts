@@ -11,7 +11,7 @@ export type PaginationState = {
  * Store constructor
  */
 
-const NAME = 'pagination'
+const NAME = 'notificationPagination'
 const initialState: PaginationState = {
   offset: 0,
   limit: LIMIT,

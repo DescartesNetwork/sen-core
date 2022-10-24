@@ -74,28 +74,6 @@ export const addNotification = createAsyncThunk<
   return { [id]: notification }
 })
 
-export const upsetAllNotifications = createAsyncThunk<
-  NotificationsState,
-  AllowUpdateField,
-  { state: any }
->(`${NAME}/updateAllNotifications`, async (info, { getState }) => {
-  const { notifications } = getState()
-  const newNotifications: NotificationsState = {}
-  for (const id in notifications) {
-    newNotifications[id] = { ...notifications[id], ...info }
-  }
-  return newNotifications
-})
-
-export const upsetNotification = createAsyncThunk<
-  NotificationsState,
-  { id: string; data: NotificationData },
-  { state: any }
->(`${NAME}/upsetNotification`, async ({ id, data }) => {
-  if (!data) throw new Error('Data is empty')
-  return { [id]: data }
-})
-
 /**
  * Usual procedure
  */
@@ -106,18 +84,13 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) =>
     void builder
-      .addCase(getNotifications.fulfilled, (state, { payload }) => payload)
+      .addCase(
+        getNotifications.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
       .addCase(
         addNotification.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
-        upsetNotification.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
-        upsetAllNotifications.fulfilled,
-        (state, { payload }) => payload,
       ),
 })
 

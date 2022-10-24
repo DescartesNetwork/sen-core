@@ -9,16 +9,9 @@ const { api } = configs
  * Interface & Utility
  */
 
-export type Role = 'admin' | 'user' | 'editor' | ''
-
-export type AllowUpdateField = {
-  seenUser: string[]
-}
-
 export type UserNotificationState = {
   _id: string
-  address: string
-  role: Role
+  userAddress: string
   readIds: string[]
   notificationMark: string
   createdAt: string
@@ -32,8 +25,7 @@ export type UserNotificationState = {
 const NAME = 'notificationUser'
 const initialState: UserNotificationState = {
   _id: '',
-  address: '',
-  role: '',
+  userAddress: '',
   readIds: [],
   notificationMark: '',
   createdAt: '',
@@ -47,7 +39,7 @@ export const getUserNotification = createAsyncThunk<
   UserNotificationState,
   void,
   { state: any }
->(`${NAME}/getNotificationUser`, async (_, { getState }) => {
+>(`${NAME}/getUserNotification`, async (_, { getState }) => {
   const {
     user: { _id },
   } = getState()
