@@ -39,7 +39,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
       .slice(0, markIndex)
       .filter(
         (notificationId) =>
-          !userNotification.notificationMark.includes(notificationId),
+          !userNotification.notificationMark?.includes(notificationId),
       ).length
   }, [notifications, userNotification.notificationMark])
 

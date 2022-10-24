@@ -52,11 +52,12 @@ export const getUserNotification = createAsyncThunk<
     user: { _id },
   } = getState()
   const { data: notificationUser } = await axios.get(
-    api.userNotification.index + `/user=${_id}`,
+    api.userNotification.index + `?user=${_id}`,
     {
       withCredentials: true,
     },
   )
+
   return notificationUser
 })
 
