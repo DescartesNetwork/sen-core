@@ -91,15 +91,11 @@ const View = () => {
             {/* End App Store */}
             <PrivateRoute path="/app/:appId" component={Page} />
             {/* Admin Notification */}
-            {/* <AdminRoute
-              path="/notification/admin"
-              component={NotificationAdmin}
-            ></AdminRoute> */}
-            <Route
+            <AdminRoute
               exact
               path="/notification/admin"
               component={NotificationAdmin}
-            />
+            ></AdminRoute>
             <Redirect from="*" to="/welcome" />
           </Switch>
         </LayoutBody>
