@@ -3,11 +3,14 @@ import { MouseEvent, useCallback, useMemo } from 'react'
 
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
-import { NotificationData } from 'store/notifications/notifications.reducer'
 import { RootDispatch, useRootDispatch } from 'store'
+import { NotificationData } from 'store/notifications/notifications.reducer'
 import { useUserNotification } from 'hooks/useUserNotification'
 import { useNotifications } from 'hooks/useNotifications'
 import { updateReadNotification } from 'store/notifications/userNotification.reducer'
+import { useWalletAddress } from 'hooks/useWallet'
+import { isGuestAddress } from 'shared/util'
+
 import NormalLogo from 'static/images/notification/normal-notification.png'
 import QuestLogo from 'static/images/notification/quest.png'
 
@@ -19,6 +22,7 @@ const NotificationItem = ({
   notification: { _id, content, broadcastedAt, title, type, action },
 }: NotificationItemProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
+  const walletAddress = useWalletAddress()
   const {
     notificationMark,
     readIds,
@@ -26,6 +30,7 @@ const NotificationItem = ({
   } = useUserNotification()
   const notifications = useNotifications()
 
+  const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
   const logo = useMemo(() => {
     return type === 'sentre' ? NormalLogo : QuestLogo
   }, [type])
@@ -46,19 +51,25 @@ const NotificationItem = ({
   const onRead = useCallback(
     async (e: MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
-      if (seen) return
+      if (seen || guest) return
       return await dispatch(updateReadNotification({ _id, userNotificationId }))
     },
-    [_id, userNotificationId, seen, dispatch],
+    [guest, _id, userNotificationId, seen, dispatch],
   )
 
   const onAction = useCallback(async () => {
+    if (guest) return
     if (!seen) dispatch(updateReadNotification({ _id, userNotificationId }))
     return window.open(action, 'blank')
-  }, [dispatch, seen, action, _id, userNotificationId])
+  }, [guest, dispatch, seen, action, _id, userNotificationId])
 
   return (
-    <Row gutter={[12, 12]} wrap={false} onClick={onAction}>
+    <Row
+      gutter={[12, 12]}
+      style={{ cursor: 'pointer' }}
+      wrap={false}
+      onClick={onAction}
+    >
       <Col span={4}>
         <Image
           src={logo}
