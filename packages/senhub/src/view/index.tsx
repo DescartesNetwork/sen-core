@@ -31,6 +31,7 @@ import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
 import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
+import { getUserNotification } from 'store/notifications/userNotification.reducer'
 
 const View = () => {
   const theme = useTheme()
@@ -48,6 +49,7 @@ const View = () => {
         const register = await dispatch(loadRegister()).unwrap()
         if (Object.keys(register).length) {
           await dispatch(login()).unwrap()
+          await dispatch(getUserNotification()).unwrap()
         }
       } catch (er: any) {
         window.notify({ type: 'warning', description: er.message })

@@ -35,6 +35,13 @@ const validateSession = async (walletAddress: string) => {
   }
 }
 
+const getUser = async (register: SenReg) => {
+  const { data: user } = await axios.get<UserState>(api.user.index, {
+    withCredentials: true,
+  })
+  return { ...user, appIds: troubleshoot(register, user.appIds) }
+}
+
 const updateUser = async (
   prevUser: Partial<UserState>,
   nextUser: Partial<UserState>,
@@ -83,6 +90,7 @@ export const login = createAsyncThunk<UserState, void, { state: any }>(
   `${NAME}/login`,
   async (_, { getState }) => {
     const {
+      register,
       wallet: { address: walletAddress },
     } = getState()
     if (!isAddress(walletAddress))
@@ -113,9 +121,7 @@ export const login = createAsyncThunk<UserState, void, { state: any }>(
       })
     }
     // Get user
-    const { data: user } = await axios.get(api.user.index, {
-      withCredentials: true,
-    })
+    const user = await getUser(register)
     return user
   },
 )

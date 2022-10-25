@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode } from 'react'
 
 import IonIcon from '@sentre/antd-ionicon'
-import { Space, Typography } from 'antd'
+import { Col, Row, Typography } from 'antd'
 
 type MenuItemProps = {
   icon?: ReactNode
@@ -11,6 +11,7 @@ type MenuItemProps = {
   onClick?: (val: string) => void
   name?: boolean
   disabled?: boolean
+  postfix?: ReactNode
 }
 const MenuItem = ({
   icon = <IonIcon name="grid-outline" />,
@@ -20,31 +21,42 @@ const MenuItem = ({
   onClick = () => {},
   name = true,
   disabled = false,
+  postfix = '',
 }: MenuItemProps) => {
   const textType = disabled ? 'secondary' : undefined
 
   return (
-    <Space
-      size={12}
+    <Row
+      gutter={12}
       style={{
-        width: '100%',
         minWidth: 32,
         minHeight: 32,
         padding: 8,
         ...style,
         cursor: 'pointer',
       }}
+      align="middle"
       onClick={() => !disabled && onClick(value)}
     >
-      <Typography.Text type={textType} style={{ fontSize: 18 }}>
-        {icon}
-      </Typography.Text>
-      {name && (
-        <Typography.Text type={textType} style={{ fontWeight: 600 }}>
-          {children || value}
+      <Col>
+        <Typography.Text type={textType} style={{ fontSize: 18 }}>
+          {icon}
         </Typography.Text>
+      </Col>
+
+      {name && (
+        <Col flex="auto">
+          <Row justify="space-between" align="middle">
+            <Col>
+              <Typography.Text type={textType} style={{ fontWeight: 600 }}>
+                {children || value}
+              </Typography.Text>
+            </Col>
+            <Col>{postfix}</Col>
+          </Row>
+        </Col>
       )}
-    </Space>
+    </Row>
   )
 }
 
