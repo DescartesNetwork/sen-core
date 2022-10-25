@@ -3,7 +3,7 @@ import { useNotifications } from 'hooks/useNotifications'
 import { useUserNotification } from 'hooks/useUserNotification'
 import React, { useMemo, useState } from 'react'
 import { RootDispatch, useRootDispatch } from 'store'
-import { upsetUserNotifications } from 'store/notifications/userNotification.reducer'
+import { updateReadNotifications } from 'store/notifications/userNotification.reducer'
 import { MenuSystemItem } from 'view/sidebar/constants'
 import NotificationDrawer from './notificationDrawer'
 
@@ -38,7 +38,7 @@ const Notification = ({ open, onClose = () => {} }: NotificationProps) => {
 
   const onMarkAllAsRead = async () => {
     await dispatch(
-      upsetUserNotifications({ userNotificationId: userNotification?._id }),
+      updateReadNotifications({ userNotificationId: userNotification?._id }),
     )
   }
 
