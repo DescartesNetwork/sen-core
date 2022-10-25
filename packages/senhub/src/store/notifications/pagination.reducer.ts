@@ -41,7 +41,7 @@ const slice = createSlice({
   extraReducers: (builder) =>
     void builder.addCase(
       upsetPagination.fulfilled,
-      (state, { payload }) => payload,
+      (_, { payload }) => payload,
     ),
 })
 

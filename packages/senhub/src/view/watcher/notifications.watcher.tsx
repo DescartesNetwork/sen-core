@@ -40,8 +40,8 @@ const NotificationsWatcher = () => {
   // Watch account changes
   const watchData = useCallback(async () => {
     eventSource.onmessage = async ({ data }) => {
-      const notification = JSON.parse(data).emitting
-      await dispatch(addNotification({ id: notification._id, notification }))
+      const notification = JSON.parse(data)
+      await dispatch(addNotification({ notification }))
     }
   }, [dispatch])
 

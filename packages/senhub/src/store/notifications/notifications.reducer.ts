@@ -28,14 +28,14 @@ export type NotificationData = {
   updatedAt: string
 }
 
-export type NotificationsState = Record<string, NotificationData>
+export type NotificationsState = NotificationData[]
 
 /**
  * Store constructor
  */
 
 const NAME = 'notifications'
-const initialState: NotificationsState = {}
+const initialState: NotificationsState = []
 
 /**
  * Actions
@@ -47,8 +47,9 @@ export const getNotifications = createAsyncThunk<
   { state: any }
 >(
   `${NAME}/getNotifications`,
-  async ({ limit, offset, broadcasted = false }) => {
-    const { data: notifications } = await axios.get(api.notification.all, {
+  async ({ limit, offset, broadcasted = false }, { getState }) => {
+    const { notifications } = getState()
+    const { data: newNotifications } = await axios.get(api.notification.all, {
       params: {
         broadcasted,
         limit,
@@ -56,22 +57,19 @@ export const getNotifications = createAsyncThunk<
       },
       withCredentials: true,
     })
-    const formattedData: Record<string, NotificationData> = {}
-    for (const notification of notifications) {
-      formattedData[notification._id] = notification
-    }
 
-    return notifications
+    return [...notifications, ...newNotifications]
   },
 )
 
 export const addNotification = createAsyncThunk<
   NotificationsState,
-  { id: string; notification: NotificationData },
+  { notification: NotificationData },
   { state: any }
->(`${NAME}/addNotification`, async ({ id, notification }, { getState }) => {
-  if (!notification || !id) throw new Error('Notification is invalid!')
-  return { [id]: notification }
+>(`${NAME}/addNotification`, async ({ notification }, { getState }) => {
+  const { notifications } = getState()
+  if (!notification._id) throw new Error('Notification is invalid!')
+  return [notification, ...notifications]
 })
 
 /**
@@ -84,14 +82,8 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) =>
     void builder
-      .addCase(
-        getNotifications.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
-        addNotification.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      ),
+      .addCase(getNotifications.fulfilled, (_, { payload }) => payload)
+      .addCase(addNotification.fulfilled, (_, { payload }) => payload),
 })
 
 export default slice.reducer

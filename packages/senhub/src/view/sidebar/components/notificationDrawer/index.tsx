@@ -21,26 +21,25 @@ const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
 
   useEffect(() => {
-    if (notifications.length < notificationPagination.limit)
+    if (notifications.length < notificationPagination.offset)
       return setDisabled(true)
     setDisabled(false)
-  }, [notificationPagination.limit, notifications.length])
+  }, [notificationPagination.offset, notifications.length])
 
   const onViewMore = async () => {
-    const newNotifications = await dispatch(
+    await dispatch(
       getNotifications({
         offset: notificationPagination.offset,
         limit: notificationPagination.limit,
         broadcasted: true,
       }),
     )
-    if (Object.keys(newNotifications).length === LIMIT)
-      await dispatch(
-        upsetPagination({
-          offset: notificationPagination.limit + LIMIT,
-          limit: notificationPagination.limit + LIMIT,
-        }),
-      )
+    await dispatch(
+      upsetPagination({
+        offset: notificationPagination.limit + LIMIT,
+        limit: notificationPagination.limit + LIMIT,
+      }),
+    )
   }
   return (
     <Row>
@@ -63,17 +62,17 @@ const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
               <NotificationItem notification={notification} />
             </Col>
           ))}
-          <Col style={{ marginTop: 8 }} span={24}>
-            <Space
-              style={{ width: '100%' }}
-              direction="vertical"
-              align="center"
-            >
-              <Button onClick={onViewMore} disabled={disabled}>
-                View More
-              </Button>
-            </Space>
-          </Col>
+          {!disabled && (
+            <Col style={{ marginTop: 8 }} span={24}>
+              <Space
+                style={{ width: '100%' }}
+                direction="vertical"
+                align="center"
+              >
+                <Button onClick={onViewMore}>View More</Button>
+              </Space>
+            </Col>
+          )}
         </Fragment>
       )}
     </Row>

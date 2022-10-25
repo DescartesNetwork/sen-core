@@ -14,7 +14,6 @@ import {
 } from 'antd'
 import NotificationDrawer from '../components/notificationDrawer'
 
-import { useWalletAddress } from 'hooks/useWallet'
 import { useNotifications } from 'hooks/useNotifications'
 import { RootDispatch, useRootDispatch } from 'store'
 import { MenuSystemItem } from '../constants'
@@ -27,58 +26,52 @@ const Notifications = ({ visible }: NotificationsProps) => {
   const [unreadOnly, setUnreadOnly] = useState(false)
   const notifications = useNotifications()
   const userNotification = useUserNotification()
-  const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
 
   const newNotificationAmount = useMemo(() => {
-    const notificationArray = Object.keys(notifications)
-    const markIndex = notificationArray.findIndex(
-      (val) => val === userNotification.notificationMark,
+    const markIndex = notifications.findIndex(
+      (val) => val._id === userNotification.notificationMark,
     )
-    return notificationArray
+    return notifications
       .slice(0, markIndex)
       .filter(
-        (notificationId) =>
-          !userNotification.notificationMark?.includes(notificationId),
+        (notification) => !userNotification.readIds?.includes(notification._id),
       ).length
-  }, [notifications, userNotification.notificationMark])
+  }, [
+    notifications,
+    userNotification.notificationMark,
+    userNotification.readIds,
+  ])
 
   const filteredNotifications = useMemo(() => {
-    const notificationArray = Object.keys(notifications)
-      .map((key) => ({
-        ...notifications[key],
-      }))
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      )
     if (unreadOnly) {
-      const markIndex = notificationArray.findIndex(
+      const markIndex = notifications.findIndex(
         (val) => val._id === userNotification.notificationMark,
       )
-      return notificationArray
+      return notifications
         .slice(0, markIndex)
         .filter(
           (notification) =>
-            !userNotification.notificationMark.includes(notification._id),
+            !userNotification.readIds.includes(notification._id),
         )
     }
 
-    return notificationArray
-  }, [notifications, unreadOnly, userNotification.notificationMark])
+    return notifications
+  }, [
+    notifications,
+    unreadOnly,
+    userNotification.notificationMark,
+    userNotification.readIds,
+  ])
 
   const onMarkAllAsRead = async () => {
     await dispatch(
-      upsetUserNotifications({ userNotificationId: walletAddress }),
+      upsetUserNotifications({ userNotificationId: userNotification?._id }),
     )
   }
 
   const markAllAsReadVisible = useMemo(() => {
-    const notificationKeys = Object.keys(notifications)
-    if (
-      notificationKeys[notificationKeys.length - 1] ===
-      userNotification.notificationMark
-    )
+    if (notifications[0]?._id === userNotification.notificationMark)
       return false
     return true
   }, [notifications, userNotification.notificationMark])
@@ -140,6 +133,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
                     <Switch
                       checked={unreadOnly}
                       onChange={() => setUnreadOnly(!unreadOnly)}
+                      size="small"
                     />
                   </Space>
                 </Col>
@@ -149,22 +143,27 @@ const Notifications = ({ visible }: NotificationsProps) => {
               <Row justify="space-between" wrap={false} align="middle">
                 <Col flex="auto">
                   <Typography.Text style={{ fontSize: 12 }} type="secondary">
-                    NEAREST
+                    RECENTLY
                   </Typography.Text>
                 </Col>
                 {markAllAsReadVisible && (
                   <Col>
                     <Button
                       style={{
-                        fontSize: 12,
                         padding: 0,
-                        color: '#5D6CCF',
                         background: 'none',
                       }}
                       type="text"
                       onClick={onMarkAllAsRead}
                     >
-                      Mark all as read
+                      <Typography.Text
+                        style={{
+                          fontSize: 12,
+                          color: '#5D6CCF',
+                        }}
+                      >
+                        Mark all as read
+                      </Typography.Text>
                     </Button>
                   </Col>
                 )}
@@ -179,7 +178,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
         }}
         open={open}
         headerStyle={{ borderBottom: 'none' }}
-        bodyStyle={{ padding: 0 }}
+        bodyStyle={{ padding: 0, paddingBottom: 12 }}
       >
         <NotificationDrawer notifications={filteredNotifications} />
       </Drawer>
