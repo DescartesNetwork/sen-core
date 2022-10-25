@@ -51,21 +51,23 @@ const Notifications = ({ visible }: NotificationsProps) => {
         onClick={() => setOpen(true)}
         name={visible}
         postfix={
-          <div
-            style={{
-              color: '#F9575E',
-              background: 'rgba(249, 87, 94, 0.1)',
-              width: 22,
-              height: 22,
-              borderRadius: 4,
-              fontSize: 12,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {newNotificationAmount}
-          </div>
+          newNotificationAmount !== 0 ? (
+            <div
+              style={{
+                color: '#F9575E',
+                background: 'rgba(249, 87, 94, 0.1)',
+                width: 22,
+                height: 22,
+                borderRadius: 4,
+                fontSize: 12,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {newNotificationAmount}
+            </div>
+          ) : null
         }
       >
         <Row>

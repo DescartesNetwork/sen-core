@@ -44,7 +44,6 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
     return await dispatch(
       updateReadNotification({
         _id,
-        userNotificationId: userNotification._id,
       }),
     )
   }
@@ -54,7 +53,6 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
       dispatch(
         updateReadNotification({
           _id,
-          userNotificationId: userNotification._id,
         }),
       )
     window.open(notification?.action, 'blank')

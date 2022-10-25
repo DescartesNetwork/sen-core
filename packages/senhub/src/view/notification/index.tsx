@@ -37,9 +37,7 @@ const Notification = ({ open, onClose = () => {} }: NotificationProps) => {
   ])
 
   const onMarkAllAsRead = async () => {
-    await dispatch(
-      updateReadNotifications({ userNotificationId: userNotification?._id }),
-    )
+    await dispatch(updateReadNotifications())
   }
 
   const markAllAsReadVisible = useMemo(() => {
