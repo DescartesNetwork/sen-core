@@ -3,9 +3,10 @@ import { CSSProperties, ReactNode, useMemo } from 'react'
 import { useInfix } from 'hooks/useUI'
 import { RootState, useRootSelector } from 'store'
 import { Infix } from 'store/ui.reducer'
-import { SIDEBAR_MIN_WIDTH, SIDEBAR_MAX_WIDTH } from './index'
 
-const SIDEBAR_STYLE_DEFAULT: CSSProperties = {
+export const SIDEBAR_MAX_WIDTH = 214
+export const SIDEBAR_MIN_WIDTH = 64
+export const SIDEBAR_STYLE_DEFAULT: CSSProperties = {
   width: SIDEBAR_MIN_WIDTH,
   position: 'fixed',
   top: 0,
@@ -15,43 +16,26 @@ const SIDEBAR_STYLE_DEFAULT: CSSProperties = {
 type LayoutSideBarProps = {
   children?: ReactNode
   style?: CSSProperties
-  sidebarMaxWidth?: number
-  sidebarMinWidth?: number
 }
-const LayoutSideBar = ({
-  children,
-  sidebarMaxWidth = SIDEBAR_MAX_WIDTH,
-  sidebarMinWidth = SIDEBAR_MIN_WIDTH,
-  style,
-}: LayoutSideBarProps) => {
+const LayoutSideBar = ({ children, style }: LayoutSideBarProps) => {
   const visibleNavigation = useRootSelector(
-    (state: RootState) => state.ui.visibleNavigation,
+    ({ ui }: RootState) => ui.visibleNavigation,
   )
   const sidebarPosition = useRootSelector(
-    (state: RootState) => state.ui.sidebarPosition,
+    ({ ui }: RootState) => ui.sidebarPosition,
   )
   const infix = useInfix()
   const isMobile = infix < Infix.md
 
   // Navigation sidebar style
-  const barStyle = useMemo(() => {
-    const nextStyle = {
-      ...SIDEBAR_STYLE_DEFAULT,
-      [sidebarPosition]: 0,
-    }
-    const width = visibleNavigation ? sidebarMaxWidth : sidebarMinWidth
-    const translate = visibleNavigation ? 0 : -sidebarMinWidth
-    const position: CSSProperties['position'] = 'sticky'
-
+  const barStyle: CSSProperties = useMemo(() => {
+    const nextStyle = { ...SIDEBAR_STYLE_DEFAULT, [sidebarPosition]: 0 }
+    const width = visibleNavigation ? SIDEBAR_MAX_WIDTH : SIDEBAR_MIN_WIDTH
+    const translate = visibleNavigation ? 0 : -SIDEBAR_MIN_WIDTH
+    const position = 'sticky'
     if (isMobile) return { ...nextStyle, [sidebarPosition]: translate }
     return { ...nextStyle, position, width }
-  }, [
-    isMobile,
-    sidebarMaxWidth,
-    sidebarMinWidth,
-    sidebarPosition,
-    visibleNavigation,
-  ])
+  }, [isMobile, sidebarPosition, visibleNavigation])
 
   return (
     <div className="sentre-sidebar" style={{ ...barStyle, ...style }}>

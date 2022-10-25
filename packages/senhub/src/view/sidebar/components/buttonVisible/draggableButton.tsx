@@ -12,6 +12,7 @@ import {
   useRootSelector,
 } from 'store'
 import { setVisibleNagivation } from 'store/ui.reducer'
+import { useAppSide } from 'hooks/useUI'
 
 import './index.os.less'
 
@@ -36,18 +37,10 @@ const DraggableButton = ({ initialY = 16 }: DraggableButtonProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: 'button_visible_sidebar',
   })
-  const visible = useRootSelector(
-    (state: RootState) => state.ui.visibleNavigation,
-  )
-  const sidebarPosition = useRootSelector(
-    (state: RootState) => state.ui.sidebarPosition,
-  )
+  const visible = useRootSelector(({ ui }: RootState) => ui.visibleNavigation)
   const dispatch = useRootDispatch<RootDispatch>()
+  const btnPosition = useAppSide()
 
-  const btnPosition = useMemo(
-    () => (sidebarPosition === 'right' ? 'left' : 'right'),
-    [sidebarPosition],
-  )
   const btnIcon = useMemo(
     () =>
       visible

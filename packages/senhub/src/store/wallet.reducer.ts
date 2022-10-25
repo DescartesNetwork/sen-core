@@ -1,7 +1,6 @@
 import { web3 } from '@project-serum/anchor'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { GuestWallet } from 'view/wallet/lib'
 import { connection } from 'providers/sol.provider'
 
 /**

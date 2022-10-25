@@ -13,6 +13,9 @@ import {
   useRootSelector,
 } from 'store'
 import { setVisibleActionCenter } from 'store/ui.reducer'
+import { openWallet } from 'store/wallet.reducer'
+import { useWalletAddress } from 'hooks/useWallet'
+import { isGuestAddress } from 'shared/util'
 
 import './index.os.less'
 
@@ -22,26 +25,28 @@ type ActionCenterProps = {
 
 const ActionCenter = ({ visibleNavigation }: ActionCenterProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const visible = useRootSelector(
-    (state: RootState) => state.ui.visibleActionCenter,
+  const visibleActionCenter = useRootSelector(
+    ({ ui }: RootState) => ui.visibleActionCenter,
   )
   const sidebarPosition = useRootSelector(
-    (state: RootState) => state.ui.sidebarPosition,
+    ({ ui }: RootState) => ui.sidebarPosition,
   )
+  const walletAddress = useWalletAddress()
 
-  const onActionCenter = useCallback(async () => {
+  const onWalletProfile = useCallback(async () => {
+    if (isGuestAddress(walletAddress)) return dispatch(openWallet())
     return dispatch(setVisibleActionCenter(true))
-  }, [dispatch])
+  }, [walletAddress, dispatch])
 
   return (
     <Fragment>
       <WalletProfile
         padding={8}
         visible={visibleNavigation}
-        onOpenActionCenter={onActionCenter}
+        onClick={onWalletProfile}
       />
       <Drawer
-        open={visible}
+        open={visibleActionCenter}
         onClose={() => dispatch(setVisibleActionCenter(false))}
         closable={false}
         contentWrapperStyle={{ width: 378 }}

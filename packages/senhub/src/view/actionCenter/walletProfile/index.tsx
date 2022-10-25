@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 
 import { Avatar, Card, Col, Row, Space, Typography } from 'antd'
-import WalletAction from './walletAction'
+import WalletAction, { WalletActionType } from './walletAction'
 import WalletName from './walletName'
 import WalletAvatar from './walletAvatar'
 
 import { useWalletAddress } from 'hooks/useWallet'
-import { shortenAddress } from 'shared/util'
+import { isGuestAddress, shortenAddress } from 'shared/util'
 import storage from 'shared/storage'
 
 import PHANTOM from 'static/images/wallet/phantom.png'
@@ -17,7 +17,6 @@ import COIN98 from 'static/images/wallet/coin98.png'
 import CLOVER from 'static/images/wallet/clover.png'
 import EXODUS from 'static/images/wallet/exodus.svg'
 import SENTRE from 'static/images/actionCenter/logo-sentre.svg'
-
 import './index.os.less'
 
 const LOGO_WALLET: Record<string, string> = {
@@ -32,7 +31,7 @@ const LOGO_WALLET: Record<string, string> = {
 }
 
 export type WalletProfileProps = {
-  onOpenActionCenter?: () => void
+  onClick?: () => void
   visible?: boolean
   avatarSize?: number
   padding?: number
@@ -40,7 +39,7 @@ export type WalletProfileProps = {
 }
 
 const WalletProfile = ({
-  onOpenActionCenter,
+  onClick = () => {},
   visible = false,
   avatarSize = 32,
   padding = 0,
@@ -52,6 +51,11 @@ const WalletProfile = ({
     const walletType = storage.get('WalletType')
     return LOGO_WALLET[walletType] || SENTRE
   }, [])
+  const actions: WalletActionType[] = useMemo(() => {
+    if (isGuestAddress(walletAddress)) return []
+    if (sideBar) return ['copy', 'qr']
+    return ['copy', 'qr', 'explorer']
+  }, [walletAddress, sideBar])
 
   return (
     <Card
@@ -62,7 +66,7 @@ const WalletProfile = ({
         boxShadow: 'unset',
       }}
       bodyStyle={{ padding }}
-      onClick={onOpenActionCenter}
+      onClick={onClick}
       className={sideBar ? 'hoverable' : ''}
     >
       <Row gutter={[12, 12]} align="middle" wrap={false}>
@@ -79,11 +83,7 @@ const WalletProfile = ({
                     {shortenAddress(walletAddress, 3)}
                   </Typography.Text>
                 </Space>
-                <WalletAction
-                  actions={
-                    sideBar ? ['copy', 'qr'] : ['copy', 'qr', 'explorer']
-                  }
-                />
+                <WalletAction actions={actions} />
               </Space>
               <WalletName />
             </Space>

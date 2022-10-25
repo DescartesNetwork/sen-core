@@ -4,6 +4,7 @@ import numbro from 'numbro'
 
 import { net } from 'shared/runtime'
 import { DataLoader } from './dataloader'
+import { GUEST_ADDRESS } from 'view/wallet/lib/guestWallet'
 
 /**
  * Delay by async/await
@@ -128,6 +129,10 @@ export const isAddress = (address: string | undefined): address is string => {
   } catch (er) {
     return false
   }
+}
+
+export const isGuestAddress = (address: string) => {
+  return address === GUEST_ADDRESS
 }
 
 /**

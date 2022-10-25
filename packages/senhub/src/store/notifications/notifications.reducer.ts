@@ -55,7 +55,6 @@ export const getNotifications = createAsyncThunk<
         limit,
         offset,
       },
-      withCredentials: true,
     })
 
     return [...notifications, ...newNotifications]

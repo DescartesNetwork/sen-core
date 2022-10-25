@@ -11,7 +11,7 @@ import {
   useRootSelector,
   RootState,
 } from 'store'
-import { useWalletAddress } from 'hooks/useWallet'
+import { useGuestMode, useWalletAddress } from 'hooks/useWallet'
 import storage from 'shared/storage'
 import { isAddress } from 'shared/util'
 import { connectWallet, openWallet } from 'store/wallet.reducer'
@@ -29,7 +29,6 @@ import {
 } from './lib'
 import { useInfix } from 'hooks/useUI'
 import { Infix } from 'store/ui.reducer'
-import { useAutoInstall } from 'hooks/useInstallApp'
 
 export type WalletProps = {
   style?: CSSProperties
@@ -43,7 +42,7 @@ const Wallet = ({ style = {}, visible = false }: WalletProps) => {
   )
   const walletAddress = useWalletAddress()
   const infix = useInfix()
-  const autoInstall = useAutoInstall()
+  const guestMode = useGuestMode()
 
   const isMobile = useMemo(() => infix < Infix.md, [infix])
 
@@ -71,10 +70,10 @@ const Wallet = ({ style = {}, visible = false }: WalletProps) => {
       case 'Exodus':
         return new ExodusWallet()
       default:
-        if (autoInstall) return new GuestWallet(() => dispatch(openWallet()))
+        if (guestMode) return new GuestWallet(() => dispatch(openWallet()))
         return undefined
     }
-  }, [dispatch, autoInstall])
+  }, [dispatch, guestMode])
 
   useEffect(() => {
     if (isAddress(walletAddress)) return
