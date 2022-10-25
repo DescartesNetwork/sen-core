@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { MouseEvent, useMemo } from 'react'
+import { MouseEvent, useCallback, useMemo } from 'react'
 
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
@@ -19,7 +19,11 @@ const NotificationItem = ({
   notification: { _id, content, broadcastedAt, title, type, action },
 }: NotificationItemProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const userNotification = useUserNotification()
+  const {
+    notificationMark,
+    readIds,
+    _id: userNotificationId,
+  } = useUserNotification()
   const notifications = useNotifications()
 
   const logo = useMemo(() => {
@@ -27,40 +31,31 @@ const NotificationItem = ({
   }, [type])
 
   const seen = useMemo(() => {
-    if (!userNotification.notificationMark) return false
+    if (!notificationMark) return false
     const notificationMarkIndex = notifications.findIndex(
-      (val) => val._id === userNotification.notificationMark,
+      ({ _id }) => _id === notificationMark,
     )
-    const notificationIndex = notifications.findIndex((val) => val._id === _id)
-
+    const notificationIndex = notifications.findIndex(
+      ({ _id: id }) => id === _id,
+    )
     if (notificationIndex >= notificationMarkIndex) return true
-
-    if (userNotification.readIds.includes(_id)) return true
+    if (readIds.includes(_id)) return true
     return false
-  }, [_id, notifications, userNotification])
+  }, [_id, notifications, notificationMark, readIds])
 
-  const onRead = async (e: MouseEvent) => {
-    e.stopPropagation()
+  const onRead = useCallback(
+    async (e: MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation()
+      if (seen) return
+      return await dispatch(updateReadNotification({ _id, userNotificationId }))
+    },
+    [_id, userNotificationId, seen, dispatch],
+  )
 
-    if (seen) return
-    return await dispatch(
-      updateReadNotification({
-        _id,
-        userNotificationId: userNotification._id,
-      }),
-    )
-  }
-
-  const onAction = async () => {
-    if (!seen)
-      dispatch(
-        updateReadNotification({
-          _id,
-          userNotificationId: userNotification._id,
-        }),
-      )
-    window.open(action, 'blank')
-  }
+  const onAction = useCallback(async () => {
+    if (!seen) dispatch(updateReadNotification({ _id, userNotificationId }))
+    return window.open(action, 'blank')
+  }, [dispatch, seen, action, _id, userNotificationId])
 
   return (
     <Row gutter={[12, 12]} wrap={false} onClick={onAction}>
