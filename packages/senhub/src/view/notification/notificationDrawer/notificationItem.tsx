@@ -1,5 +1,5 @@
-import moment from 'moment'
 import { MouseEvent, useCallback, useMemo } from 'react'
+import moment from 'moment'
 
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
@@ -27,9 +27,10 @@ const NotificationItem = ({
   const notifications = useNotifications()
 
   const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
-  const logo = useMemo(() => {
-    return type === 'sentre' ? NormalLogo : QuestLogo
-  }, [type])
+  const logo = useMemo(
+    () => (type === 'sentre' ? NormalLogo : QuestLogo),
+    [type],
+  )
 
   const seen = useMemo(() => {
     if (!notificationMark) return false

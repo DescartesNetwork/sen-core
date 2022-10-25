@@ -8,13 +8,9 @@ const { api } = configs
 export const LIMIT = 10
 
 const updateUserNotification = async () => {
-  const { data } = await axios.post(
-    api.userNotification.index,
-    {},
-    {
-      withCredentials: true,
-    },
-  )
+  const { data } = await axios.post(api.userNotification.index, null, {
+    withCredentials: true,
+  })
   return data
 }
 
@@ -55,10 +51,8 @@ export const getUserNotification = createAsyncThunk(
         withCredentials: true,
       },
     )
-    if (!notificationUser.userAddress) {
-      const notificationUser = await updateUserNotification(walletAddress)
-      return notificationUser
-    }
+    if (!notificationUser.userAddress) return await updateUserNotification()
+
     return notificationUser
   },
 )
@@ -68,7 +62,7 @@ export const updateReadNotification = createAsyncThunk(
   async ({ _id }: { _id: string }) => {
     const { data: newUserNotification } = await axios.patch(
       api.userNotification.updateReadNotification + `/${_id}`,
-      {},
+      null,
       {
         withCredentials: true,
       },
@@ -83,7 +77,7 @@ export const updateReadNotifications = createAsyncThunk(
   async () => {
     const { data: newUser } = await axios.patch(
       api.userNotification.updateReadNotifications,
-      {},
+      null,
       {
         withCredentials: true,
       },

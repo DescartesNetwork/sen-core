@@ -10,8 +10,8 @@ import {
   LIMIT,
   upsetPagination,
 } from 'store/notifications/userNotification.reducer'
-import configs from 'configs'
 import { useWalletAddress } from 'hooks/useWallet'
+import configs from 'configs'
 
 const { api } = configs
 const eventSource = new EventSource(api.notification.SSE)

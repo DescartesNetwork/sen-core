@@ -10,30 +10,23 @@ import { MenuSystemItem } from '../constants'
 import { useUserNotification } from 'hooks/useUserNotification'
 
 type NotificationsProps = { visible?: boolean }
+
 const Notifications = ({ visible }: NotificationsProps) => {
   const [open, setOpen] = useState(false)
   const notifications = useNotifications()
-  const userNotification = useUserNotification()
+  const { notificationMark, readIds } = useUserNotification()
 
   const newNotificationAmount = useMemo(() => {
-    if (!userNotification.notificationMark)
-      return notifications.filter(
-        (notification) => !userNotification.readIds?.includes(notification._id),
-      ).length
+    if (!notificationMark)
+      return notifications.filter(({ _id }) => !readIds?.includes(_id)).length
     const markIndex = notifications.findIndex(
-      (val) => val._id === userNotification.notificationMark,
+      (val) => val._id === notificationMark,
     )
 
     return notifications
       .slice(0, markIndex)
-      .filter(
-        (notification) => !userNotification.readIds?.includes(notification._id),
-      ).length
-  }, [
-    notifications,
-    userNotification.notificationMark,
-    userNotification.readIds,
-  ])
+      .filter(({ _id }) => !readIds?.includes(_id)).length
+  }, [notificationMark, notifications, readIds])
 
   return (
     <Fragment>
