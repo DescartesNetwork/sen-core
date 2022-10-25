@@ -82,16 +82,14 @@ const Notifications = ({ visible }: NotificationsProps) => {
         icon={
           !visible ? (
             <Badge count={newNotificationAmount}>
-              <IonIcon name="notifications-outline" />
+              <IonIcon name="notifications-outline" style={{ fontSize: 18 }} />
             </Badge>
           ) : (
-            <IonIcon name="notifications-outline" />
+            <IonIcon name="notifications-outline" style={{ fontSize: 18 }} />
           )
         }
         value={MenuSystemItem.Notify}
-        onClick={() => {
-          setOpen(true)
-        }}
+        onClick={() => setOpen(true)}
         name={visible}
         postfix={
           <div
