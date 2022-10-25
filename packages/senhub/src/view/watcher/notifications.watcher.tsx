@@ -5,17 +5,35 @@ import {
   addNotification,
   getNotifications,
 } from 'store/notifications/notifications.reducer'
-import { LIMIT, upsetPagination } from 'store/notifications/pagination.reducer'
+import {
+  getUserNotification,
+  LIMIT,
+  upsetPagination,
+} from 'store/notifications/userNotification.reducer'
 import configs from 'configs'
+import { useWalletAddress } from 'hooks/useWallet'
 
 const { api } = configs
 const eventSource = new EventSource(api.notification.SSE)
 
 const NotificationsWatcher = () => {
+  const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
 
+  const fetchUserNotification = useCallback(async () => {
+    if (!walletAddress) return
+    try {
+      await dispatch(getUserNotification({ walletAddress }))
+    } catch (e) {
+      return window.notify({
+        type: 'error',
+        description: 'Cannot fetch user notifications',
+      })
+    }
+  }, [dispatch, walletAddress])
+
   // First-time fetching
-  const fetchData = useCallback(async () => {
+  const fetchNotification = useCallback(async () => {
     try {
       await dispatch(
         getNotifications({
@@ -46,9 +64,13 @@ const NotificationsWatcher = () => {
   }, [dispatch])
 
   useEffect(() => {
-    fetchData()
+    fetchNotification()
     watchData()
-  }, [fetchData, watchData])
+  }, [fetchNotification, watchData])
+
+  useEffect(() => {
+    fetchUserNotification()
+  }, [fetchUserNotification])
 
   return <Fragment />
 }

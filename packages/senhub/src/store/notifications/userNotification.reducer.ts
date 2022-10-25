@@ -5,6 +5,19 @@ import configs from 'configs'
 
 const { api } = configs
 
+export const LIMIT = 10
+
+const updateUserNotification = async (userAddress: string) => {
+  const { data } = await axios.post(
+    api.userNotification.index,
+    { userAddress },
+    {
+      withCredentials: true,
+    },
+  )
+  return data
+}
+
 /**
  * Interface & Utility
  */
@@ -14,8 +27,8 @@ export type UserNotificationState = {
   userAddress: string
   readIds: string[]
   notificationMark: string
-  createdAt: string
-  updatedAt: string
+  offset: number
+  limit: number
 }
 
 /**
@@ -28,39 +41,56 @@ const initialState: UserNotificationState = {
   userAddress: '',
   readIds: [],
   notificationMark: '',
-  createdAt: '',
-  updatedAt: '',
+  offset: 0,
+  limit: LIMIT,
 }
 
 /**
  * Actions
  */
-export const getUserNotification = createAsyncThunk<
-  UserNotificationState,
-  void,
-  { state: any }
->(`${NAME}/getUserNotification`, async (_, { getState }) => {
-  const {
-    user: { walletAddress },
-  } = getState()
-  const { data: notificationUser } = await axios.get(
-    api.userNotification.index + `?userAddress=${walletAddress}`,
-    {
-      withCredentials: true,
-    },
-  )
-  return notificationUser
-})
+export const getUserNotification = createAsyncThunk(
+  `${NAME}/getUserNotification`,
+  async ({ walletAddress }: { walletAddress: string }) => {
+    const { data: notificationUser } = await axios.get(
+      api.userNotification.index + `?userAddress=${walletAddress}`,
+      {
+        withCredentials: true,
+      },
+    )
+    if (!notificationUser._id) {
+      const notificationUser = await updateUserNotification(walletAddress)
+      return notificationUser
+    }
+    return notificationUser
+  },
+)
 
-export const upsetUserNotification = createAsyncThunk<
-  UserNotificationState,
-  { _id: string; userNotificationId: string },
-  { state: any }
->(
-  `${NAME}/upsetUserNotification`,
-  async ({ _id, userNotificationId }, { getState }) => {
-    const { data: newUser } = await axios.patch(
+export const updateReadNotification = createAsyncThunk(
+  `${NAME}/updateReadNotification`,
+  async ({
+    _id,
+    userNotificationId,
+  }: {
+    _id: string
+    userNotificationId: string
+  }) => {
+    const { data: newUserNotification } = await axios.patch(
       api.userNotification.updateReadNotification + `/${_id}`,
+      { userNotificationId },
+      {
+        withCredentials: true,
+      },
+    )
+
+    return { ...newUserNotification }
+  },
+)
+
+export const updateReadNotifications = createAsyncThunk(
+  `${NAME}/updateReadNotifications`,
+  async ({ userNotificationId }: { userNotificationId: string }) => {
+    const { data: newUser } = await axios.patch(
+      api.userNotification.updateReadNotifications,
       { userNotificationId },
       {
         withCredentials: true,
@@ -71,22 +101,10 @@ export const upsetUserNotification = createAsyncThunk<
   },
 )
 
-export const upsetUserNotifications = createAsyncThunk<
-  UserNotificationState,
-  { userNotificationId: string },
-  { state: any }
->(
-  `${NAME}/upsetUserNotifications`,
-  async ({ userNotificationId }, { getState }) => {
-    const { data: newUser } = await axios.patch(
-      api.userNotification.updateReadNotifications,
-      { userNotificationId },
-      {
-        withCredentials: true,
-      },
-    )
-
-    return { ...newUser }
+export const upsetPagination = createAsyncThunk(
+  `${NAME}/upsetNotification`,
+  async ({ limit, offset }: { offset: number; limit: number }) => {
+    return { limit, offset }
   },
 )
 
@@ -105,11 +123,15 @@ const slice = createSlice({
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        upsetUserNotification.fulfilled,
+        updateReadNotification.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        upsetUserNotifications.fulfilled,
+        updateReadNotifications.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        upsetPagination.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

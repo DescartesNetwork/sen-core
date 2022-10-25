@@ -7,7 +7,7 @@ import { NotificationData } from 'store/notifications/notifications.reducer'
 import { RootDispatch, useRootDispatch } from 'store'
 import { useUserNotification } from 'hooks/useUserNotification'
 import { useNotifications } from 'hooks/useNotifications'
-import { upsetUserNotification } from 'store/notifications/userNotification.reducer'
+import { updateReadNotification } from 'store/notifications/userNotification.reducer'
 import NormalLogo from 'static/images/notification/normal-notification.png'
 import QuestLogo from 'static/images/notification/quest.png'
 
@@ -25,6 +25,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
   }, [type])
 
   const seen = useMemo(() => {
+    if (!userNotification.notificationMark) return false
     const notificationMarkIndex = notifications.findIndex(
       (val) => val._id === userNotification.notificationMark,
     )
@@ -41,7 +42,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
 
     if (seen) return
     return await dispatch(
-      upsetUserNotification({
+      updateReadNotification({
         _id,
         userNotificationId: userNotification._id,
       }),
@@ -51,7 +52,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
   const onAction = async () => {
     if (!seen)
       dispatch(
-        upsetUserNotification({
+        updateReadNotification({
           _id,
           userNotificationId: userNotification._id,
         }),
