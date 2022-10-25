@@ -15,8 +15,9 @@ import WalletProfile from '../walletProfile'
 import SolBalance from './solBalance'
 
 import { RootDispatch, useRootDispatch } from 'store'
-import { disconnectWallet } from 'store/wallet.reducer'
+import { disconnectWallet, openWallet } from 'store/wallet.reducer'
 import { logout } from 'store/user.reducer'
+import { GuestWallet } from 'view/wallet/lib'
 
 import LOGO_SOL from 'static/images/actionCenter/logo-solana.svg'
 
@@ -25,8 +26,9 @@ const WalletInfo = () => {
   const [hidden, setHidden] = useState(false)
 
   const onDisconnect = useCallback(async () => {
+    const guestWallet = new GuestWallet(() => dispatch(openWallet()))
     await dispatch(logout())
-    await dispatch(disconnectWallet())
+    await dispatch(disconnectWallet(guestWallet))
   }, [dispatch])
 
   return (

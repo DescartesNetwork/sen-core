@@ -9,10 +9,11 @@ import Loading from 'view/loading'
 import Marketplace from 'view/marketplace'
 import Watcher from 'view/watcher'
 import Installer from 'view/installer'
-import SideBar from './sidebar'
+import SideBar from 'view/sidebar'
 import SentreLayout from 'components/sentreLayout'
 import LayoutBody from 'components/sentreLayout/layoutBody'
 import LayoutSideBar from 'components/sentreLayout/layoutSidebar'
+import GuestMode from './guestMode'
 
 import {
   useRootSelector,
@@ -22,7 +23,7 @@ import {
 } from 'store'
 import { loadRegister } from 'store/register.reducer'
 import { loadVisited, updateLoading } from 'store/flags.reducer'
-import { isAddress } from 'shared/util'
+import { isAddress, isGuestAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 import { useTheme } from 'hooks/useUI'
 import { login } from 'store/user.reducer'
@@ -42,14 +43,17 @@ const View = () => {
   // Load DApp flags, registry, page
   useEffect(() => {
     ;(async () => {
-      if (!isAddress(walletAddress)) return dispatch(loadRegister())
       try {
         await dispatch(updateLoading(true))
-        await dispatch(loadVisited())
-        const register = await dispatch(loadRegister()).unwrap()
-        if (Object.keys(register).length) {
-          await dispatch(login()).unwrap()
-          await dispatch(getUserNotification()).unwrap()
+        if (!isAddress(walletAddress) || isGuestAddress(walletAddress)) {
+          await dispatch(loadRegister())
+        } else {
+          await dispatch(loadVisited())
+          const register = await dispatch(loadRegister()).unwrap()
+          if (Object.keys(register).length) {
+            await dispatch(login()).unwrap()
+            await dispatch(getUserNotification()).unwrap()
+          }
         }
       } catch (er: any) {
         window.notify({ type: 'warning', description: er.message })
@@ -70,7 +74,6 @@ const View = () => {
 
   return (
     <Layout>
-      {/* Body */}
       <SentreLayout>
         <LayoutSideBar>
           <SideBar />
@@ -78,7 +81,6 @@ const View = () => {
         <LayoutBody>
           <Switch>
             <Route exact path="/welcome" component={Welcome} />
-            {/* DApp Store */}
             <Route exact path="/app/store/:appId?" component={Marketplace} />
             <Route
               path="/store"
@@ -86,14 +88,12 @@ const View = () => {
                 <Redirect to={{ pathname: `/app${pathname}`, search }} />
               )}
             />
-            {/* End App Store */}
             <PrivateRoute path="/app/:appId" component={Page} />
             <Redirect from="*" to="/welcome" />
           </Switch>
+          <GuestMode />
         </LayoutBody>
       </SentreLayout>
-
-      {/* In-Background Run Jobs */}
       <Loading />
       <Watcher />
       <Installer />

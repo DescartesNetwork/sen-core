@@ -13,7 +13,7 @@ import {
 } from 'store'
 import { setVisibleInstaller } from 'store/ui.reducer'
 import { randChoose } from 'shared/util'
-import { useInstallAppCallback } from 'hooks/useInstallApp'
+import { useAutoInstall, useInstallAppCallback } from 'hooks/useInstallApp'
 import { useRegister } from 'hooks/useRegister'
 import { useAppIds } from 'hooks/useAppIds'
 import SearchEngine from './searchEngine'
@@ -24,17 +24,13 @@ const Installer = () => {
   const [recommendedApps, setRecommendeddApps] = useState<string[]>([])
   const appIds = useAppIds()
   const register = useRegister()
-  const value = useRootSelector((state: RootState) => state.search.value)
-  const visible = useRootSelector(
-    (state: RootState) => state.ui.visibleInstaller,
-  )
+  const value = useRootSelector(({ search }: RootState) => search.value)
+  const visible = useRootSelector(({ ui }: RootState) => ui.visibleInstaller)
   const dispatch = useRootDispatch<RootDispatch>()
   const history = useHistory()
-  const { pathname, search } = useLocation()
+  const { pathname } = useLocation()
   const onInstall = useInstallAppCallback()
-
-  const params = new URLSearchParams(search)
-  const autoInstall = params.get('autoInstall') === 'true' ? true : false
+  const autoInstall = useAutoInstall()
 
   const allAppIds = useMemo(() => Object.keys(register), [register])
   const exactAppId = useMemo(() => {

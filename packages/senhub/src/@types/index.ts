@@ -93,8 +93,6 @@ interface Window {
   sentre: {
     solana: WalletInterface
   }
-  // IPFS
-  ipfs?: any
   // Utility
   notify: ({ type, description, onClick }: SentreNotification) => void
   message: ({ type, description, onClick }: SentreMessage) => void

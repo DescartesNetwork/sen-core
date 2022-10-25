@@ -10,16 +10,17 @@ import { useRootSelector, RootState } from 'store'
 import { useWalletAddress } from 'hooks/useWallet'
 import { useAppIds } from 'hooks/useAppIds'
 import { isAddress } from 'shared/util'
+import { useWidth } from 'hooks/useUI'
 
 import './index.os.less'
 
 const Welcome = () => {
   const history = useHistory()
   const { search } = useLocation()
+  const loading = useRootSelector(({ flags }: RootState) => flags.loading)
   const walletAddress = useWalletAddress()
   const appIds = useAppIds()
-  const width = useRootSelector((state: RootState) => state.ui.width)
-  const loading = useRootSelector((state: RootState) => state.flags.loading)
+  const width = useWidth()
 
   // Redirect callback
   useEffect(() => {

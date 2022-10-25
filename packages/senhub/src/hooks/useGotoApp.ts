@@ -19,10 +19,10 @@ export const useGoToAppCallback = () => {
   const history = useHistory()
   const dispatch = useRootDispatch<RootDispatch>()
   const visibleActionCenter = useRootSelector(
-    (state: RootState) => state.ui.visibleActionCenter,
+    ({ ui }: RootState) => ui.visibleActionCenter,
   )
   const visibleInstaller = useRootSelector(
-    (state: RootState) => state.ui.visibleInstaller,
+    ({ ui }: RootState) => ui.visibleInstaller,
   )
 
   const onGotoAppCallback = useCallback(

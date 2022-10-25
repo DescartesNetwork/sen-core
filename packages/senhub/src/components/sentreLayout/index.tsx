@@ -6,8 +6,6 @@ import { RootState, useRootSelector } from 'store'
 
 import './index.os.less'
 
-export const SIDEBAR_MAX_WIDTH = 214
-export const SIDEBAR_MIN_WIDTH = 64
 const CONTAINER_CLN = 'sentre-container'
 
 type SentreLayoutProps = {
@@ -17,7 +15,7 @@ type SentreLayoutProps = {
 }
 const SentreLayout = ({ gap = 0, style, children }: SentreLayoutProps) => {
   const sidebarPosition = useRootSelector(
-    (state: RootState) => state.ui.sidebarPosition,
+    ({ ui }: RootState) => ui.sidebarPosition,
   )
   const infix = useInfix()
   const isMobile = infix < Infix.md
