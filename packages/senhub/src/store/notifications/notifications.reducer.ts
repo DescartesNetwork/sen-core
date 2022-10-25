@@ -9,11 +9,7 @@ const { api } = configs
  * Interface & Utility
  */
 
-export type NotificationType = 'sentre'
-
-export type AllowUpdateField = {
-  seenUser: string[]
-}
+export type NotificationType = 'sentre' | 'quest'
 
 export type NotificationData = {
   _id: string
@@ -23,8 +19,6 @@ export type NotificationData = {
   content: string
   action: string
   broadcastedAt: Date
-  createdAt: string
-  updatedAt: string
 }
 
 export type NotificationsState = NotificationData[]

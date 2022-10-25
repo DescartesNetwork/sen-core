@@ -7,10 +7,10 @@ const { api } = configs
 
 export const LIMIT = 10
 
-const updateUserNotification = async (userAddress: string) => {
+const updateUserNotification = async () => {
   const { data } = await axios.post(
     api.userNotification.index,
-    { userAddress },
+    {},
     {
       withCredentials: true,
     },
