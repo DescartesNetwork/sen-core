@@ -19,7 +19,6 @@ export type NotificationData = {
   _id: string
   type: NotificationType
   sender: string
-  thumbnail: string
   title: string[]
   content: string
   action: string

@@ -26,12 +26,12 @@ import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 import { useTheme } from 'hooks/useUI'
 import { login } from 'store/user.reducer'
+import { getUserNotification } from 'store/notifications/userNotification.reducer'
 
 import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
 import 'static/styles/dark.os.less'
 import 'static/styles/light.os.less'
-import { getUserNotification } from 'store/notifications/userNotification.reducer'
 
 const View = () => {
   const theme = useTheme()
