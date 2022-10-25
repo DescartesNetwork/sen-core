@@ -26,7 +26,6 @@ import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 import { useTheme } from 'hooks/useUI'
 import { login } from 'store/user.reducer'
-import { getUserNotification } from 'store/notifications/userNotification.reducer'
 
 import DEFAULT_LIGHT_BG from 'static/images/bg/light-bg.png'
 import DEFAULT_DARK_BG from 'static/images/bg/dark-bg.png'
@@ -49,7 +48,6 @@ const View = () => {
         const register = await dispatch(loadRegister()).unwrap()
         if (Object.keys(register).length) {
           await dispatch(login()).unwrap()
-          await dispatch(getUserNotification()).unwrap()
         }
       } catch (er: any) {
         window.notify({ type: 'warning', description: er.message })

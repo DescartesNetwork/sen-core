@@ -19,7 +19,6 @@ import mints from './mints.reducer'
 import search from './search.reducer'
 import userNotification from './notifications/userNotification.reducer'
 import notifications from './notifications/notifications.reducer'
-import notificationPagination from './notifications/pagination.reducer'
 
 /**
  * Root types
@@ -54,7 +53,6 @@ const store = configureStore({
     search,
     notifications,
     userNotification,
-    notificationPagination,
   },
 })
 

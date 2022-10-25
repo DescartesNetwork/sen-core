@@ -7,9 +7,12 @@ import {
   getNotifications,
   NotificationData,
 } from 'store/notifications/notifications.reducer'
-import { useNotificationPagination } from 'hooks/useNotificationPagination'
 import { RootDispatch, useRootDispatch } from 'store'
-import { LIMIT, upsetPagination } from 'store/notifications/pagination.reducer'
+import { useUserNotification } from 'hooks/useUserNotification'
+import {
+  LIMIT,
+  upsetPagination,
+} from 'store/notifications/userNotification.reducer'
 
 export type NotificationDrawerProps = {
   notifications: NotificationData[]
@@ -17,27 +20,26 @@ export type NotificationDrawerProps = {
 
 const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
   const [disabled, setDisabled] = useState(true)
-  const notificationPagination = useNotificationPagination()
   const dispatch = useRootDispatch<RootDispatch>()
+  const userNotification = useUserNotification()
 
   useEffect(() => {
-    if (notifications.length < notificationPagination.offset)
-      return setDisabled(true)
+    if (notifications.length < userNotification.offset) return setDisabled(true)
     setDisabled(false)
-  }, [notificationPagination.offset, notifications.length])
+  }, [userNotification.offset, notifications.length])
 
   const onViewMore = async () => {
     await dispatch(
       getNotifications({
-        offset: notificationPagination.offset,
-        limit: notificationPagination.limit,
+        offset: userNotification.offset,
+        limit: userNotification.limit,
         broadcasted: true,
       }),
     )
     await dispatch(
       upsetPagination({
-        offset: notificationPagination.limit + LIMIT,
-        limit: notificationPagination.limit + LIMIT,
+        offset: userNotification.limit + LIMIT,
+        limit: userNotification.limit + LIMIT,
       }),
     )
   }

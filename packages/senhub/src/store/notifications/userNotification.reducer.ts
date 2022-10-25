@@ -5,6 +5,19 @@ import configs from 'configs'
 
 const { api } = configs
 
+export const LIMIT = 10
+
+const updateUserNotification = async (userAddress: string) => {
+  const { data } = await axios.post(
+    api.userNotification.index,
+    { userAddress },
+    {
+      withCredentials: true,
+    },
+  )
+  return data
+}
+
 /**
  * Interface & Utility
  */
@@ -14,8 +27,8 @@ export type UserNotificationState = {
   userAddress: string
   readIds: string[]
   notificationMark: string
-  createdAt: string
-  updatedAt: string
+  offset: number
+  limit: number
 }
 
 /**
@@ -28,8 +41,8 @@ const initialState: UserNotificationState = {
   userAddress: '',
   readIds: [],
   notificationMark: '',
-  createdAt: '',
-  updatedAt: '',
+  offset: 0,
+  limit: LIMIT,
 }
 
 /**
@@ -37,29 +50,32 @@ const initialState: UserNotificationState = {
  */
 export const getUserNotification = createAsyncThunk<
   UserNotificationState,
-  void,
+  { walletAddress: string },
   { state: any }
->(`${NAME}/getUserNotification`, async (_, { getState }) => {
-  const {
-    user: { walletAddress },
-  } = getState()
+>(`${NAME}/getUserNotification`, async ({ walletAddress }, { getState }) => {
   const { data: notificationUser } = await axios.get(
     api.userNotification.index + `?userAddress=${walletAddress}`,
     {
       withCredentials: true,
     },
   )
+  if (!notificationUser._id) {
+    const notificationUser = await updateUserNotification(walletAddress)
+    return notificationUser
+  }
+
+  console.log('chay vao hamf get User Notification', notificationUser)
   return notificationUser
 })
 
-export const upsetUserNotification = createAsyncThunk<
+export const updateReadNotification = createAsyncThunk<
   UserNotificationState,
   { _id: string; userNotificationId: string },
   { state: any }
 >(
-  `${NAME}/upsetUserNotification`,
+  `${NAME}/updateReadNotification`,
   async ({ _id, userNotificationId }, { getState }) => {
-    const { data: newUser } = await axios.patch(
+    const { data: newUserNotification } = await axios.patch(
       api.userNotification.updateReadNotification + `/${_id}`,
       { userNotificationId },
       {
@@ -67,28 +83,33 @@ export const upsetUserNotification = createAsyncThunk<
       },
     )
 
-    return { ...newUser }
+    return { ...newUserNotification }
   },
 )
 
-export const upsetUserNotifications = createAsyncThunk<
+export const updateReadNotifications = createAsyncThunk<
   UserNotificationState,
   { userNotificationId: string },
   { state: any }
->(
-  `${NAME}/upsetUserNotifications`,
-  async ({ userNotificationId }, { getState }) => {
-    const { data: newUser } = await axios.patch(
-      api.userNotification.updateReadNotifications,
-      { userNotificationId },
-      {
-        withCredentials: true,
-      },
-    )
+>(`${NAME}/updateReadNotifications`, async ({ userNotificationId }) => {
+  const { data: newUser } = await axios.patch(
+    api.userNotification.updateReadNotifications,
+    { userNotificationId },
+    {
+      withCredentials: true,
+    },
+  )
 
-    return { ...newUser }
-  },
-)
+  return { ...newUser }
+})
+
+export const upsetPagination = createAsyncThunk<
+  Partial<UserNotificationState>,
+  { offset: number; limit: number },
+  { state: any }
+>(`${NAME}/upsetNotification`, async ({ limit, offset }) => {
+  return { limit, offset }
+})
 
 /**
  * Usual procedure
@@ -105,11 +126,15 @@ const slice = createSlice({
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        upsetUserNotification.fulfilled,
+        updateReadNotification.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        upsetUserNotifications.fulfilled,
+        updateReadNotifications.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        upsetPagination.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

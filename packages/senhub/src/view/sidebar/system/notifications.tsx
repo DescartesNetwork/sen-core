@@ -16,9 +16,14 @@ const Notifications = ({ visible }: NotificationsProps) => {
   const userNotification = useUserNotification()
 
   const newNotificationAmount = useMemo(() => {
+    if (!userNotification.notificationMark)
+      return notifications.filter(
+        (notification) => !userNotification.readIds?.includes(notification._id),
+      ).length
     const markIndex = notifications.findIndex(
       (val) => val._id === userNotification.notificationMark,
     )
+
     return notifications
       .slice(0, markIndex)
       .filter(
