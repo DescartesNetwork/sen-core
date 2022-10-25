@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useCallback, useMemo } from 'react'
 
 import { Button, Col, Empty, Row, Space, Typography } from 'antd'
 import NotificationItem from './notificationItem'
@@ -19,16 +19,15 @@ export type NotificationDrawerProps = {
 }
 
 const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
-  const [disabled, setDisabled] = useState(true)
   const dispatch = useRootDispatch<RootDispatch>()
   const userNotification = useUserNotification()
 
-  useEffect(() => {
-    if (notifications.length < userNotification.offset) return setDisabled(true)
-    setDisabled(false)
-  }, [userNotification.offset, notifications.length])
+  const disabled = useMemo(
+    () => notifications.length < userNotification.offset,
+    [userNotification.offset, notifications.length],
+  )
 
-  const onViewMore = async () => {
+  const onViewMore = useCallback(async () => {
     await dispatch(
       getNotifications({
         offset: userNotification.offset,
@@ -42,7 +41,8 @@ const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
         limit: userNotification.limit + LIMIT,
       }),
     )
-  }
+  }, [dispatch, userNotification])
+
   return (
     <Row>
       {!notifications.length ? (
@@ -53,7 +53,7 @@ const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
               height: 60,
             }}
             description={
-              <Typography.Text>You have no notifications</Typography.Text>
+              <Typography.Text>You have no notification</Typography.Text>
             }
           />
         </Col>

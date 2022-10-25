@@ -1,65 +1,71 @@
 import moment from 'moment'
-import { MouseEvent, useMemo } from 'react'
+import { MouseEvent, useCallback, useMemo } from 'react'
 
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
-import { NotificationData } from 'store/notifications/notifications.reducer'
 import { RootDispatch, useRootDispatch } from 'store'
+import { NotificationData } from 'store/notifications/notifications.reducer'
 import { useUserNotification } from 'hooks/useUserNotification'
 import { useNotifications } from 'hooks/useNotifications'
 import { updateReadNotification } from 'store/notifications/userNotification.reducer'
+import { useWalletAddress } from 'hooks/useWallet'
+import { isGuestAddress } from 'shared/util'
+
 import NormalLogo from 'static/images/notification/normal-notification.png'
 import QuestLogo from 'static/images/notification/quest.png'
 
-type NotificationItemProps = {
+export type NotificationItemProps = {
   notification: NotificationData
 }
-const NotificationItem = ({ notification }: NotificationItemProps) => {
-  const { _id, content, broadcastedAt, title, type } = notification
-  const userNotification = useUserNotification()
-  const notifications = useNotifications()
-  const dispatch = useRootDispatch<RootDispatch>()
 
+const NotificationItem = ({
+  notification: { _id, content, broadcastedAt, title, type, action },
+}: NotificationItemProps) => {
+  const dispatch = useRootDispatch<RootDispatch>()
+  const walletAddress = useWalletAddress()
+  const { notificationMark, readIds } = useUserNotification()
+  const notifications = useNotifications()
+
+  const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
   const logo = useMemo(() => {
     return type === 'sentre' ? NormalLogo : QuestLogo
   }, [type])
 
   const seen = useMemo(() => {
-    if (!userNotification.notificationMark) return false
+    if (!notificationMark) return false
     const notificationMarkIndex = notifications.findIndex(
-      (val) => val._id === userNotification.notificationMark,
+      ({ _id }) => _id === notificationMark,
     )
-    const notificationIndex = notifications.findIndex((val) => val._id === _id)
-
+    const notificationIndex = notifications.findIndex(
+      ({ _id: id }) => id === _id,
+    )
     if (notificationIndex >= notificationMarkIndex) return true
-
-    if (userNotification.readIds.includes(_id)) return true
+    if (readIds.includes(_id)) return true
     return false
-  }, [_id, notifications, userNotification])
+  }, [_id, notifications, notificationMark, readIds])
 
-  const onRead = async (e: MouseEvent) => {
-    e.stopPropagation()
+  const onRead = useCallback(
+    async (e: MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation()
+      if (seen || guest) return
+      return await dispatch(updateReadNotification({ _id }))
+    },
+    [_id, dispatch, guest, seen],
+  )
 
-    if (seen) return
-    return await dispatch(
-      updateReadNotification({
-        _id,
-      }),
-    )
-  }
-
-  const onAction = async () => {
-    if (!seen)
-      dispatch(
-        updateReadNotification({
-          _id,
-        }),
-      )
-    window.open(notification?.action, 'blank')
-  }
+  const onAction = useCallback(async () => {
+    if (guest) return
+    if (!seen) dispatch(updateReadNotification({ _id }))
+    return window.open(action, 'blank')
+  }, [_id, action, dispatch, guest, seen])
 
   return (
-    <Row gutter={[12, 12]} wrap={false} onClick={onAction}>
+    <Row
+      gutter={[12, 12]}
+      style={{ cursor: 'pointer' }}
+      wrap={false}
+      onClick={onAction}
+    >
       <Col span={4}>
         <Image
           src={logo}
