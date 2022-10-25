@@ -11,14 +11,16 @@ import { updateReadNotification } from 'store/notifications/userNotification.red
 import NormalLogo from 'static/images/notification/normal-notification.png'
 import QuestLogo from 'static/images/notification/quest.png'
 
-type NotificationItemProps = {
+export type NotificationItemProps = {
   notification: NotificationData
 }
-const NotificationItem = ({ notification }: NotificationItemProps) => {
-  const { _id, content, broadcastedAt, title, type } = notification
+
+const NotificationItem = ({
+  notification: { _id, content, broadcastedAt, title, type, action },
+}: NotificationItemProps) => {
+  const dispatch = useRootDispatch<RootDispatch>()
   const userNotification = useUserNotification()
   const notifications = useNotifications()
-  const dispatch = useRootDispatch<RootDispatch>()
 
   const logo = useMemo(() => {
     return type === 'sentre' ? NormalLogo : QuestLogo
@@ -57,7 +59,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
           userNotificationId: userNotification._id,
         }),
       )
-    window.open(notification?.action, 'blank')
+    window.open(action, 'blank')
   }
 
   return (
