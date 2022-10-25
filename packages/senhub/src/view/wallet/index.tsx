@@ -29,6 +29,7 @@ import {
 } from './lib'
 import { useInfix } from 'hooks/useUI'
 import { Infix } from 'store/ui.reducer'
+import { useAutoInstall } from 'hooks/useInstallApp'
 
 export type WalletProps = {
   style?: CSSProperties
@@ -42,6 +43,7 @@ const Wallet = ({ style = {}, visible = false }: WalletProps) => {
   )
   const walletAddress = useWalletAddress()
   const infix = useInfix()
+  const autoInstall = useAutoInstall()
 
   const isMobile = useMemo(() => infix < Infix.md, [infix])
 
@@ -69,33 +71,36 @@ const Wallet = ({ style = {}, visible = false }: WalletProps) => {
       case 'Exodus':
         return new ExodusWallet()
       default:
-        return new GuestWallet(() => dispatch(openWallet()))
+        if (autoInstall) return new GuestWallet(() => dispatch(openWallet()))
+        return undefined
     }
-  }, [dispatch])
+  }, [dispatch, autoInstall])
 
   useEffect(() => {
     if (isAddress(walletAddress)) return
     try {
       const wallet = reconnect()
-      dispatch(connectWallet(wallet)).unwrap()
+      if (wallet) dispatch(connectWallet(wallet)).unwrap()
     } catch (er: any) {
       window.notify({ type: 'error', description: er.message })
     }
   }, [dispatch, reconnect, walletAddress])
 
-  if (isAddress(walletAddress))
-    return <ActionCenter visibleNavigation={visible} />
   return (
     <Fragment>
-      <Button
-        style={style}
-        type="primary"
-        icon={<IonIcon name="wallet-outline" />}
-        onClick={() => dispatch(openWallet())}
-        block={!isMobile && visibleNavigation}
-      >
-        {!isMobile && visibleNavigation && 'Connect Wallet'}
-      </Button>
+      {isAddress(walletAddress) ? (
+        <ActionCenter visibleNavigation={visible} />
+      ) : (
+        <Button
+          style={style}
+          type="primary"
+          icon={<IonIcon name="wallet-outline" />}
+          onClick={() => dispatch(openWallet())}
+          block={!isMobile && visibleNavigation}
+        >
+          {!isMobile && visibleNavigation && 'Connect Wallet'}
+        </Button>
+      )}
       <Login />
     </Fragment>
   )

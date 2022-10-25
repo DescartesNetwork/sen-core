@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import { useRootDispatch, RootDispatch } from 'store'
 import { openWallet } from 'store/wallet.reducer'
@@ -30,4 +31,11 @@ export const useInstallApp = (appId: string) => {
   }, [onInstallAppCallback, appId])
 
   return onInstallApp
+}
+
+export const useAutoInstall = () => {
+  const { search } = useLocation()
+  const params = new URLSearchParams(search)
+  const autoInstall = params.get('autoInstall') === 'true' ? true : false
+  return autoInstall
 }
