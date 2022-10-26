@@ -29,14 +29,14 @@ const SideBar = () => {
       <Row className="wrapper-sidebar" gutter={[0, 12]}>
         <Col style={{ flex: '1 1' }}>
           <Row
-            gutter={[8, 8]}
+            gutter={[8, 0]}
             style={{ flexFlow: 'column', height: '100%' }}
             align={rowAlign}
           >
             <Col
               style={{
-                paddingTop: 24,
-                paddingBottom: 36,
+                paddingTop: 20,
+                paddingBottom: 20,
                 paddingLeft: 12,
                 paddingRight: 12,
               }}

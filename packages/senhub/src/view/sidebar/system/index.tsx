@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { Col, Divider, Row } from 'antd'
+import { Col, Divider, Row, Tooltip } from 'antd'
 import SenMarket from './market'
 import Notifications from './notifications'
 import AppSettings from './applications'
@@ -45,7 +45,14 @@ const System = ({ isMobile = false }: SystemProps) => {
         <SenMarket isMobile={isMobile} />
       </Col>
       <Col>
-        <Wallet visible={nextVisible} style={{ margin: '8px 0px' }} />
+        <Tooltip
+          trigger={nextVisible ? [] : ['hover']}
+          title="Wallet"
+          arrowPointAtCenter
+          placement="right"
+        >
+          <Wallet visible={nextVisible} style={{ margin: '8px 0px' }} />
+        </Tooltip>
       </Col>
     </Row>
   )

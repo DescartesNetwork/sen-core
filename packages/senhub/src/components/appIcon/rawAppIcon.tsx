@@ -1,10 +1,9 @@
-import { MouseEvent, ReactNode, useMemo } from 'react'
+import { MouseEvent, ReactNode } from 'react'
 
 import { Space, Avatar, Typography, Badge, AvatarProps } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { REGISTER_APP_STORE } from 'view/marketplace'
-import { useRegisterSelector } from 'hooks/useRegister'
+import { useAppName } from 'hooks/useAppName'
 import configs from 'configs'
 import './index.os.less'
 
@@ -48,11 +47,7 @@ export const RawVerticalAppIcon = ({
   size = 64,
   name = true,
 }: RawAppIconProps) => {
-  const manifest = useRegisterSelector((register) => register[appId])
-  const { name: appName } = useMemo(
-    () => manifest || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
-    [manifest, appId],
-  )
+  const getAppName = useAppName()
 
   return (
     <Space
@@ -75,7 +70,7 @@ export const RawVerticalAppIcon = ({
             fontSize: Math.floor(size / 4.5),
           }}
         >
-          {appName}
+          {getAppName(appId)}
         </Typography.Text>
       ) : null}
     </Space>
@@ -89,11 +84,7 @@ export const RawHorizontalAppIcon = ({
   size = 32,
   name = true,
 }: RawAppIconProps) => {
-  const manifest = useRegisterSelector((register) => register[appId])
-  const { name: appName } = useMemo(
-    () => manifest || REGISTER_APP_STORE[appId] || { name: 'Unknown' },
-    [manifest, appId],
-  )
+  const getAppName = useAppName()
 
   return (
     <Space
@@ -112,7 +103,7 @@ export const RawHorizontalAppIcon = ({
           style: { cursor: 'pointer' },
         }}
       />
-      {name ? <Typography.Text>{appName}</Typography.Text> : null}
+      {name ? <Typography.Text>{getAppName(appId)}</Typography.Text> : null}
     </Space>
   )
 }
