@@ -7,14 +7,10 @@ const { api } = configs
 
 export const LIMIT = 10
 
-const updateUserNotification = async (userAddress: string) => {
-  const { data } = await axios.post(
-    api.userNotification.index,
-    { userAddress },
-    {
-      withCredentials: true,
-    },
-  )
+const updateUserNotification = async () => {
+  const { data } = await axios.post(api.userNotification.index, null, {
+    withCredentials: true,
+  })
   return data
 }
 
@@ -23,7 +19,6 @@ const updateUserNotification = async (userAddress: string) => {
  */
 
 export type UserNotificationState = {
-  _id: string
   userAddress: string
   readIds: string[]
   notificationMark: string
@@ -37,7 +32,6 @@ export type UserNotificationState = {
 
 const NAME = 'notificationUser'
 const initialState: UserNotificationState = {
-  _id: '',
   userAddress: '',
   readIds: [],
   notificationMark: '',
@@ -52,31 +46,23 @@ export const getUserNotification = createAsyncThunk(
   `${NAME}/getUserNotification`,
   async ({ walletAddress }: { walletAddress: string }) => {
     const { data: notificationUser } = await axios.get(
-      api.userNotification.index + `?userAddress=${walletAddress}`,
+      api.userNotification.index,
       {
         withCredentials: true,
       },
     )
-    if (!notificationUser._id) {
-      const notificationUser = await updateUserNotification(walletAddress)
-      return notificationUser
-    }
+    if (!notificationUser.userAddress) return await updateUserNotification()
+
     return notificationUser
   },
 )
 
 export const updateReadNotification = createAsyncThunk(
   `${NAME}/updateReadNotification`,
-  async ({
-    _id,
-    userNotificationId,
-  }: {
-    _id: string
-    userNotificationId: string
-  }) => {
+  async ({ _id }: { _id: string }) => {
     const { data: newUserNotification } = await axios.patch(
       api.userNotification.updateReadNotification + `/${_id}`,
-      { userNotificationId },
+      null,
       {
         withCredentials: true,
       },
@@ -88,10 +74,10 @@ export const updateReadNotification = createAsyncThunk(
 
 export const updateReadNotifications = createAsyncThunk(
   `${NAME}/updateReadNotifications`,
-  async ({ userNotificationId }: { userNotificationId: string }) => {
+  async () => {
     const { data: newUser } = await axios.patch(
       api.userNotification.updateReadNotifications,
-      { userNotificationId },
+      null,
       {
         withCredentials: true,
       },

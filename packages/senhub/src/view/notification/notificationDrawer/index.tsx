@@ -19,8 +19,8 @@ export type NotificationDrawerProps = {
 }
 
 const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
-  const dispatch = useRootDispatch<RootDispatch>()
   const userNotification = useUserNotification()
+  const dispatch = useRootDispatch<RootDispatch>()
 
   const disabled = useMemo(
     () => notifications.length < userNotification.offset,

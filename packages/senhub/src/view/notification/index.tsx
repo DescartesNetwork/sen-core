@@ -1,46 +1,42 @@
+import { useMemo, useState } from 'react'
+
 import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
-import { useNotifications } from 'hooks/useNotifications'
-import { useUserNotification } from 'hooks/useUserNotification'
-import React, { useMemo, useState } from 'react'
-import { RootDispatch, useRootDispatch } from 'store'
-import { updateReadNotifications } from 'store/notifications/userNotification.reducer'
 import { MenuSystemItem } from 'view/sidebar/constants'
 import NotificationDrawer from './notificationDrawer'
 
+import { useNotifications } from 'hooks/useNotifications'
+import { useUserNotification } from 'hooks/useUserNotification'
+import { updateReadNotifications } from 'store/notifications/userNotification.reducer'
+import { RootDispatch, useRootDispatch } from 'store'
+
 type NotificationProps = { open?: boolean; onClose?: () => void }
-const Notification = ({ open, onClose = () => {} }: NotificationProps) => {
+
+const Notification = ({
+  open = false,
+  onClose = () => {},
+}: NotificationProps) => {
   const [unreadOnly, setUnreadOnly] = useState(false)
   const notifications = useNotifications()
   const userNotification = useUserNotification()
 
   const dispatch = useRootDispatch<RootDispatch>()
 
-  const filteredNotifications = useMemo(() => {
-    if (unreadOnly) {
-      const markIndex = notifications.findIndex(
-        (val) => val._id === userNotification.notificationMark,
-      )
-      return notifications
-        .slice(0, markIndex)
-        .filter(
-          (notification) =>
-            !userNotification.readIds.includes(notification._id),
-        )
-    }
-
+  const unreadNotifications = useMemo(() => {
+    const markIndex = notifications.findIndex(
+      (val) => val._id === userNotification.notificationMark,
+    )
     return notifications
+      .slice(0, markIndex)
+      .filter(
+        (notification) => !userNotification.readIds.includes(notification._id),
+      )
   }, [
     notifications,
-    unreadOnly,
     userNotification.notificationMark,
     userNotification.readIds,
   ])
 
-  const onMarkAllAsRead = async () => {
-    await dispatch(
-      updateReadNotifications({ userNotificationId: userNotification?._id }),
-    )
-  }
+  const onMarkAllAsRead = async () => await dispatch(updateReadNotifications())
 
   const markAllAsReadVisible = useMemo(() => {
     if (notifications[0]?._id === userNotification.notificationMark)
@@ -112,7 +108,9 @@ const Notification = ({ open, onClose = () => {} }: NotificationProps) => {
       headerStyle={{ borderBottom: 'none' }}
       bodyStyle={{ padding: 0, paddingBottom: 12 }}
     >
-      <NotificationDrawer notifications={filteredNotifications} />
+      <NotificationDrawer
+        notifications={unreadOnly ? unreadNotifications : notifications}
+      />
     </Drawer>
   )
 }

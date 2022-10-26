@@ -1,5 +1,5 @@
-import moment from 'moment'
 import { MouseEvent, useCallback, useMemo } from 'react'
+import moment from 'moment'
 
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
@@ -23,17 +23,14 @@ const NotificationItem = ({
 }: NotificationItemProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
-  const {
-    notificationMark,
-    readIds,
-    _id: userNotificationId,
-  } = useUserNotification()
+  const { notificationMark, readIds } = useUserNotification()
   const notifications = useNotifications()
 
   const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
-  const logo = useMemo(() => {
-    return type === 'sentre' ? NormalLogo : QuestLogo
-  }, [type])
+  const logo = useMemo(
+    () => (type === 'sentre' ? NormalLogo : QuestLogo),
+    [type],
+  )
 
   const seen = useMemo(() => {
     if (!notificationMark) return false
@@ -52,16 +49,16 @@ const NotificationItem = ({
     async (e: MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
       if (seen || guest) return
-      return await dispatch(updateReadNotification({ _id, userNotificationId }))
+      return await dispatch(updateReadNotification({ _id }))
     },
-    [guest, _id, userNotificationId, seen, dispatch],
+    [_id, dispatch, guest, seen],
   )
 
   const onAction = useCallback(async () => {
     if (guest) return
-    if (!seen) dispatch(updateReadNotification({ _id, userNotificationId }))
+    if (!seen) dispatch(updateReadNotification({ _id }))
     return window.open(action, 'blank')
-  }, [guest, dispatch, seen, action, _id, userNotificationId])
+  }, [_id, action, dispatch, guest, seen])
 
   return (
     <Row
