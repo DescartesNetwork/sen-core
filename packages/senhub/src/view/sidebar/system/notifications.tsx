@@ -5,7 +5,7 @@ import MenuItem from '../components/menuItem'
 import { Col, Row, Badge } from 'antd'
 import Notification from 'view/notification'
 
-import { useNotifications } from 'hooks/useNotifications'
+import { useNotificationsData } from 'hooks/useNotificationsData'
 import { MenuSystemItem } from '../constants'
 import { useUserNotification } from 'hooks/useUserNotification'
 
@@ -13,7 +13,7 @@ type NotificationsProps = { visible?: boolean }
 
 const Notifications = ({ visible }: NotificationsProps) => {
   const [open, setOpen] = useState(false)
-  const notifications = useNotifications()
+  const notifications = useNotificationsData()
   const { notificationMark, readIds } = useUserNotification()
 
   const newNotificationAmount = useMemo(() => {

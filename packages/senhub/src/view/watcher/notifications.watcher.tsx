@@ -1,16 +1,15 @@
 import { Fragment, useCallback, useEffect } from 'react'
 
 import { useRootDispatch, RootDispatch } from 'store'
+import { useWalletAddress } from 'hooks/useWallet'
 import {
   addNotification,
+  DEFAUlT_LIMIT,
   getNotifications,
-} from 'store/notifications/notifications.reducer'
-import {
   getUserNotification,
-  LIMIT,
   upsetPagination,
-} from 'store/notifications/userNotification.reducer'
-import { useWalletAddress } from 'hooks/useWallet'
+} from 'store/notifications.reducer'
+import { useNotificationPagination } from 'hooks/useNotificationPagination'
 import configs from 'configs'
 
 const { api } = configs
@@ -18,12 +17,13 @@ const eventSource = new EventSource(api.notification.SSE)
 
 const NotificationsWatcher = () => {
   const walletAddress = useWalletAddress()
+  const { offset, limit } = useNotificationPagination()
   const dispatch = useRootDispatch<RootDispatch>()
 
   const fetchUserNotification = useCallback(async () => {
     if (!walletAddress) return
     try {
-      await dispatch(getUserNotification({ walletAddress }))
+      await dispatch(getUserNotification())
     } catch (e) {
       return window.notify({
         type: 'error',
@@ -33,19 +33,18 @@ const NotificationsWatcher = () => {
   }, [dispatch, walletAddress])
 
   // First-time fetching
-  const fetchNotification = useCallback(async () => {
+  const fetchNotifications = useCallback(async () => {
     try {
       await dispatch(
         getNotifications({
-          offset: 0,
-          limit: LIMIT,
-          broadcasted: true,
+          offset,
+          limit,
         }),
       )
       await dispatch(
         upsetPagination({
-          offset: LIMIT,
-          limit: LIMIT + LIMIT,
+          offset: limit,
+          limit: limit + DEFAUlT_LIMIT,
         }),
       )
     } catch (er) {
@@ -56,7 +55,7 @@ const NotificationsWatcher = () => {
     }
   }, [dispatch])
   // Watch account changes
-  const watchData = useCallback(async () => {
+  const watchNotification = useCallback(async () => {
     eventSource.onmessage = async ({ data }) => {
       const notification = JSON.parse(data)
       await dispatch(addNotification({ notification }))
@@ -64,9 +63,9 @@ const NotificationsWatcher = () => {
   }, [dispatch])
 
   useEffect(() => {
-    fetchNotification()
-    watchData()
-  }, [fetchNotification, watchData])
+    fetchNotifications()
+    watchNotification()
+  }, [fetchNotifications, watchNotification])
 
   useEffect(() => {
     fetchUserNotification()

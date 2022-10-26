@@ -4,10 +4,10 @@ import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
 import { MenuSystemItem } from 'view/sidebar/constants'
 import NotificationDrawer from './notificationDrawer'
 
-import { useNotifications } from 'hooks/useNotifications'
+import { useNotificationsData } from 'hooks/useNotificationsData'
 import { useUserNotification } from 'hooks/useUserNotification'
-import { updateReadNotifications } from 'store/notifications/userNotification.reducer'
 import { RootDispatch, useRootDispatch } from 'store'
+import { upsetUserNotification } from 'store/notifications.reducer'
 
 type NotificationProps = { open?: boolean; onClose?: () => void }
 
@@ -16,33 +16,36 @@ const Notification = ({
   onClose = () => {},
 }: NotificationProps) => {
   const [unreadOnly, setUnreadOnly] = useState(false)
-  const notifications = useNotifications()
-  const userNotification = useUserNotification()
+  const notifications = useNotificationsData()
+  const { notificationMark, readIds, userAddress } = useUserNotification()
 
   const dispatch = useRootDispatch<RootDispatch>()
 
   const unreadNotifications = useMemo(() => {
+    if (!notificationMark) return notifications
     const markIndex = notifications.findIndex(
-      (val) => val._id === userNotification.notificationMark,
+      (val) => val._id === notificationMark,
     )
     return notifications
       .slice(0, markIndex)
-      .filter(
-        (notification) => !userNotification.readIds.includes(notification._id),
-      )
-  }, [
-    notifications,
-    userNotification.notificationMark,
-    userNotification.readIds,
-  ])
+      .filter((notification) => !readIds.includes(notification._id))
+  }, [notifications, notificationMark, readIds])
 
-  const onMarkAllAsRead = async () => await dispatch(updateReadNotifications())
+  //TEST
+  const onMarkAllAsRead = async () => {
+    const newUserNotification = {
+      notificationMark,
+      readIds: [...readIds],
+      userAddress,
+    }
+    newUserNotification.notificationMark = notifications[0]._id
+    newUserNotification.readIds = []
+    await dispatch(upsetUserNotification(newUserNotification))
+  }
 
   const markAllAsReadVisible = useMemo(() => {
-    if (notifications[0]?._id === userNotification.notificationMark)
-      return false
-    return true
-  }, [notifications, userNotification.notificationMark])
+    return notifications.length > 0 && notifications[0]._id !== notificationMark
+  }, [notifications, notificationMark])
 
   return (
     <Drawer

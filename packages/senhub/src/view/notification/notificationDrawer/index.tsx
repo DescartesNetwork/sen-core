@@ -3,52 +3,49 @@ import { Fragment, useCallback, useMemo } from 'react'
 import { Button, Col, Empty, Row, Space, Typography } from 'antd'
 import NotificationItem from './notificationItem'
 
+import { RootDispatch, useRootDispatch } from 'store'
+import { useNotificationPagination } from 'hooks/useNotificationPagination'
 import {
+  DEFAUlT_LIMIT,
   getNotifications,
   NotificationData,
-} from 'store/notifications/notifications.reducer'
-import { RootDispatch, useRootDispatch } from 'store'
-import { useUserNotification } from 'hooks/useUserNotification'
-import {
-  LIMIT,
   upsetPagination,
-} from 'store/notifications/userNotification.reducer'
+} from 'store/notifications.reducer'
 
 export type NotificationDrawerProps = {
   notifications: NotificationData[]
 }
 
 const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
-  const userNotification = useUserNotification()
+  const { offset, limit } = useNotificationPagination()
   const dispatch = useRootDispatch<RootDispatch>()
 
   const disabled = useMemo(
-    () => notifications.length < userNotification.offset,
-    [userNotification.offset, notifications.length],
+    () => notifications.length < offset,
+    [offset, notifications.length],
   )
 
   const onViewMore = useCallback(async () => {
     await dispatch(
       getNotifications({
-        offset: userNotification.offset,
-        limit: userNotification.limit,
-        broadcasted: true,
+        offset,
+        limit,
       }),
     )
     await dispatch(
       upsetPagination({
-        offset: userNotification.limit + LIMIT,
-        limit: userNotification.limit + LIMIT,
+        offset: limit,
+        limit: limit + DEFAUlT_LIMIT,
       }),
     )
-  }, [dispatch, userNotification])
+  }, [dispatch, limit, offset])
 
   return (
     <Row>
       {!notifications.length ? (
         <Col span={24}>
           <Empty
-            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
             imageStyle={{
               height: 60,
             }}

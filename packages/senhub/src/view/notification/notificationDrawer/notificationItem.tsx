@@ -4,12 +4,15 @@ import moment from 'moment'
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
 import { RootDispatch, useRootDispatch } from 'store'
-import { NotificationData } from 'store/notifications/notifications.reducer'
 import { useUserNotification } from 'hooks/useUserNotification'
-import { useNotifications } from 'hooks/useNotifications'
-import { updateReadNotification } from 'store/notifications/userNotification.reducer'
+import { useNotificationsData } from 'hooks/useNotificationsData'
 import { useWalletAddress } from 'hooks/useWallet'
 import { isGuestAddress } from 'shared/util'
+import {
+  NotificationData,
+  upsetUserNotification,
+  UserNotification,
+} from 'store/notifications.reducer'
 
 import NormalLogo from 'static/images/notification/normal-notification.png'
 import QuestLogo from 'static/images/notification/quest.png'
@@ -18,13 +21,34 @@ export type NotificationItemProps = {
   notification: NotificationData
 }
 
+const syncNotification = (
+  userNotification: UserNotification,
+  notifications: NotificationData[],
+) => {
+  const markNotificationIndex = notifications.findIndex(
+    (val) => val._id === userNotification.notificationMark,
+  )
+  let nextMarkNotification = notifications[markNotificationIndex - 1]
+
+  if (!nextMarkNotification && !userNotification.notificationMark)
+    nextMarkNotification = notifications[notifications.length - 1]
+
+  if (userNotification.readIds.includes(nextMarkNotification?._id)) {
+    userNotification.readIds = userNotification.readIds.filter(
+      (val) => val !== nextMarkNotification?._id,
+    )
+    userNotification.notificationMark = nextMarkNotification?._id
+    syncNotification(userNotification, notifications)
+  }
+}
+
 const NotificationItem = ({
   notification: { _id, content, broadcastedAt, title, type, action },
 }: NotificationItemProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
-  const { notificationMark, readIds } = useUserNotification()
-  const notifications = useNotifications()
+  const { notificationMark, readIds, userAddress } = useUserNotification()
+  const notifications = useNotificationsData()
 
   const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
   const logo = useMemo(
@@ -45,20 +69,34 @@ const NotificationItem = ({
     return false
   }, [_id, notifications, notificationMark, readIds])
 
+  const updateUserNotification = useCallback(async () => {
+    const newUserNotification = {
+      notificationMark,
+      readIds: [...readIds],
+      userAddress,
+    }
+    if (!newUserNotification.readIds.includes(_id)) {
+      newUserNotification.readIds.push(_id)
+    }
+    syncNotification(newUserNotification, notifications)
+
+    return await dispatch(upsetUserNotification(newUserNotification))
+  }, [_id, dispatch, notificationMark, notifications, readIds, userAddress])
+
   const onRead = useCallback(
     async (e: MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
       if (seen || guest) return
-      return await dispatch(updateReadNotification({ _id }))
+      await updateUserNotification()
     },
-    [_id, dispatch, guest, seen],
+    [guest, seen, updateUserNotification],
   )
 
   const onAction = useCallback(async () => {
     if (guest) return
-    if (!seen) dispatch(updateReadNotification({ _id }))
+    if (!seen) await updateUserNotification()
     return window.open(action, 'blank')
-  }, [_id, action, dispatch, guest, seen])
+  }, [action, guest, seen, updateUserNotification])
 
   return (
     <Row
