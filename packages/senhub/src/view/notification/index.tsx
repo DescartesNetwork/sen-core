@@ -31,15 +31,12 @@ const Notification = ({
       .filter((notification) => !readIds.includes(notification._id))
   }, [notifications, notificationMark, readIds])
 
-  //TEST
   const onMarkAllAsRead = async () => {
     const newUserNotification = {
-      notificationMark,
-      readIds: [...readIds],
+      notificationMark: notifications[0]._id,
+      readIds: [],
       userAddress,
     }
-    newUserNotification.notificationMark = notifications[0]._id
-    newUserNotification.readIds = []
     await dispatch(upsetUserNotification(newUserNotification))
   }
 
