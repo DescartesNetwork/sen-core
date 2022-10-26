@@ -16,9 +16,11 @@ const Applications = ({ visible }: ApplicationsProps) => {
         value={MenuSystemItem.AppSettings}
         onClick={() => setOpenSettings(true)}
         name={visible}
+        tooltip
       >
         {MenuSystemItem.AppSettings}
       </MenuItem>
+
       <AppSettings open={openSettings} onClose={setOpenSettings} />
     </Fragment>
   )
