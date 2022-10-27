@@ -11,7 +11,6 @@ import { isGuestAddress } from 'shared/util'
 import {
   NotificationData,
   upsetUserNotification,
-  UserNotification,
 } from 'store/notifications.reducer'
 
 import NormalLogo from 'static/images/notification/normal-notification.png'
@@ -19,27 +18,6 @@ import QuestLogo from 'static/images/notification/quest.png'
 
 export type NotificationItemProps = {
   notification: NotificationData
-}
-
-const syncNotification = (
-  userNotification: UserNotification,
-  notifications: NotificationData[],
-) => {
-  const markNotificationIndex = notifications.findIndex(
-    (val) => val._id === userNotification.notificationMark,
-  )
-  let nextMarkNotification = notifications[markNotificationIndex - 1]
-
-  if (!nextMarkNotification && !userNotification.notificationMark)
-    nextMarkNotification = notifications[notifications.length - 1]
-
-  if (userNotification.readIds.includes(nextMarkNotification?._id)) {
-    userNotification.readIds = userNotification.readIds.filter(
-      (val) => val !== nextMarkNotification?._id,
-    )
-    userNotification.notificationMark = nextMarkNotification?._id
-    syncNotification(userNotification, notifications)
-  }
 }
 
 const NotificationItem = ({
@@ -79,7 +57,6 @@ const NotificationItem = ({
     if (!newUserNotification.readIds.includes(_id)) {
       newUserNotification.readIds.push(_id)
     }
-    syncNotification(newUserNotification, notifications)
 
     return await dispatch(
       upsetUserNotification({
@@ -87,7 +64,7 @@ const NotificationItem = ({
         readOne: true,
       }),
     )
-  }, [_id, dispatch, notificationMark, notifications, readIds, userAddress])
+  }, [_id, dispatch, notificationMark, readIds, userAddress])
 
   const onRead = useCallback(
     async (e: MouseEvent<HTMLDivElement>) => {

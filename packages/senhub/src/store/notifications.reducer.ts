@@ -7,11 +7,6 @@ const { api } = configs
 
 export const DEFAUlT_LIMIT = 10
 
-const INITIAL_PAGINATION = {
-  offset: 0,
-  limit: DEFAUlT_LIMIT,
-}
-
 const INITIAL_USER_NOTIFICATION = {
   userAddress: '',
   readIds: [],
@@ -39,11 +34,6 @@ export type UserNotification = {
   notificationMark: string
 }
 
-export type Pagination = {
-  offset: number
-  limit: number
-}
-
 export type NotificationType = 'sentre' | 'quest'
 
 export type NotificationData = {
@@ -58,7 +48,7 @@ export type NotificationData = {
 
 export type NotificationsState = {
   notificationsData: NotificationData[]
-  pagination: Pagination
+  offset: number
   userNotification: UserNotification
   unreadCount: number
 }
@@ -70,7 +60,7 @@ export type NotificationsState = {
 const NAME = 'notifications'
 const initialState: NotificationsState = {
   notificationsData: [],
-  pagination: INITIAL_PAGINATION,
+  offset: 0,
   userNotification: INITIAL_USER_NOTIFICATION,
   unreadCount: 0,
 }
@@ -81,21 +71,55 @@ const initialState: NotificationsState = {
 
 export const getNotifications = createAsyncThunk<
   Partial<NotificationsState>,
-  Pagination,
+  { offset: number; isNew?: boolean },
   { state: any }
->(`${NAME}/getNotifications`, async ({ limit, offset }, { getState }) => {
-  const {
-    notifications: { notificationsData },
-  } = getState()
-  const { data: newNotifications } = await axios.get(api.notification.index, {
-    params: {
-      broadcasted: true, // get broadcasted notification only
-      limit,
-      offset,
-    },
-  })
-  return { notificationsData: [...notificationsData, ...newNotifications] }
-})
+>(
+  `${NAME}/getNotifications`,
+  async ({ offset, isNew = false }, { getState }) => {
+    const {
+      notifications: { notificationsData },
+    } = getState()
+    const { data: newNotifications } = await axios.get(api.notification.index, {
+      params: {
+        broadcasted: true, // get broadcasted notification only
+        offset,
+        limit: DEFAUlT_LIMIT,
+      },
+    })
+    return {
+      notificationsData: isNew
+        ? notificationsData
+        : [...notificationsData, ...newNotifications],
+    }
+  },
+)
+
+export const getUnreadNotifications = createAsyncThunk<
+  Partial<NotificationsState>,
+  { offset: number; isNew?: boolean },
+  { state: any }
+>(
+  `${NAME}/getUnreadNotifications`,
+  async ({ offset, isNew = false }, { getState }) => {
+    const {
+      notifications: { notificationsData },
+    } = getState()
+    const { data: newNotifications } = await axios.get(
+      api.notification.unreadNotification,
+      {
+        params: {
+          offset,
+          limit: DEFAUlT_LIMIT,
+        },
+      },
+    )
+    return {
+      notificationsData: isNew
+        ? newNotifications
+        : [...notificationsData, ...newNotifications],
+    }
+  },
+)
 
 export const addNotification = createAsyncThunk<
   Partial<NotificationsState>,
@@ -164,10 +188,10 @@ export const upsetUserNotification = createAsyncThunk<
   },
 )
 
-export const upsetPagination = createAsyncThunk(
-  `${NAME}/upsetNotification`,
-  async (pagination: Pagination) => {
-    return { pagination }
+export const upsetOffset = createAsyncThunk(
+  `${NAME}/upsetOffset`,
+  async (offset: number) => {
+    return { offset }
   },
 )
 
@@ -202,7 +226,7 @@ const slice = createSlice({
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        upsetPagination.fulfilled,
+        upsetOffset.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

@@ -4,20 +4,25 @@ import { Button, Col, Empty, Row, Space, Typography } from 'antd'
 import NotificationItem from './notificationItem'
 
 import { RootDispatch, useRootDispatch } from 'store'
-import { useNotificationPagination } from 'hooks/useNotificationPagination'
+import { useNotificationOffset } from 'hooks/useNotificationOffset'
 import {
   DEFAUlT_LIMIT,
   getNotifications,
+  getUnreadNotifications,
   NotificationData,
-  upsetPagination,
+  upsetOffset,
 } from 'store/notifications.reducer'
 
 export type NotificationDrawerProps = {
   notifications: NotificationData[]
+  unreadOnly: boolean
 }
 
-const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
-  const { offset, limit } = useNotificationPagination()
+const NotificationDrawer = ({
+  notifications,
+  unreadOnly,
+}: NotificationDrawerProps) => {
+  const offset = useNotificationOffset()
   const dispatch = useRootDispatch<RootDispatch>()
 
   const disabled = useMemo(
@@ -26,19 +31,20 @@ const NotificationDrawer = ({ notifications }: NotificationDrawerProps) => {
   )
 
   const onViewMore = useCallback(async () => {
-    await dispatch(
-      getNotifications({
+    dispatch(upsetOffset(offset + DEFAUlT_LIMIT))
+    if (!unreadOnly) {
+      return await dispatch(
+        getNotifications({
+          offset,
+        }),
+      )
+    }
+    return await dispatch(
+      getUnreadNotifications({
         offset,
-        limit,
       }),
     )
-    await dispatch(
-      upsetPagination({
-        offset: limit,
-        limit: limit + DEFAUlT_LIMIT,
-      }),
-    )
-  }, [dispatch, limit, offset])
+  }, [dispatch, offset, unreadOnly])
 
   return (
     <Row>

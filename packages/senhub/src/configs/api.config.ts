@@ -36,6 +36,9 @@ const generator = (origin: string): Conf => ({
   },
   notification: {
     index: origin + '/notification',
+    get unreadNotification() {
+      return this.index + '/unread-notification'
+    },
     get SSE() {
       return this.index + '/sse'
     },
