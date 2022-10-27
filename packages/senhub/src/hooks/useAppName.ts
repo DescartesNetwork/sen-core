@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 
 import { REGISTER_APP_STORE } from 'view/marketplace'
-import { useRegisterSelector } from './useRegister'
+import { useRegister } from './useRegister'
 
 export const useAppName = () => {
-  const manifest = useRegisterSelector((register) => register)
+  const manifest = useRegister()
 
   const getAppName = useCallback(
     (appId: string) => {
