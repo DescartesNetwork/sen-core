@@ -28,17 +28,14 @@ const SideBar = () => {
     <Card className="card-sidebar" bordered={false}>
       <Row className="wrapper-sidebar" gutter={[0, 12]}>
         <Col style={{ flex: '1 1' }}>
-          <Row
-            gutter={[8, 8]}
-            style={{ flexFlow: 'column', height: '100%' }}
-            align={rowAlign}
-          >
+          <Row style={{ flexFlow: 'column', height: '100%' }} align={rowAlign}>
             <Col
               style={{
-                paddingTop: 24,
-                paddingBottom: 36,
-                paddingLeft: 12,
-                paddingRight: 12,
+                paddingTop: 20,
+                paddingBottom: 20,
+                paddingLeft: 8,
+                paddingRight: 8,
+                flex: 'none',
               }}
             >
               <Brand
