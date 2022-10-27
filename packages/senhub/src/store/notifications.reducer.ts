@@ -159,7 +159,6 @@ export const getUnreadNotificationCount = createAsyncThunk(
         withCredentials: true,
       },
     )
-
     return { unreadCount }
   },
 )

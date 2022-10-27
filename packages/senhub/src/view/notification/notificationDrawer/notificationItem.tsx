@@ -54,9 +54,8 @@ const NotificationItem = ({
       readIds: [...readIds],
       userAddress,
     }
-    if (!newUserNotification.readIds.includes(_id)) {
+    if (!newUserNotification.readIds.includes(_id))
       newUserNotification.readIds.push(_id)
-    }
 
     return await dispatch(
       upsetUserNotification({

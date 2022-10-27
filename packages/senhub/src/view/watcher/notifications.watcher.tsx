@@ -16,11 +16,10 @@ const { api } = configs
 const eventSource = new EventSource(api.notification.SSE)
 
 const NotificationsWatcher = () => {
-  const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
 
   const fetchUserNotification = useCallback(async () => {
-    if (!walletAddress) return
+    // if (!walletAddress) return
     try {
       await dispatch(getUserNotification())
     } catch (e) {
@@ -29,10 +28,9 @@ const NotificationsWatcher = () => {
         description: 'Cannot fetch user notifications',
       })
     }
-  }, [dispatch, walletAddress])
+  }, [dispatch])
 
   const fetchUnreadNotificationCount = useCallback(async () => {
-    if (!walletAddress) return
     try {
       await dispatch(getUnreadNotificationCount())
     } catch (e) {
@@ -41,7 +39,7 @@ const NotificationsWatcher = () => {
         description: 'Cannot fetch unread count',
       })
     }
-  }, [dispatch, walletAddress])
+  }, [dispatch])
 
   // First-time fetching
   const fetchNotifications = useCallback(async () => {
