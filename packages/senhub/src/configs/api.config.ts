@@ -42,6 +42,9 @@ const generator = (origin: string): Conf => ({
   },
   userNotification: {
     index: origin + '/user-notification',
+    get unreadCount() {
+      return this.index + '/count-unread-notification'
+    },
   },
 })
 

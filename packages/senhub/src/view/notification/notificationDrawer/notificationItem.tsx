@@ -57,14 +57,15 @@ const NotificationItem = ({
   )
 
   const seen = useMemo(() => {
-    if (!notificationMark) return false
     const notificationMarkIndex = notifications.findIndex(
       ({ _id }) => _id === notificationMark,
     )
-    const notificationIndex = notifications.findIndex(
-      ({ _id: id }) => id === _id,
-    )
-    if (notificationIndex >= notificationMarkIndex) return true
+    if (notificationMarkIndex !== -1) {
+      const notificationIndex = notifications.findIndex(
+        ({ _id: id }) => id === _id,
+      )
+      if (notificationIndex >= notificationMarkIndex) return true
+    }
     if (readIds.includes(_id)) return true
     return false
   }, [_id, notifications, notificationMark, readIds])
@@ -80,7 +81,12 @@ const NotificationItem = ({
     }
     syncNotification(newUserNotification, notifications)
 
-    return await dispatch(upsetUserNotification(newUserNotification))
+    return await dispatch(
+      upsetUserNotification({
+        userNotification: newUserNotification,
+        readOne: true,
+      }),
+    )
   }, [_id, dispatch, notificationMark, notifications, readIds, userAddress])
 
   const onRead = useCallback(

@@ -37,7 +37,9 @@ const Notification = ({
       readIds: [],
       userAddress,
     }
-    await dispatch(upsetUserNotification(newUserNotification))
+    await dispatch(
+      upsetUserNotification({ userNotification: newUserNotification }),
+    )
   }
 
   const markAllAsReadVisible = useMemo(() => {

@@ -60,6 +60,7 @@ export type NotificationsState = {
   notificationsData: NotificationData[]
   pagination: Pagination
   userNotification: UserNotification
+  unreadCount: number
 }
 
 /**
@@ -71,6 +72,7 @@ const initialState: NotificationsState = {
   notificationsData: [],
   pagination: INITIAL_PAGINATION,
   userNotification: INITIAL_USER_NOTIFICATION,
+  unreadCount: 0,
 }
 
 /**
@@ -100,11 +102,13 @@ export const addNotification = createAsyncThunk<
   { notification: NotificationData },
   { state: any }
 >(`${NAME}/addNotification`, async ({ notification }, { getState }) => {
-  const { notifications } = getState()
+  const {
+    notifications: { notificationsData },
+  } = getState()
 
   if (!notification._id) throw new Error('Notification is invalid!')
 
-  return { notificationsData: [notification, ...notifications] }
+  return { notificationsData: [notification, ...notificationsData] }
 })
 
 export const getUserNotification = createAsyncThunk(
@@ -122,25 +126,43 @@ export const getUserNotification = createAsyncThunk(
   },
 )
 
+export const getUnreadNotificationCount = createAsyncThunk(
+  `${NAME}/getUnreadNotificationCount`,
+  async () => {
+    const { data: unreadCount } = await axios.get(
+      api.userNotification.unreadCount,
+      {
+        withCredentials: true,
+      },
+    )
+
+    return { unreadCount }
+  },
+)
+
 export const upsetUserNotification = createAsyncThunk<
   Partial<NotificationsState>,
-  UserNotification,
+  { userNotification: UserNotification; readOne?: boolean },
   { state: any }
->(`${NAME}/upsetUserNotification`, async (userNotification, { getState }) => {
-  const {
-    notifications: { userNotification: prevUserNotification },
-  } = getState()
-  const { data: newUserNotification } = await axios.patch(
-    api.userNotification.index,
-    userNotification,
-    {
-      withCredentials: true,
-    },
-  )
-  return {
-    userNotification: { ...prevUserNotification, ...newUserNotification },
-  }
-})
+>(
+  `${NAME}/upsetUserNotification`,
+  async ({ userNotification, readOne = false }, { getState }) => {
+    const {
+      notifications: { userNotification: prevUserNotification, unreadCount },
+    } = getState()
+    const { data: newUserNotification } = await axios.put(
+      api.userNotification.index,
+      { sync: readOne, ...userNotification },
+      {
+        withCredentials: true,
+      },
+    )
+    return {
+      userNotification: { ...prevUserNotification, ...newUserNotification },
+      unreadCount: readOne ? unreadCount - 1 : 0,
+    }
+  },
+)
 
 export const upsetPagination = createAsyncThunk(
   `${NAME}/upsetNotification`,
@@ -169,6 +191,10 @@ const slice = createSlice({
       )
       .addCase(
         getUserNotification.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        getUnreadNotificationCount.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(

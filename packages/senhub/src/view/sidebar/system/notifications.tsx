@@ -1,39 +1,25 @@
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import IonIcon from '@sentre/antd-ionicon'
 import MenuItem from '../components/menuItem'
 import { Col, Row, Badge } from 'antd'
 import Notification from 'view/notification'
 
-import { useNotificationsData } from 'hooks/useNotificationsData'
 import { MenuSystemItem } from '../constants'
-import { useUserNotification } from 'hooks/useUserNotification'
+import { useUnreadNotificationCount } from 'hooks/useUnreadNotificationCount'
 
 type NotificationsProps = { visible?: boolean }
 
 const Notifications = ({ visible }: NotificationsProps) => {
   const [open, setOpen] = useState(false)
-  const notifications = useNotificationsData()
-  const { notificationMark, readIds } = useUserNotification()
-
-  const newNotificationAmount = useMemo(() => {
-    if (!notificationMark)
-      return notifications.filter(({ _id }) => !readIds?.includes(_id)).length
-    const markIndex = notifications.findIndex(
-      (val) => val._id === notificationMark,
-    )
-
-    return notifications
-      .slice(0, markIndex)
-      .filter(({ _id }) => !readIds?.includes(_id)).length
-  }, [notificationMark, notifications, readIds])
+  const unreadCount = useUnreadNotificationCount()
 
   return (
     <Fragment>
       <MenuItem
         icon={
           !visible ? (
-            <Badge count={newNotificationAmount}>
+            <Badge count={unreadCount}>
               <IonIcon name="notifications-outline" style={{ fontSize: 18 }} />
             </Badge>
           ) : (
@@ -44,7 +30,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
         onClick={() => setOpen(true)}
         name={visible}
         postfix={
-          newNotificationAmount !== 0 ? (
+          unreadCount !== 0 ? (
             <div
               style={{
                 color: '#F9575E',
@@ -58,7 +44,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
                 alignItems: 'center',
               }}
             >
-              {newNotificationAmount}
+              {unreadCount}
             </div>
           ) : null
         }

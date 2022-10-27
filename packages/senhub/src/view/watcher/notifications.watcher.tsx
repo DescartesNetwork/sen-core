@@ -6,10 +6,10 @@ import {
   addNotification,
   DEFAUlT_LIMIT,
   getNotifications,
+  getUnreadNotificationCount,
   getUserNotification,
   upsetPagination,
 } from 'store/notifications.reducer'
-import { useNotificationPagination } from 'hooks/useNotificationPagination'
 import configs from 'configs'
 
 const { api } = configs
@@ -17,7 +17,6 @@ const eventSource = new EventSource(api.notification.SSE)
 
 const NotificationsWatcher = () => {
   const walletAddress = useWalletAddress()
-  const { offset, limit } = useNotificationPagination()
   const dispatch = useRootDispatch<RootDispatch>()
 
   const fetchUserNotification = useCallback(async () => {
@@ -32,19 +31,31 @@ const NotificationsWatcher = () => {
     }
   }, [dispatch, walletAddress])
 
+  const fetchUnreadNotificationCount = useCallback(async () => {
+    if (!walletAddress) return
+    try {
+      await dispatch(getUnreadNotificationCount())
+    } catch (e) {
+      return window.notify({
+        type: 'error',
+        description: 'Cannot fetch unread count',
+      })
+    }
+  }, [dispatch, walletAddress])
+
   // First-time fetching
   const fetchNotifications = useCallback(async () => {
     try {
       await dispatch(
         getNotifications({
-          offset,
-          limit,
+          offset: 0,
+          limit: DEFAUlT_LIMIT,
         }),
       )
       await dispatch(
         upsetPagination({
-          offset: limit,
-          limit: limit + DEFAUlT_LIMIT,
+          offset: DEFAUlT_LIMIT,
+          limit: DEFAUlT_LIMIT * 2,
         }),
       )
     } catch (er) {
@@ -70,6 +81,10 @@ const NotificationsWatcher = () => {
   useEffect(() => {
     fetchUserNotification()
   }, [fetchUserNotification])
+
+  useEffect(() => {
+    fetchUnreadNotificationCount()
+  }, [fetchUnreadNotificationCount])
 
   return <Fragment />
 }
