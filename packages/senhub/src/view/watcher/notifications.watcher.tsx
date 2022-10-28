@@ -4,50 +4,43 @@ import { useRootDispatch, RootDispatch } from 'store'
 import {
   addNotification,
   getNotifications,
-} from 'store/notifications/notifications.reducer'
-import {
+  getUnreadNotificationCount,
   getUserNotification,
-  LIMIT,
-  upsetPagination,
-} from 'store/notifications/userNotification.reducer'
-import { useWalletAddress } from 'hooks/useWallet'
+} from 'store/notifications.reducer'
 import configs from 'configs'
 
 const { api } = configs
 const eventSource = new EventSource(api.notification.SSE)
 
 const NotificationsWatcher = () => {
-  const walletAddress = useWalletAddress()
   const dispatch = useRootDispatch<RootDispatch>()
 
   const fetchUserNotification = useCallback(async () => {
-    if (!walletAddress) return
     try {
-      await dispatch(getUserNotification({ walletAddress }))
+      await dispatch(getUserNotification())
     } catch (e) {
       return window.notify({
         type: 'error',
         description: 'Cannot fetch user notifications',
       })
     }
-  }, [dispatch, walletAddress])
+  }, [dispatch])
+
+  const fetchUnreadNotificationCount = useCallback(async () => {
+    try {
+      await dispatch(getUnreadNotificationCount())
+    } catch (e) {
+      return window.notify({
+        type: 'error',
+        description: 'Cannot fetch unread count',
+      })
+    }
+  }, [dispatch])
 
   // First-time fetching
-  const fetchNotification = useCallback(async () => {
+  const fetchNotifications = useCallback(async () => {
     try {
-      await dispatch(
-        getNotifications({
-          offset: 0,
-          limit: LIMIT,
-          broadcasted: true,
-        }),
-      )
-      await dispatch(
-        upsetPagination({
-          offset: LIMIT,
-          limit: LIMIT + LIMIT,
-        }),
-      )
+      await dispatch(getNotifications({ offset: 0 }))
     } catch (er) {
       return window.notify({
         type: 'error',
@@ -56,7 +49,7 @@ const NotificationsWatcher = () => {
     }
   }, [dispatch])
   // Watch account changes
-  const watchData = useCallback(async () => {
+  const watchNotification = useCallback(async () => {
     eventSource.onmessage = async ({ data }) => {
       const notification = JSON.parse(data)
       await dispatch(addNotification({ notification }))
@@ -64,13 +57,17 @@ const NotificationsWatcher = () => {
   }, [dispatch])
 
   useEffect(() => {
-    fetchNotification()
-    watchData()
-  }, [fetchNotification, watchData])
+    fetchNotifications()
+    watchNotification()
+  }, [fetchNotifications, watchNotification])
 
   useEffect(() => {
     fetchUserNotification()
   }, [fetchUserNotification])
+
+  useEffect(() => {
+    fetchUnreadNotificationCount()
+  }, [fetchUnreadNotificationCount])
 
   return <Fragment />
 }

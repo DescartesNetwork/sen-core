@@ -1,13 +1,16 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
 import { MenuSystemItem } from 'view/sidebar/constants'
 import NotificationDrawer from './notificationDrawer'
 
-import { useNotifications } from 'hooks/useNotifications'
-import { useUserNotification } from 'hooks/useUserNotification'
-import { updateReadNotifications } from 'store/notifications/userNotification.reducer'
 import { RootDispatch, useRootDispatch } from 'store'
+import {
+  getNotifications,
+  getUnreadNotifications,
+  upsetUserNotification,
+} from 'store/notifications.reducer'
+import { useNotifications, useUserNotification } from 'hooks/useNotifications'
 
 type NotificationProps = { open?: boolean; onClose?: () => void }
 
@@ -16,33 +19,33 @@ const Notification = ({
   onClose = () => {},
 }: NotificationProps) => {
   const [unreadOnly, setUnreadOnly] = useState(false)
+  const { notificationMark, userAddress } = useUserNotification()
   const notifications = useNotifications()
-  const userNotification = useUserNotification()
 
   const dispatch = useRootDispatch<RootDispatch>()
 
-  const unreadNotifications = useMemo(() => {
-    const markIndex = notifications.findIndex(
-      (val) => val._id === userNotification.notificationMark,
+  const onMarkAllAsRead = async () => {
+    const newUserNotification = {
+      notificationMark: notifications[0]._id,
+      readIds: [],
+      userAddress,
+    }
+    await dispatch(
+      upsetUserNotification({ userNotification: newUserNotification }),
     )
-    return notifications
-      .slice(0, markIndex)
-      .filter(
-        (notification) => !userNotification.readIds.includes(notification._id),
-      )
-  }, [
-    notifications,
-    userNotification.notificationMark,
-    userNotification.readIds,
-  ])
-
-  const onMarkAllAsRead = async () => await dispatch(updateReadNotifications())
+  }
 
   const markAllAsReadVisible = useMemo(() => {
-    if (notifications[0]?._id === userNotification.notificationMark)
-      return false
-    return true
-  }, [notifications, userNotification.notificationMark])
+    return notifications.length > 0 && notifications[0]._id !== notificationMark
+  }, [notifications, notificationMark])
+
+  const onUnreadOnly = useCallback(async () => {
+    setUnreadOnly(!unreadOnly)
+    if (!unreadOnly) {
+      return await dispatch(getUnreadNotifications({ offset: 0, isNew: true }))
+    }
+    return await dispatch(getNotifications({ offset: 0, isNew: true }))
+  }, [dispatch, unreadOnly])
 
   return (
     <Drawer
@@ -62,7 +65,7 @@ const Notification = ({
                   </Typography.Text>
                   <Switch
                     checked={unreadOnly}
-                    onChange={() => setUnreadOnly(!unreadOnly)}
+                    onChange={onUnreadOnly}
                     size="small"
                   />
                 </Space>
@@ -109,7 +112,8 @@ const Notification = ({
       bodyStyle={{ padding: 0, paddingBottom: 12 }}
     >
       <NotificationDrawer
-        notifications={unreadOnly ? unreadNotifications : notifications}
+        notifications={notifications}
+        unreadOnly={unreadOnly}
       />
     </Drawer>
   )

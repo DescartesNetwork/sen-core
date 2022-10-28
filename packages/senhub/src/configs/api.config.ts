@@ -36,8 +36,8 @@ const generator = (origin: string): Conf => ({
   },
   notification: {
     index: origin + '/notification',
-    get all() {
-      return this.index + '/all'
+    get unreadNotification() {
+      return this.index + '/unread-notification'
     },
     get SSE() {
       return this.index + '/sse'
@@ -45,11 +45,8 @@ const generator = (origin: string): Conf => ({
   },
   userNotification: {
     index: origin + '/user-notification',
-    get updateReadNotification() {
-      return this.index + '/update-read-notification'
-    },
-    get updateReadNotifications() {
-      return this.index + '/update-read-notifications'
+    get unreadCount() {
+      return this.index + '/count-unread-notification'
     },
   },
 })

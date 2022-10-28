@@ -1,30 +1,32 @@
-import { MouseEvent, useCallback, useMemo } from 'react'
+import React, { MouseEvent, useCallback, useMemo } from 'react'
 import moment from 'moment'
 
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
 import { RootDispatch, useRootDispatch } from 'store'
-import { NotificationData } from 'store/notifications/notifications.reducer'
-import { useUserNotification } from 'hooks/useUserNotification'
-import { useNotifications } from 'hooks/useNotifications'
-import { updateReadNotification } from 'store/notifications/userNotification.reducer'
 import { useWalletAddress } from 'hooks/useWallet'
 import { isGuestAddress } from 'shared/util'
+import {
+  NotificationData,
+  upsetUserNotification,
+} from 'store/notifications.reducer'
 
 import NormalLogo from 'static/images/notification/normal-notification.png'
 import QuestLogo from 'static/images/notification/quest.png'
+import { useUserNotification } from 'hooks/useNotifications'
 
 export type NotificationItemProps = {
   notification: NotificationData
+  isBeforeMark: boolean
 }
 
 const NotificationItem = ({
   notification: { _id, content, broadcastedAt, title, type, action },
+  isBeforeMark,
 }: NotificationItemProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
-  const { notificationMark, readIds } = useUserNotification()
-  const notifications = useNotifications()
+  const { notificationMark, readIds, userAddress } = useUserNotification()
 
   const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
   const logo = useMemo(
@@ -33,32 +35,42 @@ const NotificationItem = ({
   )
 
   const seen = useMemo(() => {
-    if (!notificationMark) return false
-    const notificationMarkIndex = notifications.findIndex(
-      ({ _id }) => _id === notificationMark,
-    )
-    const notificationIndex = notifications.findIndex(
-      ({ _id: id }) => id === _id,
-    )
-    if (notificationIndex >= notificationMarkIndex) return true
+    if (isBeforeMark) return true
     if (readIds.includes(_id)) return true
     return false
-  }, [_id, notifications, notificationMark, readIds])
+  }, [_id, isBeforeMark, readIds])
+
+  const updateUserNotification = useCallback(async () => {
+    const newUserNotification = {
+      notificationMark,
+      readIds: [...readIds],
+      userAddress,
+    }
+    if (!newUserNotification.readIds.includes(_id))
+      newUserNotification.readIds.push(_id)
+
+    return await dispatch(
+      upsetUserNotification({
+        userNotification: newUserNotification,
+        readOne: true,
+      }),
+    )
+  }, [_id, dispatch, notificationMark, readIds, userAddress])
 
   const onRead = useCallback(
     async (e: MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
       if (seen || guest) return
-      return await dispatch(updateReadNotification({ _id }))
+      await updateUserNotification()
     },
-    [_id, dispatch, guest, seen],
+    [guest, seen, updateUserNotification],
   )
 
   const onAction = useCallback(async () => {
     if (guest) return
-    if (!seen) dispatch(updateReadNotification({ _id }))
+    if (!seen) await updateUserNotification()
     return window.open(action, 'blank')
-  }, [_id, action, dispatch, guest, seen])
+  }, [action, guest, seen, updateUserNotification])
 
   return (
     <Row
@@ -117,4 +129,4 @@ const NotificationItem = ({
   )
 }
 
-export default NotificationItem
+export default React.memo(NotificationItem)
