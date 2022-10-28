@@ -1,6 +1,11 @@
 import { Fragment, useCallback, useEffect } from 'react'
 
-import { useRootDispatch, RootDispatch } from 'store'
+import {
+  useRootDispatch,
+  RootDispatch,
+  useRootSelector,
+  RootState,
+} from 'store'
 import {
   addNotification,
   getNotifications,
@@ -14,8 +19,12 @@ const eventSource = new EventSource(api.notification.SSE)
 
 const NotificationsWatcher = () => {
   const dispatch = useRootDispatch<RootDispatch>()
+  const walletAddress = useRootSelector(
+    ({ user }: RootState) => user.walletAddress,
+  )
 
   const fetchUserNotification = useCallback(async () => {
+    if (!walletAddress) return
     try {
       await dispatch(getUserNotification())
     } catch (e) {
@@ -24,9 +33,10 @@ const NotificationsWatcher = () => {
         description: 'Cannot fetch user notifications',
       })
     }
-  }, [dispatch])
+  }, [dispatch, walletAddress])
 
   const fetchUnreadNotificationCount = useCallback(async () => {
+    if (!walletAddress) return
     try {
       await dispatch(getUnreadNotificationCount())
     } catch (e) {
@@ -35,7 +45,7 @@ const NotificationsWatcher = () => {
         description: 'Cannot fetch unread count',
       })
     }
-  }, [dispatch])
+  }, [dispatch, walletAddress])
 
   // First-time fetching
   const fetchNotifications = useCallback(async () => {

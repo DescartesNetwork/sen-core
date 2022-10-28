@@ -3,8 +3,12 @@ import moment from 'moment'
 
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
-import { RootDispatch, useRootDispatch } from 'store'
-import { useWalletAddress } from 'hooks/useWallet'
+import {
+  RootDispatch,
+  RootState,
+  useRootDispatch,
+  useRootSelector,
+} from 'store'
 import { isGuestAddress } from 'shared/util'
 import {
   NotificationData,
@@ -25,7 +29,9 @@ const NotificationItem = ({
   isBeforeMark,
 }: NotificationItemProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useWalletAddress()
+  const walletAddress = useRootSelector(
+    ({ user }: RootState) => user.walletAddress,
+  )
   const { notificationMark, readIds, userAddress } = useUserNotification()
 
   const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
@@ -93,6 +99,7 @@ const NotificationItem = ({
             <Typography.Title
               style={{ marginBottom: 0, fontSize: 14 }}
               level={5}
+              type={seen ? 'secondary' : undefined}
             >
               {title}
             </Typography.Title>
@@ -110,21 +117,23 @@ const NotificationItem = ({
           </Col>
         </Row>
       </Col>
-      <Col onClick={onRead} span={3}>
-        {!seen ? (
-          <Tooltip
-            title={
-              <Typography.Text style={{ color: '#E9E9EB' }}>
-                Mark as read
-              </Typography.Text>
-            }
-          >
+      {walletAddress && (
+        <Col onClick={onRead} span={3}>
+          {!seen ? (
+            <Tooltip
+              title={
+                <Typography.Text style={{ color: '#E9E9EB' }}>
+                  Mark as read
+                </Typography.Text>
+              }
+            >
+              <Radio checked={!seen} />
+            </Tooltip>
+          ) : (
             <Radio checked={!seen} />
-          </Tooltip>
-        ) : (
-          <Radio checked={!seen} />
-        )}
-      </Col>
+          )}
+        </Col>
+      )}
     </Row>
   )
 }
