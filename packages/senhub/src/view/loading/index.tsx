@@ -1,16 +1,9 @@
 import { useMemo } from 'react'
 
-import { Row, Col, Button, Typography, Space } from 'antd'
-import IonIcon from '@sentre/antd-ionicon'
+import { Row, Col, Typography, Space } from 'antd'
 import IconLoading from 'components/loadingSvg'
 
-import {
-  RootDispatch,
-  RootState,
-  useRootDispatch,
-  useRootSelector,
-} from 'store'
-import { updateLoading } from 'store/flags.reducer'
+import { RootState, useRootSelector } from 'store'
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
 
@@ -18,8 +11,7 @@ import './index.os.less'
 
 const Loading = () => {
   const walletAddress = useWalletAddress()
-  const loading = useRootSelector((state: RootState) => state.flags.loading)
-  const dispatch = useRootDispatch<RootDispatch>()
+  const loading = useRootSelector(({ flags }: RootState) => flags.loading)
 
   const visible = useMemo(
     () => isAddress(walletAddress) && loading,
@@ -31,30 +23,15 @@ const Loading = () => {
       className="loading-screen"
       style={{ display: visible ? 'block' : 'none' }}
     >
-      <Row gutter={[24, 24]}>
-        <Col span={24}>
-          <Row gutter={[24, 24]} justify="end">
-            <Col>
-              <Button
-                type="text"
-                icon={<IonIcon name="close-outline" />}
-                onClick={() => dispatch(updateLoading(false))}
-              />
-            </Col>
-          </Row>
-        </Col>
+      <Row gutter={[24, 24]} justify="center">
         <Col span={24} style={{ height: 256 }} />
-        <Col span={24}>
-          <Row gutter={[24, 24]} justify="center">
-            <Col>
-              <Space direction="vertical" align="center" size={32}>
-                <IconLoading />
-                <Typography.Title level={5}>
-                  Welcome to SenHub. The workspace is loading...
-                </Typography.Title>
-              </Space>
-            </Col>
-          </Row>
+        <Col>
+          <Space direction="vertical" align="center" size={32}>
+            <IconLoading />
+            <Typography.Title level={5}>
+              Welcome to SenHub. The workspace is loading...
+            </Typography.Title>
+          </Space>
         </Col>
       </Row>
     </div>

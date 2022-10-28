@@ -1,7 +1,6 @@
 import { web3 } from '@project-serum/anchor'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { GuestWallet } from 'view/wallet/lib'
 import { connection } from 'providers/sol.provider'
 
 /**
@@ -14,15 +13,13 @@ export type WalletState = {
   lamports: number
 }
 
-const initializeWindow = (wallet?: WalletInterface) => {
-  window.sentre = {
-    solana: wallet || new GuestWallet(),
-  }
+const initializeWindow = (wallet: WalletInterface) => {
+  window.sentre = { ...window.sentre, solana: wallet }
 }
 
-const destroyWindow = async () => {
+const destroyWindow = async (wallet: WalletInterface) => {
   if (window.sentre?.solana) window.sentre.solana.disconnect()
-  initializeWindow()
+  window.sentre = { ...window.sentre, solana: wallet }
 }
 
 /**
@@ -69,8 +66,8 @@ export const updateWallet = createAsyncThunk(
 
 export const disconnectWallet = createAsyncThunk(
   `${NAME}/disconnectWallet`,
-  async () => {
-    await destroyWindow()
+  async (guestWallet: WalletInterface) => {
+    await destroyWindow(guestWallet)
     window.location.reload() // Reset all redux store
   },
 )

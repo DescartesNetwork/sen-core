@@ -17,6 +17,7 @@ import user from './user.reducer'
 import accounts from './accounts.reducer'
 import mints from './mints.reducer'
 import search from './search.reducer'
+import notifications from './notifications.reducer'
 
 /**
  * Root types
@@ -49,6 +50,7 @@ const store = configureStore({
     accounts,
     mints,
     search,
+    notifications,
   },
 })
 

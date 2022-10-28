@@ -1,4 +1,4 @@
-import { Transaction } from '@solana/web3.js'
+import { Transaction, PublicKey } from '@solana/web3.js'
 
 import BaseWallet from './baseWallet'
 
@@ -7,17 +7,13 @@ export const GUEST_ADDRESS = 'GuestAccount11111111111111111111111111111111'
 type ExpanedProvider = WalletProvider & { address: string }
 
 class GuestWallet extends BaseWallet {
+  private _callback = () => {}
+
   constructor(callback: () => void = () => {}) {
     super('Guest')
 
     this._callback = callback
-  }
-
-  private _callback = () => {}
-  private _error = () => {
-    throw new Error(
-      'You are in the Guest Mode. Please connect your personal wallet to proceed the action.',
-    )
+    this.publicKey = new PublicKey(GUEST_ADDRESS)
   }
 
   async getProvider(): Promise<ExpanedProvider> {
@@ -35,25 +31,27 @@ class GuestWallet extends BaseWallet {
 
   async signTransaction(transaction: Transaction): Promise<Transaction> {
     await this._callback()
-    return this._error()
+    return transaction
   }
 
   async signAllTransaction(
     transactions: Transaction[],
   ): Promise<Transaction[]> {
     await this._callback()
-    return this._error()
+    return transactions
   }
 
   async signMessage(message: string) {
     await this._callback()
-    return this._error()
+    return { signature: '', address: GUEST_ADDRESS, message }
   }
 
   async verifySignature(signature: string, message: string, address?: string) {
     await this._callback()
-    return this._error()
+    return false
   }
+
+  async disconnect() {}
 }
 
 export default GuestWallet

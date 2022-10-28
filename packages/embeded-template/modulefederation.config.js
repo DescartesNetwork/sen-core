@@ -10,7 +10,7 @@ module.exports = {
     '@reduxjs/toolkit': { singleton: true, requiredVersion: '^1.6.2' },
     'react-redux': { singleton: true, requiredVersion: '^7.2.5' },
     antd: { singleton: true, requiredVersion: '^4.23.0' },
-    '@sentre/senhub': { singleton: true, requiredVersion: '^3' },
+    '@sentre/senhub': { singleton: true, requiredVersion: '^4' },
   },
   exposes: {
     './bootstrap': 'bootstrap.app',

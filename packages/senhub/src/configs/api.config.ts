@@ -10,6 +10,8 @@ type Conf = {
   health: BasicEndpoint
   user: BasicEndpoint
   dapp: BasicEndpoint
+  notification: BasicEndpoint
+  userNotification: BasicEndpoint
 }
 
 const generator = (origin: string): Conf => ({
@@ -31,6 +33,21 @@ const generator = (origin: string): Conf => ({
   },
   dapp: {
     index: origin + '/dapp',
+  },
+  notification: {
+    index: origin + '/notification',
+    get unreadNotification() {
+      return this.index + '/unread-notification'
+    },
+    get SSE() {
+      return this.index + '/sse'
+    },
+  },
+  userNotification: {
+    index: origin + '/user-notification',
+    get unreadCount() {
+      return this.index + '/count-unread-notification'
+    },
   },
 })
 

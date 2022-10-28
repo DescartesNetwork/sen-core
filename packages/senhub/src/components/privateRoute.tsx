@@ -3,6 +3,7 @@ import { Route, Redirect } from 'react-router-dom'
 
 import { isAddress } from 'shared/util'
 import { useWalletAddress } from 'hooks/useWallet'
+import { useAutoInstall } from 'hooks/useInstallApp'
 
 export type PrivateRouteProps = {
   component: ElementType
@@ -10,19 +11,20 @@ export type PrivateRouteProps = {
 
 const PrivateRoute = ({ component: Component, ...rest }: PrivateRouteProps) => {
   const walletAddress = useWalletAddress()
+  const autoInstall = useAutoInstall()
 
   const render = useCallback(
     (props) => {
       const pathname = encodeURIComponent(
         window.location.href.replace(window.location.origin, ''),
       )
+      const redirect = `?redirect=${pathname}`
+      const guest = autoInstall ? '&guestMode=true' : ''
       if (!isAddress(walletAddress))
-        return (
-          <Redirect to={'/welcome?redirect=' + encodeURIComponent(pathname)} />
-        )
+        return <Redirect to={`/welcome${redirect}${guest}`} />
       return <Component {...props} />
     },
-    [walletAddress, Component],
+    [walletAddress, autoInstall, Component],
   )
 
   return <Route {...rest} render={render} />

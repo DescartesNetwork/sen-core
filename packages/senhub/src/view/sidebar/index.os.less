@@ -37,8 +37,21 @@
   }
 }
 
+.notification-item {
+  padding: 8px 24px !important;
+  &:hover {
+    cursor: pointer;
+    background: @NEUTRAL10;
+  }
+}
+
 #dark {
   .card-sidebar {
     background: @NEUTRAL100 !important;
+  }
+  .notification-item {
+    &:hover {
+      background: @NEUTRAL95;
+    }
   }
 }

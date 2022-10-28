@@ -1,4 +1,4 @@
-import { CSSProperties, Fragment, useCallback, useEffect } from 'react'
+import { CSSProperties, Fragment, useCallback, useEffect, useMemo } from 'react'
 
 import { Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -11,7 +11,7 @@ import {
   useRootSelector,
   RootState,
 } from 'store'
-import { useWalletAddress } from 'hooks/useWallet'
+import { useGuestMode, useWalletAddress } from 'hooks/useWallet'
 import storage from 'shared/storage'
 import { isAddress } from 'shared/util'
 import { connectWallet, openWallet } from 'store/wallet.reducer'
@@ -25,6 +25,7 @@ import {
   SolflareExtensionWallet,
   CloverWallet,
   ExodusWallet,
+  GuestWallet,
 } from './lib'
 import { useInfix } from 'hooks/useUI'
 import { Infix } from 'store/ui.reducer'
@@ -35,13 +36,15 @@ export type WalletProps = {
 }
 
 const Wallet = ({ style = {}, visible = false }: WalletProps) => {
-  const infix = useInfix()
-  const isMobile = infix < Infix.md
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useWalletAddress()
   const visibleNavigation = useRootSelector(
-    (state: RootState) => state.ui.visibleNavigation,
+    ({ ui }: RootState) => ui.visibleNavigation,
   )
+  const walletAddress = useWalletAddress()
+  const infix = useInfix()
+  const guestMode = useGuestMode()
+
+  const isMobile = useMemo(() => infix < Infix.md, [infix])
 
   const reconnect = useCallback(() => {
     const walletType = storage.get('WalletType')
@@ -67,9 +70,10 @@ const Wallet = ({ style = {}, visible = false }: WalletProps) => {
       case 'Exodus':
         return new ExodusWallet()
       default:
+        if (guestMode) return new GuestWallet(() => dispatch(openWallet()))
         return undefined
     }
-  }, [])
+  }, [dispatch, guestMode])
 
   useEffect(() => {
     if (isAddress(walletAddress)) return
@@ -77,23 +81,25 @@ const Wallet = ({ style = {}, visible = false }: WalletProps) => {
       const wallet = reconnect()
       if (wallet) dispatch(connectWallet(wallet)).unwrap()
     } catch (er: any) {
-      return window.notify({ type: 'error', description: er.message })
+      window.notify({ type: 'error', description: er.message })
     }
   }, [dispatch, reconnect, walletAddress])
 
-  if (isAddress(walletAddress))
-    return <ActionCenter visibleNavigation={visible} />
   return (
     <Fragment>
-      <Button
-        style={style}
-        type="primary"
-        icon={<IonIcon name="wallet-outline" />}
-        onClick={() => dispatch(openWallet())}
-        block={!isMobile && visibleNavigation}
-      >
-        {!isMobile && visibleNavigation && 'Connect Wallet'}
-      </Button>
+      {isAddress(walletAddress) ? (
+        <ActionCenter visibleNavigation={visible} />
+      ) : (
+        <Button
+          style={style}
+          type="primary"
+          icon={<IonIcon name="wallet-outline" />}
+          onClick={() => dispatch(openWallet())}
+          block={!isMobile && visibleNavigation}
+        >
+          {!isMobile && visibleNavigation && 'Connect Wallet'}
+        </Button>
+      )}
       <Login />
     </Fragment>
   )

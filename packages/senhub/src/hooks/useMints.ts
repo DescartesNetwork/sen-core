@@ -21,12 +21,12 @@ export const tokenProvider = new TokenProvider([
 ])
 
 export const useMints = () => {
-  const mints = useRootSelector((state: RootState) => state.mints)
+  const mints = useRootSelector(({ mints }: RootState) => mints)
   return mints
 }
 
 export const useMintSelector = <T>(selector: (mints: MintsState) => T) => {
-  const data = useRootSelector((state: RootState) => selector(state.mints))
+  const data = useRootSelector(({ mints }: RootState) => selector(mints))
   return data
 }
 
