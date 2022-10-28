@@ -18,7 +18,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
     <Fragment>
       <MenuItem
         icon={
-          unreadCount ? (
+          !visible ? (
             <Badge count={unreadCount}>
               <IonIcon name="notifications-outline" style={{ fontSize: 18 }} />
             </Badge>
@@ -30,7 +30,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
         onClick={() => setOpen(true)}
         name={visible}
         postfix={
-          unreadCount !== 0 ? (
+          unreadCount ? (
             <div
               style={{
                 color: '#F9575E',

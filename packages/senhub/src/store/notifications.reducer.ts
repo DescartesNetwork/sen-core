@@ -130,12 +130,15 @@ export const addNotification = createAsyncThunk<
   { state: any }
 >(`${NAME}/addNotification`, async ({ notification }, { getState }) => {
   const {
-    notifications: { notificationsData },
+    notifications: { notificationsData, unreadCount },
   } = getState()
 
   if (!notification._id) throw new Error('Notification is invalid!')
 
-  return { notificationsData: [notification, ...notificationsData] }
+  return {
+    notificationsData: [notification, ...notificationsData],
+    unreadCount: unreadCount + 1,
+  }
 })
 
 export const getUserNotification = createAsyncThunk(
