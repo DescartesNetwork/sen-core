@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
+import IonIcon from '@sentre/antd-ionicon'
 import { MenuSystemItem } from 'view/sidebar/constants'
 import NotificationDrawer from './notificationDrawer'
 
@@ -47,7 +48,15 @@ const Notification = ({
       title={
         <Row gutter={[24, 24]}>
           <Col span={24}>
-            <Row align="middle">
+            <Row gutter={[4, 4]} align="middle">
+              <Col>
+                <Button
+                  type="text"
+                  icon={<IonIcon name="chevron-back" />}
+                  style={{ marginLeft: -8 }}
+                  onClick={onClose}
+                />
+              </Col>
               <Col flex="auto">
                 <Typography.Title level={4}>
                   {MenuSystemItem.Notify}
