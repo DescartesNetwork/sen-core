@@ -3,11 +3,9 @@ import { Fragment, useCallback, useEffect } from 'react'
 import { useRootDispatch, RootDispatch } from 'store'
 import {
   addNotification,
-  DEFAUlT_LIMIT,
   getNotifications,
   getUnreadNotificationCount,
   getUserNotification,
-  upsetOffset,
 } from 'store/notifications.reducer'
 import configs from 'configs'
 
@@ -43,7 +41,6 @@ const NotificationsWatcher = () => {
   const fetchNotifications = useCallback(async () => {
     try {
       await dispatch(getNotifications({ offset: 0 }))
-      await dispatch(upsetOffset(DEFAUlT_LIMIT))
     } catch (er) {
       return window.notify({
         type: 'error',

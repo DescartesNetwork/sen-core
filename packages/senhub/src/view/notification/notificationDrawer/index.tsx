@@ -5,13 +5,11 @@ import NotificationItem from './notificationItem'
 
 import { RootDispatch, useRootDispatch } from 'store'
 import {
-  DEFAUlT_LIMIT,
   getNotifications,
   getUnreadNotifications,
   NotificationData,
-  upsetOffset,
 } from 'store/notifications.reducer'
-import { useNotifications } from 'hooks/useNotifications'
+import { useOffset, useUserNotification } from 'hooks/useNotifications'
 
 export type NotificationDrawerProps = {
   notifications: NotificationData[]
@@ -22,16 +20,20 @@ const NotificationDrawer = ({
   notifications,
   unreadOnly,
 }: NotificationDrawerProps) => {
-  const { offset } = useNotifications()
+  const offset = useOffset()
   const dispatch = useRootDispatch<RootDispatch>()
+  const { notificationMark } = useUserNotification()
 
   const disabled = useMemo(
     () => notifications.length < offset,
     [offset, notifications.length],
   )
 
+  const markNotificationIndex = useMemo(() => {
+    return notifications.findIndex((val) => val._id === notificationMark)
+  }, [notificationMark, notifications])
+
   const onViewMore = useCallback(async () => {
-    dispatch(upsetOffset(offset + DEFAUlT_LIMIT))
     if (!unreadOnly) {
       return await dispatch(
         getNotifications({
@@ -62,11 +64,18 @@ const NotificationDrawer = ({
         </Col>
       ) : (
         <Fragment>
-          {notifications.map((notification, index) => (
-            <Col key={index} span={24} className="notification-item">
-              <NotificationItem notification={notification} />
-            </Col>
-          ))}
+          {notifications.map((notification, index) => {
+            const isBeforeMark =
+              markNotificationIndex !== -1 && markNotificationIndex <= index
+            return (
+              <Col key={index} span={24} className="notification-item">
+                <NotificationItem
+                  notification={notification}
+                  isBeforeMark={isBeforeMark}
+                />
+              </Col>
+            )
+          })}
           {!disabled && (
             <Col style={{ marginTop: 8 }} span={24}>
               <Space

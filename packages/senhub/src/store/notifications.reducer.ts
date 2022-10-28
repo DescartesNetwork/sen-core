@@ -90,6 +90,7 @@ export const getNotifications = createAsyncThunk<
       notificationsData: isNew
         ? newNotifications
         : [...notificationsData, ...newNotifications],
+      offset: offset + DEFAUlT_LIMIT,
     }
   },
 )
@@ -118,6 +119,7 @@ export const getUnreadNotifications = createAsyncThunk<
       notificationsData: isNew
         ? newNotifications
         : [...notificationsData, ...newNotifications],
+      offset: offset + DEFAUlT_LIMIT,
     }
   },
 )
@@ -188,13 +190,6 @@ export const upsetUserNotification = createAsyncThunk<
   },
 )
 
-export const upsetOffset = createAsyncThunk(
-  `${NAME}/upsetOffset`,
-  async (offset: number) => {
-    return { offset }
-  },
-)
-
 /**
  * Usual procedure
  */
@@ -227,10 +222,6 @@ const slice = createSlice({
       )
       .addCase(
         upsetUserNotification.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
-        upsetOffset.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

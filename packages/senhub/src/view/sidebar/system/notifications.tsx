@@ -6,19 +6,19 @@ import { Col, Row, Badge } from 'antd'
 import Notification from 'view/notification'
 
 import { MenuSystemItem } from '../constants'
-import { useNotifications } from 'hooks/useNotifications'
+import { useUnreadCount } from 'hooks/useNotifications'
 
 type NotificationsProps = { visible?: boolean }
 
 const Notifications = ({ visible }: NotificationsProps) => {
   const [open, setOpen] = useState(false)
-  const { unreadCount } = useNotifications()
+  const unreadCount = useUnreadCount()
 
   return (
     <Fragment>
       <MenuItem
         icon={
-          !visible ? (
+          unreadCount ? (
             <Badge count={unreadCount}>
               <IonIcon name="notifications-outline" style={{ fontSize: 18 }} />
             </Badge>

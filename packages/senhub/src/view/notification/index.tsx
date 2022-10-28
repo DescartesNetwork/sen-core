@@ -6,13 +6,11 @@ import NotificationDrawer from './notificationDrawer'
 
 import { RootDispatch, useRootDispatch } from 'store'
 import {
-  DEFAUlT_LIMIT,
   getNotifications,
   getUnreadNotifications,
-  upsetOffset,
   upsetUserNotification,
 } from 'store/notifications.reducer'
-import { useNotifications } from 'hooks/useNotifications'
+import { useNotifications, useUserNotification } from 'hooks/useNotifications'
 
 type NotificationProps = { open?: boolean; onClose?: () => void }
 
@@ -21,16 +19,14 @@ const Notification = ({
   onClose = () => {},
 }: NotificationProps) => {
   const [unreadOnly, setUnreadOnly] = useState(false)
-  const {
-    userNotification: { notificationMark, userAddress },
-    notificationsData,
-  } = useNotifications()
+  const { notificationMark, userAddress } = useUserNotification()
+  const notifications = useNotifications()
 
   const dispatch = useRootDispatch<RootDispatch>()
 
   const onMarkAllAsRead = async () => {
     const newUserNotification = {
-      notificationMark: notificationsData[0]._id,
+      notificationMark: notifications[0]._id,
       readIds: [],
       userAddress,
     }
@@ -40,15 +36,11 @@ const Notification = ({
   }
 
   const markAllAsReadVisible = useMemo(() => {
-    return (
-      notificationsData.length > 0 &&
-      notificationsData[0]._id !== notificationMark
-    )
-  }, [notificationsData, notificationMark])
+    return notifications.length > 0 && notifications[0]._id !== notificationMark
+  }, [notifications, notificationMark])
 
   const onUnreadOnly = useCallback(async () => {
     setUnreadOnly(!unreadOnly)
-    dispatch(upsetOffset(DEFAUlT_LIMIT))
     if (!unreadOnly) {
       return await dispatch(getUnreadNotifications({ offset: 0, isNew: true }))
     }
@@ -120,7 +112,7 @@ const Notification = ({
       bodyStyle={{ padding: 0, paddingBottom: 12 }}
     >
       <NotificationDrawer
-        notifications={notificationsData}
+        notifications={notifications}
         unreadOnly={unreadOnly}
       />
     </Drawer>
