@@ -97,6 +97,7 @@ const Notification = ({
                       style={{
                         fontSize: 12,
                         color: '#5D6CCF',
+                        opacity: !isLogin ? 0.5 : 1,
                       }}
                     >
                       Mark all as read
