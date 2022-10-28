@@ -4,18 +4,14 @@ import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
 import { MenuSystemItem } from 'view/sidebar/constants'
 import NotificationDrawer from './notificationDrawer'
 
-import {
-  RootDispatch,
-  RootState,
-  useRootDispatch,
-  useRootSelector,
-} from 'store'
+import { RootDispatch, useRootDispatch } from 'store'
 import {
   getNotifications,
   getUnreadNotifications,
   upsetUserNotification,
 } from 'store/notifications.reducer'
 import { useNotifications, useUserNotification } from 'hooks/useNotifications'
+import { useIsLogin } from 'hooks/useWallet'
 
 type NotificationProps = { open?: boolean; onClose?: () => void }
 
@@ -23,9 +19,7 @@ const Notification = ({
   open = false,
   onClose = () => {},
 }: NotificationProps) => {
-  const walletAddress = useRootSelector(
-    ({ user }: RootState) => user.walletAddress,
-  )
+  const isLogin = useIsLogin()
   const [unreadOnly, setUnreadOnly] = useState(false)
   const { notificationMark, userAddress } = useUserNotification()
   const notifications = useNotifications()
@@ -66,20 +60,19 @@ const Notification = ({
                   {MenuSystemItem.Notify}
                 </Typography.Title>
               </Col>
-              {walletAddress && (
-                <Col>
-                  <Space>
-                    <Typography.Text style={{ fontSize: 14 }}>
-                      Unread only
-                    </Typography.Text>
-                    <Switch
-                      checked={unreadOnly}
-                      onChange={onUnreadOnly}
-                      size="small"
-                    />
-                  </Space>
-                </Col>
-              )}
+              <Col>
+                <Space>
+                  <Typography.Text style={{ fontSize: 14 }}>
+                    Unread only
+                  </Typography.Text>
+                  <Switch
+                    checked={unreadOnly}
+                    onChange={onUnreadOnly}
+                    size="small"
+                    disabled={!isLogin}
+                  />
+                </Space>
+              </Col>
             </Row>
           </Col>
           <Col span={24}>
@@ -89,7 +82,7 @@ const Notification = ({
                   RECENTLY
                 </Typography.Text>
               </Col>
-              {walletAddress && markAllAsReadVisible && (
+              {markAllAsReadVisible && (
                 <Col>
                   <Button
                     style={{
@@ -98,6 +91,7 @@ const Notification = ({
                     }}
                     type="text"
                     onClick={onMarkAllAsRead}
+                    disabled={!isLogin}
                   >
                     <Typography.Text
                       style={{
