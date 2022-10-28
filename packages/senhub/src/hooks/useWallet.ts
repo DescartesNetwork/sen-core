@@ -18,3 +18,10 @@ export const useGuestMode = () => {
   const guestMode = params.get('guestMode') === 'true' ? true : false
   return guestMode
 }
+
+export const useIsLogin = () => {
+  const walletAddress = useRootSelector(
+    ({ user }: RootState) => user.walletAddress,
+  )
+  return !!walletAddress
+}

@@ -3,12 +3,7 @@ import moment from 'moment'
 
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
-import {
-  RootDispatch,
-  RootState,
-  useRootDispatch,
-  useRootSelector,
-} from 'store'
+import { RootDispatch, useRootDispatch } from 'store'
 import { isGuestAddress } from 'shared/util'
 import {
   NotificationData,
@@ -18,6 +13,7 @@ import {
 import NormalLogo from 'static/images/notification/normal-notification.png'
 import QuestLogo from 'static/images/notification/quest.png'
 import { useUserNotification } from 'hooks/useNotifications'
+import { useIsLogin, useWalletAddress } from 'hooks/useWallet'
 
 export type NotificationItemProps = {
   notification: NotificationData
@@ -29,9 +25,8 @@ const NotificationItem = ({
   isBeforeMark,
 }: NotificationItemProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const walletAddress = useRootSelector(
-    ({ user }: RootState) => user.walletAddress,
-  )
+  const walletAddress = useWalletAddress()
+  const isLogin = useIsLogin()
   const { notificationMark, readIds, userAddress } = useUserNotification()
 
   const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
@@ -117,23 +112,21 @@ const NotificationItem = ({
           </Col>
         </Row>
       </Col>
-      {walletAddress && (
-        <Col onClick={onRead} span={3}>
-          {!seen ? (
-            <Tooltip
-              title={
-                <Typography.Text style={{ color: '#E9E9EB' }}>
-                  Mark as read
-                </Typography.Text>
-              }
-            >
-              <Radio checked={!seen} />
-            </Tooltip>
-          ) : (
-            <Radio checked={!seen} />
-          )}
-        </Col>
-      )}
+      <Col onClick={onRead} span={3}>
+        {!seen ? (
+          <Tooltip
+            title={
+              <Typography.Text style={{ color: '#E9E9EB' }}>
+                Mark as read
+              </Typography.Text>
+            }
+          >
+            <Radio checked={!seen} disabled={!isLogin} />
+          </Tooltip>
+        ) : (
+          <Radio checked={!seen} />
+        )}
+      </Col>
     </Row>
   )
 }
