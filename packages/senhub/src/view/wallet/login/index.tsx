@@ -12,7 +12,7 @@ import { closeWallet } from 'store/wallet.reducer'
 import './index.os.less'
 
 const Login = () => {
-  const visible = useRootSelector((state: RootState) => state.wallet.visible)
+  const visible = useRootSelector(({ wallet }: RootState) => wallet.visible)
   const dispatch = useRootDispatch<RootDispatch>()
   return (
     <Modal

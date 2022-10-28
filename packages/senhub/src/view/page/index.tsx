@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
 
 import { Row, Col } from 'antd'
 import PageLoader from 'components/pageLoader'
@@ -12,15 +11,15 @@ import {
 } from 'store'
 import { setVisibleInstaller } from 'store/ui.reducer'
 import { setValue } from 'store/search.reducer'
-import { useAppIds } from 'hooks/useAppIds'
+import { useAppIds, useCurrentAppId } from 'hooks/useAppIds'
 import { useRegisterSelector } from 'hooks/useRegister'
 
 const Page = () => {
-  const { appId } = useParams<{ appId: string }>()
+  const dispatch = useRootDispatch<RootDispatch>()
+  const appId = useCurrentAppId() as string
   const appIds = useAppIds()
   const manifest = useRegisterSelector((register) => register[appId])
-  const loading = useRootSelector((state: RootState) => state.flags.loading)
-  const dispatch = useRootDispatch<RootDispatch>()
+  const loading = useRootSelector(({ flags }: RootState) => flags.loading)
 
   const installed = useMemo(
     () => manifest && appIds.includes(appId),

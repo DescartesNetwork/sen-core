@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom'
 
 import { RootState, useRootSelector } from 'store'
+import { isAddress, isGuestAddress } from 'shared/util'
 
 export const useWalletAddress = () => {
   const address = useRootSelector(({ wallet }: RootState) => wallet.address)
@@ -23,5 +24,7 @@ export const useIsLogin = () => {
   const walletAddress = useRootSelector(
     ({ user }: RootState) => user.walletAddress,
   )
-  return !!walletAddress
+  if (!isAddress(walletAddress)) return false
+  if (isGuestAddress(walletAddress)) return false
+  return true
 }

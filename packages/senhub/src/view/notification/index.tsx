@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
 import { MenuSystemItem } from 'view/sidebar/constants'
@@ -10,7 +10,10 @@ import {
   getUnreadNotifications,
   upsetUserNotification,
 } from 'store/notifications.reducer'
-import { useNotifications, useUserNotification } from 'hooks/useNotifications'
+import {
+  useNotificationsSelector,
+  useUserNotification,
+} from 'hooks/useNotifications'
 import { useIsLogin } from 'hooks/useWallet'
 
 type NotificationProps = { open?: boolean; onClose?: () => void }
@@ -19,42 +22,32 @@ const Notification = ({
   open = false,
   onClose = () => {},
 }: NotificationProps) => {
-  const isLogin = useIsLogin()
-  const [unreadOnly, setUnreadOnly] = useState(false)
-  const { notificationMark, userAddress } = useUserNotification()
-  const notifications = useNotifications()
-
   const dispatch = useRootDispatch<RootDispatch>()
+  const [unreadOnly, setUnreadOnly] = useState(false)
+  const isLogin = useIsLogin()
+  const { notificationMark } = useUserNotification()
+  const { _id: latestNotiId } = useNotificationsSelector(([noti]) => noti) || {}
 
-  const onMarkAllAsRead = async () => {
-    const newUserNotification = {
-      notificationMark: notifications[0]._id,
+  const onMarkAllAsRead = useCallback(async () => {
+    if (!latestNotiId) return
+    const userNotification = {
+      notificationMark: latestNotiId,
       readIds: [],
-      userAddress,
     }
-    await dispatch(
-      upsetUserNotification({ userNotification: newUserNotification }),
-    )
-  }
+    await dispatch(upsetUserNotification({ userNotification }))
+  }, [dispatch, latestNotiId])
 
-  const markAllAsReadVisible = useMemo(() => {
-    return notifications.length > 0 && notifications[0]._id !== notificationMark
-  }, [notifications, notificationMark])
-
-  const onUnreadOnly = useCallback(async () => {
-    setUnreadOnly(!unreadOnly)
-    if (!unreadOnly) {
-      return await dispatch(getUnreadNotifications({ offset: 0, isNew: true }))
-    }
-    return await dispatch(getNotifications({ offset: 0, isNew: true }))
-  }, [dispatch, unreadOnly])
+  useEffect(() => {
+    const fetchNoti = unreadOnly ? getUnreadNotifications : getNotifications
+    dispatch(fetchNoti({ offset: 0, isNew: true }))
+  }, [unreadOnly, dispatch])
 
   return (
     <Drawer
       title={
         <Row gutter={[24, 24]}>
           <Col span={24}>
-            <Row justify="center">
+            <Row align="middle">
               <Col flex="auto">
                 <Typography.Title level={4}>
                   {MenuSystemItem.Notify}
@@ -62,12 +55,12 @@ const Notification = ({
               </Col>
               <Col>
                 <Space>
-                  <Typography.Text style={{ fontSize: 14 }}>
+                  <Typography.Text className="caption">
                     Unread only
                   </Typography.Text>
                   <Switch
                     checked={unreadOnly}
-                    onChange={onUnreadOnly}
+                    onChange={() => setUnreadOnly(!unreadOnly)}
                     size="small"
                     disabled={!isLogin}
                   />
@@ -76,50 +69,38 @@ const Notification = ({
             </Row>
           </Col>
           <Col span={24}>
-            <Row justify="space-between" wrap={false} align="middle">
+            <Row justify="space-between" wrap={false} align="bottom">
               <Col flex="auto">
-                <Typography.Text style={{ fontSize: 12 }} type="secondary">
-                  RECENTLY
-                </Typography.Text>
+                <Typography.Text className="caption">RECENTLY</Typography.Text>
               </Col>
-              {markAllAsReadVisible && (
-                <Col>
-                  <Button
-                    style={{
-                      padding: 0,
-                      background: 'none',
-                    }}
-                    type="text"
-                    onClick={onMarkAllAsRead}
-                    disabled={!isLogin}
+              <Col>
+                <Button
+                  style={{ marginRight: -8 }}
+                  type="text"
+                  size="small"
+                  onClick={onMarkAllAsRead}
+                  disabled={latestNotiId !== notificationMark || !isLogin}
+                >
+                  <Typography.Text
+                    className="caption"
+                    style={{ color: '#5D6CCF' }}
                   >
-                    <Typography.Text
-                      style={{
-                        fontSize: 12,
-                        color: '#5D6CCF',
-                        opacity: !isLogin ? 0.5 : 1,
-                      }}
-                    >
-                      Mark all as read
-                    </Typography.Text>
-                  </Button>
-                </Col>
-              )}
+                    Mark all as read
+                  </Typography.Text>
+                </Button>
+              </Col>
             </Row>
           </Col>
         </Row>
       }
       placement="left"
       closable={false}
-      onClose={() => onClose()}
+      onClose={onClose}
       open={open}
-      headerStyle={{ borderBottom: 'none' }}
+      headerStyle={{ border: 'none' }}
       bodyStyle={{ padding: 0, paddingBottom: 12 }}
     >
-      <NotificationDrawer
-        notifications={notifications}
-        unreadOnly={unreadOnly}
-      />
+      <NotificationDrawer unreadOnly={unreadOnly} />
     </Drawer>
   )
 }

@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { Card, Col, Row } from 'antd'
 import Brand from 'components/brand'
 import Navigation from './navigation'
@@ -14,15 +16,19 @@ import './index.os.less'
 
 const SideBar = () => {
   const infix = useInfix()
-  const visible = useRootSelector(
-    (state: RootState) => state.ui.visibleNavigation,
-  )
+  const visible = useRootSelector(({ ui }: RootState) => ui.visibleNavigation)
   const theme = useTheme()
   const goToStore = useGoToStore()
 
-  const isMobile = infix < Infix.md
-  const brandDirection = visible && !isMobile ? 'horizontal' : 'vertical'
-  const rowAlign = visible && !isMobile ? 'top' : 'middle'
+  const isMobile = useMemo(() => infix < Infix.md, [infix])
+  const brandDirection = useMemo(
+    () => (visible && !isMobile ? 'horizontal' : 'vertical'),
+    [visible, isMobile],
+  )
+  const rowAlign = useMemo(
+    () => (visible && !isMobile ? 'top' : 'middle'),
+    [visible, isMobile],
+  )
 
   return (
     <Card className="card-sidebar" bordered={false}>

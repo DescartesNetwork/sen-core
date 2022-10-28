@@ -1,27 +1,29 @@
-import { Fragment, useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
-import { Button, Col, Empty, Row, Space, Typography } from 'antd'
+import { Button, Col, Empty, Row, Typography } from 'antd'
 import NotificationItem from './notificationItem'
 
 import { RootDispatch, useRootDispatch } from 'store'
 import {
   getNotifications,
   getUnreadNotifications,
-  NotificationData,
 } from 'store/notifications.reducer'
-import { useOffset, useUserNotification } from 'hooks/useNotifications'
+import {
+  useNotifications,
+  useOffset,
+  useUserNotification,
+} from 'hooks/useNotifications'
 
 export type NotificationDrawerProps = {
-  notifications: NotificationData[]
-  unreadOnly: boolean
+  unreadOnly?: boolean
 }
 
 const NotificationDrawer = ({
-  notifications,
-  unreadOnly,
+  unreadOnly = false,
 }: NotificationDrawerProps) => {
-  const offset = useOffset()
   const dispatch = useRootDispatch<RootDispatch>()
+  const offset = useOffset()
+  const notifications = useNotifications()
   const { notificationMark } = useUserNotification()
 
   const disabled = useMemo(
@@ -54,40 +56,34 @@ const NotificationDrawer = ({
         <Col span={24}>
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
-            imageStyle={{
-              height: 60,
-            }}
+            imageStyle={{ height: 60 }}
             description={
               <Typography.Text>You have no notification</Typography.Text>
             }
           />
         </Col>
       ) : (
-        <Fragment>
-          {notifications.map((notification, index) => {
-            const isBeforeMark =
-              markNotificationIndex !== -1 && markNotificationIndex <= index
-            return (
-              <Col key={index} span={24} className="notification-item">
-                <NotificationItem
-                  notification={notification}
-                  isBeforeMark={isBeforeMark}
-                />
-              </Col>
-            )
-          })}
-          {!disabled && (
-            <Col style={{ marginTop: 8 }} span={24}>
-              <Space
-                style={{ width: '100%' }}
-                direction="vertical"
-                align="center"
-              >
+        <Col span={24}>
+          <Row gutter={[0, 8]} justify="center">
+            {notifications.map((notification, index) => {
+              const isBeforeMark =
+                markNotificationIndex !== -1 && markNotificationIndex <= index
+              return (
+                <Col key={index} span={24} className="notification-item">
+                  <NotificationItem
+                    notification={notification}
+                    isBeforeMark={isBeforeMark}
+                  />
+                </Col>
+              )
+            })}
+            {!disabled && (
+              <Col>
                 <Button onClick={onViewMore}>View More</Button>
-              </Space>
-            </Col>
-          )}
-        </Fragment>
+              </Col>
+            )}
+          </Row>
+        </Col>
       )}
     </Row>
   )

@@ -13,20 +13,16 @@ import { RootState, useRootSelector } from 'store'
 export type SystemProps = { isMobile?: boolean }
 
 const System = ({ isMobile = false }: SystemProps) => {
-  const visible = useRootSelector(
-    (state: RootState) => state.ui.visibleNavigation,
-  )
+  const visible = useRootSelector(({ ui }: RootState) => ui.visibleNavigation)
   const walletAddress = useWalletAddress()
 
-  const rowAlign = visible && !isMobile ? 'stretch' : 'middle'
-
-  const nextVisible = useMemo(
-    () => (!isMobile ? visible : false),
-    [isMobile, visible],
-  )
+  const nextVisible = useMemo(() => !isMobile && visible, [isMobile, visible])
 
   return (
-    <Row style={{ flexFlow: 'column' }} align={rowAlign}>
+    <Row
+      style={{ flexFlow: 'column' }}
+      align={visible && !isMobile ? 'stretch' : 'middle'}
+    >
       {isAddress(walletAddress) && (
         <Col>
           <AppSettings visible={nextVisible} />

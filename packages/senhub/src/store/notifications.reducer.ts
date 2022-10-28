@@ -171,7 +171,7 @@ export const getUnreadNotificationCount = createAsyncThunk(
 
 export const upsetUserNotification = createAsyncThunk<
   Partial<NotificationsState>,
-  { userNotification: UserNotification; readOne?: boolean },
+  { userNotification: Partial<UserNotification>; readOne?: boolean },
   { state: any }
 >(
   `${NAME}/upsetUserNotification`,
@@ -182,9 +182,7 @@ export const upsetUserNotification = createAsyncThunk<
     const { data: newUserNotification } = await axios.put(
       api.userNotification.index,
       { sync: readOne, ...userNotification },
-      {
-        withCredentials: true,
-      },
+      { withCredentials: true },
     )
     return {
       userNotification: { ...prevUserNotification, ...newUserNotification },

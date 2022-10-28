@@ -1,8 +1,8 @@
 import { Fragment, useState } from 'react'
 
+import { Col, Row, Badge } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import MenuItem from '../components/menuItem'
-import { Col, Row, Badge } from 'antd'
 import Notification from 'view/notification'
 
 import { MenuSystemItem } from '../constants'

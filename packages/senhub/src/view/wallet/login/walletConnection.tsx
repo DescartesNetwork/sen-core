@@ -40,14 +40,11 @@ const SecureMethods = () => {
 
   return (
     <Row gutter={[12, 12]}>
-      {sortedWallet.map((wallet) => {
-        const WalletComponent = wallet.component
-        return (
-          <Col span={24} key={wallet.key}>
-            <WalletComponent />
-          </Col>
-        )
-      })}
+      {sortedWallet.map((wallet) => (
+        <Col span={24} key={wallet.key}>
+          <wallet.component />
+        </Col>
+      ))}
     </Row>
   )
 }

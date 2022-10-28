@@ -1,8 +1,18 @@
 import { RootState, useRootSelector } from 'store'
+import { NotificationData } from 'store/notifications.reducer'
 
 export const useNotifications = () => {
   const notifications = useRootSelector(
     ({ notifications }: RootState) => notifications.notificationsData,
+  )
+  return notifications
+}
+
+export const useNotificationsSelector = <T>(
+  selector: (accounts: NotificationData[]) => T,
+) => {
+  const notifications = useRootSelector(({ notifications }: RootState) =>
+    selector(notifications.notificationsData),
   )
   return notifications
 }

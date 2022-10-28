@@ -20,7 +20,6 @@ const Applications = ({ visible }: ApplicationsProps) => {
       >
         {MenuSystemItem.AppSettings}
       </MenuItem>
-
       <AppSettings open={openSettings} onClose={setOpenSettings} />
     </Fragment>
   )

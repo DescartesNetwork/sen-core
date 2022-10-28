@@ -22,9 +22,10 @@ export const ContextMenu = ({ appId }: ContextMenuProps) => {
   const onViewInStore = useGoToStore({ appId, blank: true })
   const onUninstall = useUninstallApp(appId)
 
-  const fullscreen = useMemo(() => {
-    return document.getElementById(`${appId}-iframe`)
-  }, [appId])
+  const fullscreen = useMemo(
+    () => document.getElementById(`${appId}-iframe`),
+    [appId],
+  )
   const onFullscreen = useCallback(
     () => fullscreen?.requestFullscreen(),
     [fullscreen],

@@ -31,17 +31,21 @@
   }
 }
 
-#light {
-  .card-sidebar {
-    background: @WHITE !important;
-  }
-}
-
 .notification-item {
   padding: 8px 24px !important;
   &:hover {
     cursor: pointer;
-    background: @NEUTRAL10;
+  }
+}
+
+#light {
+  .card-sidebar {
+    background: @WHITE !important;
+  }
+  .notification-item {
+    &:hover {
+      background: @NEUTRAL10;
+    }
   }
 }
 
