@@ -4,7 +4,12 @@ import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
 import { MenuSystemItem } from 'view/sidebar/constants'
 import NotificationDrawer from './notificationDrawer'
 
-import { RootDispatch, useRootDispatch } from 'store'
+import {
+  RootDispatch,
+  RootState,
+  useRootDispatch,
+  useRootSelector,
+} from 'store'
 import {
   getNotifications,
   getUnreadNotifications,
@@ -18,6 +23,9 @@ const Notification = ({
   open = false,
   onClose = () => {},
 }: NotificationProps) => {
+  const walletAddress = useRootSelector(
+    ({ user }: RootState) => user.walletAddress,
+  )
   const [unreadOnly, setUnreadOnly] = useState(false)
   const { notificationMark, userAddress } = useUserNotification()
   const notifications = useNotifications()
@@ -58,18 +66,20 @@ const Notification = ({
                   {MenuSystemItem.Notify}
                 </Typography.Title>
               </Col>
-              <Col>
-                <Space>
-                  <Typography.Text style={{ fontSize: 14 }}>
-                    Unread only
-                  </Typography.Text>
-                  <Switch
-                    checked={unreadOnly}
-                    onChange={onUnreadOnly}
-                    size="small"
-                  />
-                </Space>
-              </Col>
+              {walletAddress && (
+                <Col>
+                  <Space>
+                    <Typography.Text style={{ fontSize: 14 }}>
+                      Unread only
+                    </Typography.Text>
+                    <Switch
+                      checked={unreadOnly}
+                      onChange={onUnreadOnly}
+                      size="small"
+                    />
+                  </Space>
+                </Col>
+              )}
             </Row>
           </Col>
           <Col span={24}>
@@ -79,7 +89,7 @@ const Notification = ({
                   RECENTLY
                 </Typography.Text>
               </Col>
-              {markAllAsReadVisible && (
+              {walletAddress && markAllAsReadVisible && (
                 <Col>
                   <Button
                     style={{
