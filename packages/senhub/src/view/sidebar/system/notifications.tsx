@@ -48,6 +48,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
             </div>
           ) : null
         }
+        tooltip
       >
         <Row>
           <Col>{MenuSystemItem.Notify}</Col>
