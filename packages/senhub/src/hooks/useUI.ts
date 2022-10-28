@@ -12,7 +12,6 @@ import {
   SIDEBAR_MAX_WIDTH,
   SIDEBAR_MIN_WIDTH,
 } from 'components/sentreLayout/layoutSidebar'
-
 export { Infix } from 'store/ui.reducer'
 
 export const useWidth = () => {
