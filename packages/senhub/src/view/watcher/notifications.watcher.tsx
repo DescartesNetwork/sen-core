@@ -1,7 +1,6 @@
 import { Fragment, useCallback, useEffect } from 'react'
 
 import { useRootDispatch, RootDispatch } from 'store'
-import { useWalletAddress } from 'hooks/useWallet'
 import {
   addNotification,
   DEFAUlT_LIMIT,
@@ -19,7 +18,6 @@ const NotificationsWatcher = () => {
   const dispatch = useRootDispatch<RootDispatch>()
 
   const fetchUserNotification = useCallback(async () => {
-    // if (!walletAddress) return
     try {
       await dispatch(getUserNotification())
     } catch (e) {

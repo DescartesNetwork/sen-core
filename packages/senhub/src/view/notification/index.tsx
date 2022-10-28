@@ -8,6 +8,7 @@ import { useNotificationsData } from 'hooks/useNotificationsData'
 import { useUserNotification } from 'hooks/useUserNotification'
 import { RootDispatch, useRootDispatch } from 'store'
 import {
+  DEFAUlT_LIMIT,
   getNotifications,
   getUnreadNotifications,
   upsetOffset,
@@ -43,7 +44,7 @@ const Notification = ({
 
   const onUnreadOnly = useCallback(async () => {
     setUnreadOnly(!unreadOnly)
-    dispatch(upsetOffset(0))
+    dispatch(upsetOffset(DEFAUlT_LIMIT))
     if (!unreadOnly) {
       return await dispatch(getUnreadNotifications({ offset: 0, isNew: true }))
     }
