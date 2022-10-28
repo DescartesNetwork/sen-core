@@ -4,8 +4,6 @@ import moment from 'moment'
 import { Col, Row, Image, Radio, Tooltip, Typography } from 'antd'
 
 import { RootDispatch, useRootDispatch } from 'store'
-import { useUserNotification } from 'hooks/useUserNotification'
-import { useNotificationsData } from 'hooks/useNotificationsData'
 import { useWalletAddress } from 'hooks/useWallet'
 import { isGuestAddress } from 'shared/util'
 import {
@@ -15,6 +13,7 @@ import {
 
 import NormalLogo from 'static/images/notification/normal-notification.png'
 import QuestLogo from 'static/images/notification/quest.png'
+import { useNotifications } from 'hooks/useNotifications'
 
 export type NotificationItemProps = {
   notification: NotificationData
@@ -25,8 +24,10 @@ const NotificationItem = ({
 }: NotificationItemProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
-  const { notificationMark, readIds, userAddress } = useUserNotification()
-  const notifications = useNotificationsData()
+  const {
+    userNotification: { notificationMark, readIds, userAddress },
+    notificationsData,
+  } = useNotifications()
 
   const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
   const logo = useMemo(
@@ -35,18 +36,18 @@ const NotificationItem = ({
   )
 
   const seen = useMemo(() => {
-    const notificationMarkIndex = notifications.findIndex(
+    const notificationMarkIndex = notificationsData.findIndex(
       ({ _id }) => _id === notificationMark,
     )
     if (notificationMarkIndex !== -1) {
-      const notificationIndex = notifications.findIndex(
+      const notificationIndex = notificationsData.findIndex(
         ({ _id: id }) => id === _id,
       )
       if (notificationIndex >= notificationMarkIndex) return true
     }
     if (readIds.includes(_id)) return true
     return false
-  }, [_id, notifications, notificationMark, readIds])
+  }, [_id, notificationsData, notificationMark, readIds])
 
   const updateUserNotification = useCallback(async () => {
     const newUserNotification = {

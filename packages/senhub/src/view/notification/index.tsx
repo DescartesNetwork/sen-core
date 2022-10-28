@@ -4,8 +4,6 @@ import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
 import { MenuSystemItem } from 'view/sidebar/constants'
 import NotificationDrawer from './notificationDrawer'
 
-import { useNotificationsData } from 'hooks/useNotificationsData'
-import { useUserNotification } from 'hooks/useUserNotification'
 import { RootDispatch, useRootDispatch } from 'store'
 import {
   DEFAUlT_LIMIT,
@@ -14,6 +12,7 @@ import {
   upsetOffset,
   upsetUserNotification,
 } from 'store/notifications.reducer'
+import { useNotifications } from 'hooks/useNotifications'
 
 type NotificationProps = { open?: boolean; onClose?: () => void }
 
@@ -22,14 +21,16 @@ const Notification = ({
   onClose = () => {},
 }: NotificationProps) => {
   const [unreadOnly, setUnreadOnly] = useState(false)
-  const notifications = useNotificationsData()
-  const { notificationMark, userAddress } = useUserNotification()
+  const {
+    userNotification: { notificationMark, userAddress },
+    notificationsData,
+  } = useNotifications()
 
   const dispatch = useRootDispatch<RootDispatch>()
 
   const onMarkAllAsRead = async () => {
     const newUserNotification = {
-      notificationMark: notifications[0]._id,
+      notificationMark: notificationsData[0]._id,
       readIds: [],
       userAddress,
     }
@@ -39,8 +40,11 @@ const Notification = ({
   }
 
   const markAllAsReadVisible = useMemo(() => {
-    return notifications.length > 0 && notifications[0]._id !== notificationMark
-  }, [notifications, notificationMark])
+    return (
+      notificationsData.length > 0 &&
+      notificationsData[0]._id !== notificationMark
+    )
+  }, [notificationsData, notificationMark])
 
   const onUnreadOnly = useCallback(async () => {
     setUnreadOnly(!unreadOnly)
@@ -116,7 +120,7 @@ const Notification = ({
       bodyStyle={{ padding: 0, paddingBottom: 12 }}
     >
       <NotificationDrawer
-        notifications={notifications}
+        notifications={notificationsData}
         unreadOnly={unreadOnly}
       />
     </Drawer>

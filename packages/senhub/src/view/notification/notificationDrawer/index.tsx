@@ -4,7 +4,6 @@ import { Button, Col, Empty, Row, Space, Typography } from 'antd'
 import NotificationItem from './notificationItem'
 
 import { RootDispatch, useRootDispatch } from 'store'
-import { useNotificationOffset } from 'hooks/useNotificationOffset'
 import {
   DEFAUlT_LIMIT,
   getNotifications,
@@ -12,6 +11,7 @@ import {
   NotificationData,
   upsetOffset,
 } from 'store/notifications.reducer'
+import { useNotifications } from 'hooks/useNotifications'
 
 export type NotificationDrawerProps = {
   notifications: NotificationData[]
@@ -22,7 +22,7 @@ const NotificationDrawer = ({
   notifications,
   unreadOnly,
 }: NotificationDrawerProps) => {
-  const offset = useNotificationOffset()
+  const { offset } = useNotifications()
   const dispatch = useRootDispatch<RootDispatch>()
 
   const disabled = useMemo(

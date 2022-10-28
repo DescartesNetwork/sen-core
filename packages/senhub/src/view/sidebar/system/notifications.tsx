@@ -6,13 +6,13 @@ import { Col, Row, Badge } from 'antd'
 import Notification from 'view/notification'
 
 import { MenuSystemItem } from '../constants'
-import { useUnreadNotificationCount } from 'hooks/useUnreadNotificationCount'
+import { useNotifications } from 'hooks/useNotifications'
 
 type NotificationsProps = { visible?: boolean }
 
 const Notifications = ({ visible }: NotificationsProps) => {
   const [open, setOpen] = useState(false)
-  const unreadCount = useUnreadNotificationCount()
+  const { unreadCount } = useNotifications()
 
   return (
     <Fragment>
