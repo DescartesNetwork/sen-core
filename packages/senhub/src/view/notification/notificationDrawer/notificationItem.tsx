@@ -99,6 +99,7 @@ const NotificationItem = ({
             <Typography.Title
               style={{ marginBottom: 0, fontSize: 14 }}
               level={5}
+              type={seen ? 'secondary' : undefined}
             >
               {title}
             </Typography.Title>
