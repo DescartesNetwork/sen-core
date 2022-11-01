@@ -23,14 +23,15 @@ export const useAppWidth = () => {
   const visibleNavigation = useRootSelector(
     ({ ui }: RootState) => ui.visibleNavigation,
   )
+  const innerWidth = useWidth()
   const infix = useInfix()
   const isMobile = useMemo(() => infix < Infix.md, [infix])
   const sidebarWidth = useMemo(
     () => (visibleNavigation ? SIDEBAR_MAX_WIDTH : SIDEBAR_MIN_WIDTH),
     [visibleNavigation],
   )
-  if (isMobile) return window.innerWidth
-  return window.innerWidth - sidebarWidth
+  if (isMobile) return innerWidth
+  return innerWidth - sidebarWidth
 }
 
 export const useAppSide = () => {
