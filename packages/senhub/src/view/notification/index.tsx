@@ -80,7 +80,7 @@ const Notification = ({
           <Col span={24}>
             <Row justify="space-between" wrap={false} align="bottom">
               <Col flex="auto">
-                <Typography.Text className="caption">RECENTLY</Typography.Text>
+                <Typography.Text className="caption">RECENT</Typography.Text>
               </Col>
               <Col>
                 <Button

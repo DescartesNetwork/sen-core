@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react'
 
-import { Col, Row, Badge } from 'antd'
+import { Badge } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import MenuItem from '../components/menuItem'
 import Notification from 'view/notification'
@@ -10,6 +10,8 @@ import { useUnreadCount } from 'hooks/useNotifications'
 
 type NotificationsProps = { visible?: boolean }
 
+const HIDDEN_BADGE = 0
+
 const Notifications = ({ visible }: NotificationsProps) => {
   const [open, setOpen] = useState(false)
   const unreadCount = useUnreadCount()
@@ -18,13 +20,9 @@ const Notifications = ({ visible }: NotificationsProps) => {
     <Fragment>
       <MenuItem
         icon={
-          !visible ? (
-            <Badge count={unreadCount}>
-              <IonIcon name="notifications-outline" style={{ fontSize: 18 }} />
-            </Badge>
-          ) : (
+          <Badge count={visible ? HIDDEN_BADGE : unreadCount}>
             <IonIcon name="notifications-outline" style={{ fontSize: 18 }} />
-          )
+          </Badge>
         }
         value={MenuSystemItem.Notify}
         onClick={() => setOpen(true)}
@@ -35,13 +33,9 @@ const Notifications = ({ visible }: NotificationsProps) => {
               style={{
                 color: '#F9575E',
                 background: 'rgba(249, 87, 94, 0.1)',
-                width: 22,
-                height: 22,
                 borderRadius: 4,
+                padding: '4px 8px',
                 fontSize: 12,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
               }}
             >
               {unreadCount}
@@ -50,9 +44,7 @@ const Notifications = ({ visible }: NotificationsProps) => {
         }
         tooltip
       >
-        <Row>
-          <Col>{MenuSystemItem.Notify}</Col>
-        </Row>
+        {MenuSystemItem.Notify}
       </MenuItem>
       <Notification open={open} onClose={() => setOpen(false)} />
     </Fragment>
