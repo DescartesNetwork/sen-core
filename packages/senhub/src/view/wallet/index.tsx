@@ -19,8 +19,6 @@ import {
   Coin98Wallet,
   PhantomWallet,
   SecretKeyWallet,
-  SolletWallet,
-  SlopeWallet,
   SolflareWebWallet,
   SolflareExtensionWallet,
   CloverWallet,
@@ -57,10 +55,6 @@ const Wallet = ({ style = {}, visible = false }: WalletProps) => {
         return new Coin98Wallet()
       case 'Phantom':
         return new PhantomWallet()
-      case 'SolletWeb':
-        return new SolletWallet()
-      case 'Slope':
-        return new SlopeWallet()
       case 'SolflareWeb':
         return new SolflareWebWallet()
       case 'SolflareExtension':
