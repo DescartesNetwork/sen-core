@@ -7,25 +7,29 @@ import { RootDispatch, useRootDispatch } from 'store'
 import { isGuestAddress } from 'shared/util'
 import {
   NotificationData,
+  setNotifications,
   upsetUserNotification,
 } from 'store/notifications.reducer'
 
 import NormalLogo from 'static/images/notification/normal-notification.png'
 import QuestLogo from 'static/images/notification/quest.png'
-import { useUserNotification } from 'hooks/useNotifications'
+import { useNotifications, useUserNotification } from 'hooks/useNotifications'
 import { useIsLogin, useWalletAddress } from 'hooks/useWallet'
 
 export type NotificationItemProps = {
   notification: NotificationData
   isBeforeMark: boolean
+  unreadOnly: boolean
 }
 
 const NotificationItem = ({
   notification: { _id, content, broadcastedAt, title, type, action },
   isBeforeMark,
+  unreadOnly,
 }: NotificationItemProps) => {
   const dispatch = useRootDispatch<RootDispatch>()
   const walletAddress = useWalletAddress()
+  const notifications = useNotifications()
   const isLogin = useIsLogin()
   const { notificationMark, readIds, userAddress } = useUserNotification()
 
@@ -63,8 +67,24 @@ const NotificationItem = ({
       e.stopPropagation()
       if (seen || guest) return
       await updateUserNotification()
+      if (unreadOnly) {
+        const filteredNotifications = notifications.filter(
+          (noti) => noti._id !== _id,
+        )
+        await dispatch(
+          setNotifications({ notifications: filteredNotifications }),
+        )
+      }
     },
-    [guest, seen, updateUserNotification],
+    [
+      _id,
+      dispatch,
+      guest,
+      notifications,
+      seen,
+      unreadOnly,
+      updateUserNotification,
+    ],
   )
 
   const onAction = useCallback(async () => {

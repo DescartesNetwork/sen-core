@@ -141,6 +141,15 @@ export const addNotification = createAsyncThunk<
   }
 })
 
+export const setNotifications = createAsyncThunk<
+  Partial<NotificationsState>,
+  { notifications: NotificationData[] }
+>(`${NAME}/setNotifications`, async ({ notifications }) => {
+  return {
+    notificationsData: notifications,
+  }
+})
+
 export const getUserNotification = createAsyncThunk(
   `${NAME}/getUserNotification`,
   async () => {
@@ -150,7 +159,10 @@ export const getUserNotification = createAsyncThunk(
         withCredentials: true,
       },
     )
-    if (!userNotification.userAddress) return await updateUserNotification()
+    if (!userNotification.userAddress) {
+      const newUserNotification = await updateUserNotification()
+      return { userNotification: newUserNotification }
+    }
 
     return { userNotification }
   },
@@ -223,6 +235,10 @@ const slice = createSlice({
       )
       .addCase(
         upsetUserNotification.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        setNotifications.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Button, Col, Drawer, Row, Space, Switch, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -9,6 +9,7 @@ import { RootDispatch, useRootDispatch } from 'store'
 import {
   getNotifications,
   getUnreadNotifications,
+  setNotifications,
   upsetUserNotification,
 } from 'store/notifications.reducer'
 import {
@@ -36,7 +37,14 @@ const Notification = ({
       readIds: [],
     }
     await dispatch(upsetUserNotification({ userNotification }))
-  }, [dispatch, latestNotiId])
+
+    if (unreadOnly) await dispatch(setNotifications({ notifications: [] }))
+  }, [dispatch, latestNotiId, unreadOnly])
+
+  const isUnreadExist = useMemo(
+    () => latestNotiId && latestNotiId !== notificationMark && isLogin,
+    [isLogin, latestNotiId, notificationMark],
+  )
 
   useEffect(() => {
     const fetchNoti = unreadOnly ? getUnreadNotifications : getNotifications
@@ -82,22 +90,23 @@ const Notification = ({
               <Col flex="auto">
                 <Typography.Text className="caption">RECENT</Typography.Text>
               </Col>
-              <Col>
-                <Button
-                  style={{ marginRight: -8 }}
-                  type="text"
-                  size="small"
-                  onClick={onMarkAllAsRead}
-                  disabled={latestNotiId !== notificationMark || !isLogin}
-                >
-                  <Typography.Text
-                    className="caption"
-                    style={{ color: '#5D6CCF' }}
+              {isUnreadExist && (
+                <Col>
+                  <Button
+                    style={{ marginRight: -8 }}
+                    type="text"
+                    size="small"
+                    onClick={onMarkAllAsRead}
                   >
-                    Mark all as read
-                  </Typography.Text>
-                </Button>
-              </Col>
+                    <Typography.Text
+                      className="caption"
+                      style={{ color: '#5D6CCF' }}
+                    >
+                      Mark all as read
+                    </Typography.Text>
+                  </Button>
+                </Col>
+              )}
             </Row>
           </Col>
         </Row>

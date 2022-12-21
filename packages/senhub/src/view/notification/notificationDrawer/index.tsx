@@ -58,7 +58,9 @@ const NotificationDrawer = ({
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             imageStyle={{ height: 60 }}
             description={
-              <Typography.Text>You have no notification</Typography.Text>
+              <Typography.Text>
+                You have no unread notifications
+              </Typography.Text>
             }
           />
         </Col>
@@ -73,6 +75,7 @@ const NotificationDrawer = ({
                   <NotificationItem
                     notification={notification}
                     isBeforeMark={isBeforeMark}
+                    unreadOnly={unreadOnly}
                   />
                 </Col>
               )
