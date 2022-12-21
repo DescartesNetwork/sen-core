@@ -4,10 +4,8 @@ import { Row, Col, Tooltip, Switch, Typography, Divider, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Coin98 from './coin98'
 import Phantom from './phantom'
-import Slope from './slope'
 import SolflareExtension from './solflareExt'
 import SolflareWeb from './solflareWeb'
-import SolletWeb from './solletWeb'
 import KeyStore from './keystore'
 import SecretKey from './secretKey'
 import CloverWallet from './clover'
@@ -23,8 +21,6 @@ const LIST_WALLET = [
   { key: 'clover_solana', component: CloverWallet, priority: 4 },
   { key: 'solflare', component: SolflareExtension, priority: 5 },
   { key: 'solflareWeb', component: SolflareWeb, priority: 6 },
-  { key: 'solletWeb', component: SolletWeb, priority: 7 },
-  { key: 'Slope', component: Slope, priority: 8 },
 ]
 
 const SecureMethods = () => {
