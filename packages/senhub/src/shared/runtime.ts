@@ -64,6 +64,6 @@ const CLUSTERS: Record<Net, string> = {
   devnet: 'https://devnet.genesysgo.net',
   testnet: 'https://api.testnet.solana.com',
   mainnet:
-    'https://solitary-autumn-water.solana-mainnet.quiknode.pro/dcbac9d444818a20ac583541dec35b44c6840888',
+    'https://solitary-autumn-water.solana-mainnet.quiknode.pro/05b03a0cfeb8a5ec38f4c55950eb9b9bad7c8b58',
 }
 export const rpc: string = CLUSTERS[net]
