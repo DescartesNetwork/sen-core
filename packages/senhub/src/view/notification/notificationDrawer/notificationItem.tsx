@@ -31,7 +31,7 @@ const NotificationItem = ({
   const walletAddress = useWalletAddress()
   const notifications = useNotifications()
   const isLogin = useIsLogin()
-  const { notificationMark, readIds, userAddress } = useUserNotification()
+  const { notificationMark, readIds } = useUserNotification()
 
   const guest = useMemo(() => isGuestAddress(walletAddress), [walletAddress])
   const logo = useMemo(
@@ -49,7 +49,6 @@ const NotificationItem = ({
     const newUserNotification = {
       notificationMark,
       readIds: [...readIds],
-      userAddress,
     }
     if (!newUserNotification.readIds.includes(_id))
       newUserNotification.readIds.push(_id)
@@ -60,7 +59,7 @@ const NotificationItem = ({
         readOne: true,
       }),
     )
-  }, [_id, dispatch, notificationMark, readIds, userAddress])
+  }, [_id, dispatch, notificationMark, readIds])
 
   const onRead = useCallback(
     async (e: MouseEvent<HTMLDivElement>) => {
